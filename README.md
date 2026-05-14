@@ -1,29 +1,20 @@
-# BDU-X 창의적 문제해결 학습도구 허브
+# BDU-X Learning Tools
 
-여러 강의용 웹 시뮬레이터를 하나의 GitHub Pages 저장소에서 운영하기 위한 구조입니다.
+창의적 문제해결 교과목 웹 학습도구 허브입니다.
 
-## 현재 포함 모듈
+## 현재 포함된 도구
 
-1. `/triz/`  
-   TRIZ 40가지 발명원리, 사례 퀴즈, 39×39 모순 매트릭스
+1. `/triz/` — TRIZ 40가지 발명원리
+2. `/week04-02-contradiction-scanner/` — 4주 2강 모순 구조 스캐너
+3. `/week10-02-triz-technical-contradiction-process/` — 10주차 2강 TRIZ 기술적 모순 해결 절차 시뮬레이터
+4. `/week12-01-02-weighted-decision-lab/` — 12주차 1·2강 가중순위·아이디어 평가 통합 시뮬레이터
+5. `/week12-03-physical-contradiction-separation/` — 12주차 3강 물리적 모순·분리원리 적용 시뮬레이터
 
-2. `/week04-02-contradiction-scanner/`  
-   4주 2강 · 모순 구조 스캐너
+## 운영 방식
 
-## 권장 구조
+각 도구는 독립 폴더의 `index.html`로 운영합니다. GitHub Pages에 업로드하면 다음과 같이 접속합니다.
 
-- 메인 `index.html`: 전체 학습도구 허브
-- 각 학습도구: 별도 폴더의 `index.html`
-- 데이터가 필요한 도구: 각 폴더 안의 `/data/` 사용
-- 공통 디자인: `/shared/` 사용
+- 메인: `/`
+- 개별 도구: `/폴더명/`
 
-## 로컬 실행
-
-- `/triz/`는 JSON을 읽기 때문에 로컬에서 파일 더블클릭 시 데이터 파일 선택 방식으로 동작합니다.
-- `/week04-02-contradiction-scanner/`는 단일 HTML이므로 더블클릭으로도 실행 가능합니다.
-
-GitHub Pages에 업로드하면 각 경로는 다음처럼 접속할 수 있습니다.
-
-- `/`
-- `/triz/`
-- `/week04-02-contradiction-scanner/`
+새 도구를 추가할 때는 새 폴더를 만들고 `index.html`을 넣은 뒤, 메인 `index.html`에 카드 링크를 추가합니다.

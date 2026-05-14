@@ -1,7 +1,7 @@
 :root{--bg:#F2EDDF;--card:#FBF8EF;--ink:#14110D;--text:#57514A;--line:#D9CFB7;--accent:#C24A2B}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'IBM Plex Sans KR',sans-serif;background:var(--bg);color:var(--ink);background-image:radial-gradient(circle at 1px 1px,rgba(20,17,13,.05) 1px,transparent 0);background-size:28px 28px}
-.home{max-width:1120px;margin:0 auto;padding:80px 32px}
+.home{max-width:1280px;margin:0 auto;padding:80px 32px}
 .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
 .hero{border-bottom:1.5px solid var(--ink);padding-bottom:48px;margin-bottom:36px}
 .hero h1{font-family:'Fraunces','IBM Plex Sans KR',serif;font-size:clamp(48px,8vw,92px);font-weight:300;line-height:.98;letter-spacing:-.04em;margin-bottom:24px}
@@ -22,3 +22,16 @@ body{font-family:'IBM Plex Sans KR',sans-serif;background:var(--bg);color:var(--
 .tool-card h2{font-family:'Fraunces','IBM Plex Sans KR',serif;font-size:26px;margin:18px 0 10px}
 .tool-card p{color:var(--text);line-height:1.65;margin-bottom:24px}
 .go{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+
+
+.tool-card.triz{background:linear-gradient(135deg,#FBF8EF 0%,#FFF8EA 100%)}
+.tool-card.technical{background:linear-gradient(135deg,#FBF8EF 0%,#EEF6FF 100%)}
+.tool-card.technical .num,.tool-card.technical .go{color:#2c6fb4}
+.tool-card.technical::after{background:rgba(44,111,180,.10)}
+.tool-card.decision{background:linear-gradient(135deg,#FBF8EF 0%,#FFF6DF 100%)}
+.tool-card.decision .num,.tool-card.decision .go{color:#B0832A}
+.tool-card.decision::after{background:rgba(176,131,42,.12)}
+.tool-card.physical{background:linear-gradient(135deg,#FBF8EF 0%,#F5F0FF 100%)}
+.tool-card.physical .num,.tool-card.physical .go{color:#5A4A78}
+.tool-card.physical::after{background:rgba(90,74,120,.11)}
+@media(max-width:640px){.home{padding:52px 20px}.tool-card{min-height:auto}.hero{padding-bottom:36px}}

@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>물리적 모순·분리원리 적용 시뮬레이터 v9</title>
+<style>
+:root{
+  --bg:#061323;
+  --panel:#0d2239;
+  --deep:#081a2f;
+  --text:#f6fbff;
+  --muted:#b8cbe0;
+  --cyan:#78c9ff;
+  --mint:#4be7ca;
+  --red:#ff6f8a;
+  --pink:#ff9db1;
+  --yellow:#ffd166;
+  --green:#65e6a4;
+  --purple:#b99cff;
+  --line:rgba(255,255,255,.16);
+  --shadow:rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 8%, rgba(75,231,202,.18), transparent 24%),
+    radial-gradient(circle at 86% 4%, rgba(120,201,255,.15), transparent 28%),
+    linear-gradient(135deg,#050f1c,#0a1c31 55%,#061323);
+  padding:14px;
+  overflow-x:hidden;
+}
+.app{
+  width:min(1240px,100%);
+  min-height:calc(100vh - 28px);
+  margin:0 auto;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:12px;
+}
+.card{
+  background:rgba(13,34,57,.88);
+  border:1px solid var(--line);
+  border-radius:26px;
+  box-shadow:0 22px 55px var(--shadow);
+  backdrop-filter:blur(14px);
+}
+.header{
+  padding:16px 20px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:16px;
+  align-items:center;
+}
+.badge{
+  padding:9px 13px;
+  border-radius:999px;
+  background:rgba(75,231,202,.12);
+  border:1px solid rgba(75,231,202,.34);
+  color:#c9fff6;
+  font-weight:900;
+  font-size:15px;
+  white-space:nowrap;
+}
+.titleWrap{text-align:center}
+.title{
+  margin:0;
+  font-size:clamp(27px,4vw,44px);
+  line-height:1.06;
+  letter-spacing:-.045em;
+  font-weight:1000;
+}
+.subtitle{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:clamp(15px,1.7vw,18px);
+  font-weight:750;
+}
+.stageBadge{
+  min-width:152px;
+  justify-self:end;
+  text-align:center;
+  padding:10px 14px;
+  border-radius:18px;
+  background:rgba(255,209,102,.12);
+  border:1px solid rgba(255,209,102,.36);
+  color:#ffe6ad;
+  font-weight:1000;
+}
+.main{
+  padding:14px;
+  display:grid;
+  grid-template-columns:minmax(0,1.34fr) minmax(330px,.66fr);
+  gap:14px;
+  overflow:hidden;
+}
+.lab{
+  display:grid;
+  grid-template-rows:auto minmax(430px,1fr) auto;
+  gap:12px;
+  min-height:710px;
+}
+.topStrip{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:center;
+  border-radius:24px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  padding:14px 16px;
+}
+.question{
+  display:grid;
+  gap:5px;
+}
+.question .label{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:850;
+}
+.question .big{
+  font-size:clamp(23px,3vw,36px);
+  font-weight:1000;
+  letter-spacing:-.045em;
+}
+.formulaBar{
+  border-radius:20px;
+  padding:12px 15px;
+  background:rgba(5,16,29,.72);
+  border:1px solid rgba(255,255,255,.14);
+  font-size:clamp(18px,2.2vw,26px);
+  font-weight:1000;
+  letter-spacing:-.035em;
+  white-space:nowrap;
+}
+.formulaBar .mainTerm{color:#fff}
+.formulaBar .left{color:#d5efff}
+.formulaBar .right{color:#ffd2db}
+.scene{
+  position:relative;
+  overflow:hidden;
+  border-radius:26px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02)),
+    var(--deep);
+  border:1px solid rgba(255,255,255,.13);
+  display:grid;
+  grid-template-rows:1fr auto;
+}
+.transferScene{
+  display:none;
+  min-height:430px;
+  border-radius:26px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02)),
+    var(--deep);
+  border:1px solid rgba(255,255,255,.13);
+  padding:22px;
+  overflow:hidden;
+}
+.transferSceneHeader{
+  display:grid;
+  gap:6px;
+  margin-bottom:14px;
+}
+.transferSceneHeader .label{
+  color:#ffe6ad;
+  font-weight:1000;
+  font-size:15px;
+}
+.transferSceneHeader h2{
+  margin:0;
+  font-size:clamp(25px,3.2vw,40px);
+  letter-spacing:-.045em;
+}
+.transferSceneHeader p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.45;
+  font-weight:800;
+}
+.transferGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.transferCard{
+  min-height:230px;
+  border-radius:22px;
+  background:rgba(255,255,255,.065);
+  border:1px solid rgba(255,255,255,.13);
+  padding:14px;
+  display:grid;
+  align-content:start;
+  gap:8px;
+  box-shadow:0 14px 30px rgba(0,0,0,.18);
+}
+.transferCard b{
+  display:block;
+  color:#fff;
+  font-size:clamp(17px,1.7vw,22px);
+  letter-spacing:-.035em;
+}
+.transferCard .formula{
+  color:#ffe6ad;
+  font-size:14px;
+  line-height:1.35;
+  font-weight:1000;
+}
+.transferCard .tag{
+  width:max-content;
+  max-width:100%;
+  padding:6px 9px;
+  border-radius:999px;
+  color:#c9fff6;
+  background:rgba(75,231,202,.10);
+  border:1px solid rgba(75,231,202,.28);
+  font-size:12px;
+  font-weight:1000;
+}
+.transferCard .hint{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+  font-weight:800;
+}
+.transferCard .principleLine{
+  display:grid;
+  gap:3px;
+  padding:7px 8px;
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.09);
+}
+.transferCard .principleLine strong{
+  color:#c9fff6;
+  font-size:12px;
+  font-weight:1000;
+}
+.transferCard .principleLine span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.32;
+  font-weight:800;
+}
+.state-apply .scene{
+  display:none;
+}
+.state-apply .transferScene{
+  display:block;
+}
+.visualWrap{
+  position:relative;
+  min-height:430px;
+  display:grid;
+  place-items:center;
+  padding:20px 18px 4px;
+}
+.visualWrap svg{
+  width:100%;
+  height:100%;
+  max-height:440px;
+  display:block;
+}
+.message{
+  justify-self:center;
+  width:min(890px,calc(100% - 36px));
+  min-height:62px;
+  margin:0 0 16px;
+  padding:12px 18px;
+  border-radius:999px;
+  background:rgba(5,16,29,.82);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 16px 34px rgba(0,0,0,.28);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  font-size:clamp(16px,1.9vw,23px);
+  font-weight:1000;
+  line-height:1.25;
+}
+.message .accent{color:#ffe6ad}
+.message .blue{color:#d5efff}
+.message .pink{color:#ffd2db}
+.principles{
+  border-radius:24px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  padding:14px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.principleBtn{
+  min-height:84px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  padding:13px;
+  color:#fff;
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.14);
+  text-align:left;
+  transition:.14s ease;
+}
+.principleBtn:hover,.navBtn:hover,.restartBtn:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+.principleBtn.active{
+  color:#042033;
+  background:linear-gradient(135deg,#ffd166,#4be7ca);
+  border-color:transparent;
+  box-shadow:0 14px 30px rgba(75,231,202,.12);
+}
+.principleBtn b{
+  display:block;
+  font-size:clamp(18px,2vw,24px);
+  letter-spacing:-.04em;
+}
+.principleBtn small{
+  display:block;
+  margin-top:5px;
+  color:rgba(255,255,255,.76);
+  font-size:13px;
+  font-weight:850;
+  line-height:1.25;
+}
+.principleBtn.active small{color:rgba(4,32,51,.72)}
+.sidebar{
+  display:grid;
+  grid-template-rows:auto auto 1fr;
+  gap:12px;
+}
+.resultPanel,
+.flowPanel,
+.transferPanel{
+  border-radius:24px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  padding:16px;
+}
+.resultPanel{
+  background:rgba(5,16,29,.72);
+}
+.resultBadge{
+  width:max-content;
+  max-width:100%;
+  border-radius:999px;
+  padding:9px 12px;
+  background:rgba(75,231,202,.12);
+  border:1px solid rgba(75,231,202,.36);
+  color:#c9fff6;
+  font-size:15px;
+  font-weight:1000;
+}
+.suitabilityBadge{
+  width:max-content;
+  max-width:100%;
+  border-radius:999px;
+  padding:8px 11px;
+  margin-top:8px;
+  color:#042033;
+  background:linear-gradient(135deg,#ffd166,#4be7ca);
+  font-size:14px;
+  font-weight:1000;
+}
+.suitabilityBadge.secondary{
+  color:#ffe6ad;
+  background:rgba(255,209,102,.11);
+  border:1px solid rgba(255,209,102,.36);
+}
+.suitabilityBadge.thinking{
+  color:#d5efff;
+  background:rgba(120,201,255,.11);
+  border:1px solid rgba(120,201,255,.34);
+}
+.resultTitle{
+  margin:10px 0 8px;
+  font-size:clamp(23px,2.7vw,34px);
+  letter-spacing:-.045em;
+  font-weight:1000;
+}
+.resultText{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:16px;
+  font-weight:800;
+}
+.resultText span{
+  color:#ffe6ad;
+  font-weight:1000;
+}
+.flowPanel h3,
+.transferPanel h3{
+  margin:0 0 10px;
+  font-size:clamp(20px,2.3vw,28px);
+  letter-spacing:-.04em;
+}
+.steps{
+  display:grid;
+  gap:8px;
+}
+.step{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  gap:9px;
+  align-items:center;
+  min-height:46px;
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.10);
+  padding:7px 9px;
+}
+.step.active{
+  border-color:rgba(255,209,102,.45);
+  background:rgba(255,209,102,.09);
+}
+.stepNo{
+  width:30px;height:30px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.10);
+  font-weight:1000;
+}
+.step.active .stepNo{
+  background:#ffd166;
+  color:#042033;
+}
+.stepText{
+  font-size:14px;
+  color:#dcecfb;
+  font-weight:850;
+}
+.transferPanel{
+  display:grid;
+  gap:12px;
+}
+.transferContent{
+  display:none;
+}
+.transferPanel.show .transferContent{
+  display:grid;
+  gap:12px;
+}
+.transferPlaceholder{
+  display:block;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.45;
+  font-weight:800;
+}
+.transferPanel.show .transferPlaceholder{
+  display:none;
+}
+.transferPanel.show{
+  background:rgba(255,209,102,.08);
+  border-color:rgba(255,209,102,.28);
+}
+.transferPanel.show h3{
+  color:#ffe6ad;
+}
+.caseCards{
+  display:none;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.caseCard{
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.10);
+  padding:10px;
+  min-height:112px;
+}
+.caseCard b{
+  display:block;
+  color:#fff;
+  margin-bottom:4px;
+  font-size:15px;
+}
+.caseCard .formula{
+  color:#ffe6ad;
+  font-size:13px;
+  line-height:1.35;
+  font-weight:1000;
+}
+.caseCard .hint{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+  font-weight:800;
+}
+.promptBox{
+  border-radius:18px;
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.25);
+  padding:12px;
+}
+.promptTitle{
+  color:#ffe6ad;
+  font-weight:1000;
+  margin-bottom:8px;
+}
+.promptGrid{
+  display:grid;
+  gap:7px;
+}
+.promptLine{
+  min-height:32px;
+  border-radius:12px;
+  background:rgba(5,16,29,.45);
+  border:1px dashed rgba(255,255,255,.22);
+  padding:7px 9px;
+  color:#f6fbff;
+  font-size:14px;
+  font-weight:850;
+}
+.nav{
+  padding:12px 14px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  align-items:center;
+}
+.navBtn,.restartBtn{
+  min-height:52px;
+  border:none;
+  border-radius:18px;
+  color:#042033;
+  background:linear-gradient(135deg,var(--mint),#2c9ee0);
+  font-size:17px;
+  font-weight:1000;
+  cursor:pointer;
+  transition:.14s ease;
+}
+.navBtn.secondary,
+.restartBtn{
+  color:#fff;
+  background:rgba(255,255,255,.09);
+  border:1px solid var(--line);
+}
+.progressDots{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+}
+.dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,.28);
+}
+.dot.active{background:#ffd166}
+
+/* SVG visibility states - v6: one clear scene at a time */
+.sceneLayer{
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s ease;
+}
+.state-conflict .conflictScene,
+.state-select .selectScene,
+.state-time .timeScene,
+.state-space .spaceScene,
+.state-condition .conditionScene,
+.state-part .partScene{
+  opacity:1;
+  pointer-events:auto;
+}
+.state-time .timeBefore{
+  animation:beforePulse 3.2s ease-in-out infinite;
+}
+.state-time .timeDuring{
+  animation:duringPulse 3.2s ease-in-out infinite;
+}
+.state-space .spaceBaseLabel,
+.state-space .spaceBase{
+  animation:basePulse 3.2s ease-in-out infinite;
+}
+.state-space .spaceTipLabel,
+.state-space .spaceTip{
+  animation:tipPulse 3.2s ease-in-out infinite;
+}
+.state-condition .softCondition{
+  animation:softPulse 2.8s ease-in-out infinite;
+}
+.state-condition .strongCondition{
+  animation:strongPulse 2.8s ease-in-out infinite;
+}
+.state-condition .pressArrow{
+  animation:press 2.8s ease-in-out infinite;
+}
+.state-part .wholeRole{
+  animation:wholePulse 3.2s ease-in-out infinite;
+}
+.state-part .partRole{
+  animation:partPulse 3.2s ease-in-out infinite;
+}
+.replay-flash .sceneLayer{
+  filter:brightness(1.28) drop-shadow(0 0 16px rgba(255,209,102,.5));
+}
+@keyframes beforePulse{
+  0%,42%,100%{opacity:1;filter:drop-shadow(0 0 12px rgba(120,201,255,.65))}
+  55%,82%{opacity:.62;filter:none}
+}
+@keyframes duringPulse{
+  0%,42%,100%{opacity:.62;filter:none}
+  55%,82%{opacity:1;filter:drop-shadow(0 0 12px rgba(255,111,138,.65))}
+}
+@keyframes basePulse{
+  0%,32%,100%{opacity:1;filter:drop-shadow(0 0 18px rgba(120,201,255,.8))}
+  48%,75%{opacity:.72;filter:none}
+}
+@keyframes tipPulse{
+  0%,32%,100%{opacity:.72;filter:none}
+  48%,75%{opacity:1;filter:drop-shadow(0 0 18px rgba(255,111,138,.8))}
+}
+@keyframes softPulse{
+  0%,35%,100%{opacity:1;filter:drop-shadow(0 0 12px rgba(75,231,202,.6))}
+  52%,78%{opacity:.62;filter:none}
+}
+@keyframes strongPulse{
+  0%,35%,100%{opacity:.62;filter:none}
+  52%,78%{opacity:1;filter:drop-shadow(0 0 12px rgba(255,209,102,.7))}
+}
+@keyframes press{
+  0%,35%,100%{transform:translateY(-4px)}
+  52%,78%{transform:translateY(10px)}
+}
+@keyframes wholePulse{
+  0%,36%,100%{opacity:1;filter:drop-shadow(0 0 18px rgba(120,201,255,.75))}
+  52%,78%{opacity:.62;filter:none}
+}
+@keyframes partPulse{
+  0%,36%,100%{opacity:.62;filter:none}
+  52%,78%{opacity:1;filter:drop-shadow(0 0 18px rgba(255,111,138,.75))}
+}
+@media(max-width:1060px){
+  body{padding:8px}
+  .caseCards{grid-template-columns:1fr}
+  .transferGrid{grid-template-columns:1fr 1fr}
+  .app{min-height:calc(100vh - 16px)}
+  .header{grid-template-columns:1fr}
+  .titleWrap{text-align:left}
+  .stageBadge{justify-self:start}
+  .main{grid-template-columns:1fr}
+  .lab{min-height:auto}
+  .topStrip{grid-template-columns:1fr}
+  .formulaBar{white-space:normal}
+  .principles{grid-template-columns:1fr 1fr}
+  .nav{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .principles{grid-template-columns:1fr}
+  .transferGrid{grid-template-columns:1fr}
+  .visualWrap{min-height:360px}
+  .message{border-radius:22px}
+}
+</style>
+</head>
+<body class="state-conflict">
+<div class="app">
+  <header class="card header">
+    <div class="badge">12주차 3강 · 프로젝트 전이</div>
+    <div class="titleWrap">
+      <h1 class="title">물리적 모순·분리원리 적용 시뮬레이터 v9</h1>
+      <p class="subtitle">중간값으로 타협하지 말고, 요구가 필요한 때·장소·조건·부분을 나누어 보라</p>
+    </div>
+    <div class="stageBadge" id="stageBadge">1단계 · 모순 확인</div>
+  </header>
+
+  <main class="card main">
+    <section class="lab">
+      <section class="topStrip">
+        <div class="question">
+          <div class="label">대표 사례</div>
+          <div class="big" id="mainQuestion">칫솔모는 굵어야 할까요, 가늘어야 할까요?</div>
+        </div>
+        <div class="formulaBar">
+          <span class="mainTerm">칫솔모 굵기</span> =
+          <span class="left">굵어야 함</span>
+          ↔
+          <span class="right">가늘어야 함</span>
+        </div>
+      </section>
+
+      <section class="scene">
+        <div class="visualWrap">
+          <svg viewBox="0 0 1040 560" aria-label="칫솔모 굵기 물리적 모순 시각화">
+            <defs>
+              <linearGradient id="handleGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#d8edff"/>
+                <stop offset="1" stop-color="#78c9ff"/>
+              </linearGradient>
+              <linearGradient id="mintGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#4be7ca"/>
+                <stop offset="1" stop-color="#78c9ff"/>
+              </linearGradient>
+            </defs>
+
+            <rect x="65" y="48" width="910" height="428" rx="46" fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.13)" stroke-width="3"/>
+
+            <!-- Conflict scene: only contradiction -->
+            <g class="sceneLayer conflictScene">
+              <g transform="translate(135 135)">
+                <rect x="0" y="0" width="270" height="226" rx="32" fill="rgba(120,201,255,.08)" stroke="#78c9ff" stroke-width="4"/>
+                <text x="135" y="44" fill="#d5efff" font-size="30" font-weight="1000" text-anchor="middle">굵어야 함</text>
+                <text x="135" y="80" fill="#b8cbe0" font-size="18" font-weight="850" text-anchor="middle">힘 지탱 · 내구성</text>
+                <rect x="70" y="108" width="30" height="92" rx="15" fill="#78c9ff"/>
+                <rect x="120" y="90" width="30" height="110" rx="15" fill="#78c9ff"/>
+                <rect x="170" y="108" width="30" height="92" rx="15" fill="#78c9ff"/>
+              </g>
+              <g transform="translate(635 135)">
+                <rect x="0" y="0" width="270" height="226" rx="32" fill="rgba(255,111,138,.08)" stroke="#ff6f8a" stroke-width="4"/>
+                <text x="135" y="44" fill="#ffd2db" font-size="30" font-weight="1000" text-anchor="middle">가늘어야 함</text>
+                <text x="135" y="80" fill="#b8cbe0" font-size="18" font-weight="850" text-anchor="middle">잇몸 틈 · 치아 사이</text>
+                <rect x="82" y="76" width="8" height="124" rx="4" fill="#ff8fa5"/>
+                <rect x="128" y="58" width="8" height="142" rx="4" fill="#ff8fa5"/>
+                <rect x="174" y="76" width="8" height="124" rx="4" fill="#ff8fa5"/>
+              </g>
+              <g>
+                <line x1="435" y1="248" x2="604" y2="248" stroke="#ffd166" stroke-width="10" stroke-linecap="round"/>
+                <polygon points="604,248 568,226 568,270" fill="#ffd166"/>
+                <polygon points="435,248 471,226 471,270" fill="#ffd166"/>
+                <circle cx="520" cy="248" r="43" fill="rgba(255,209,102,.13)" stroke="#ffd166" stroke-width="5"/>
+                <text x="520" y="265" fill="#ffd166" font-size="48" font-weight="1000" text-anchor="middle">↔</text>
+              </g>
+              <g transform="translate(250 408)">
+                <rect width="540" height="56" rx="24" fill="rgba(5,16,29,.70)" stroke="rgba(255,255,255,.17)"/>
+                <text x="270" y="36" fill="#f6fbff" font-size="25" font-weight="1000" text-anchor="middle">하나의 특성, 서로 반대되는 두 요구</text>
+              </g>
+            </g>
+
+            <!-- Select scene: clean instruction -->
+            <g class="sceneLayer selectScene">
+              <text x="520" y="135" fill="#ffe6ad" font-size="38" font-weight="1000" text-anchor="middle">분리원리를 선택하세요</text>
+              <text x="520" y="176" fill="#b8cbe0" font-size="22" font-weight="850" text-anchor="middle">중간값으로 타협하지 말고, 요구가 필요한 기준을 나눕니다</text>
+              <g transform="translate(165 235)">
+                <rect width="170" height="90" rx="28" fill="rgba(255,209,102,.10)" stroke="#ffd166" stroke-width="4"/>
+                <text x="85" y="55" fill="#ffe6ad" font-size="28" font-weight="1000" text-anchor="middle">시간</text>
+              </g>
+              <g transform="translate(355 235)">
+                <rect width="170" height="90" rx="28" fill="rgba(75,231,202,.10)" stroke="#4be7ca" stroke-width="4"/>
+                <text x="85" y="55" fill="#c9fff6" font-size="28" font-weight="1000" text-anchor="middle">공간</text>
+              </g>
+              <g transform="translate(545 235)">
+                <rect width="170" height="90" rx="28" fill="rgba(120,201,255,.10)" stroke="#78c9ff" stroke-width="4"/>
+                <text x="85" y="55" fill="#d5efff" font-size="28" font-weight="1000" text-anchor="middle">조건</text>
+              </g>
+              <g transform="translate(735 235)">
+                <rect width="170" height="90" rx="28" fill="rgba(255,111,138,.10)" stroke="#ff6f8a" stroke-width="4"/>
+                <text x="85" y="55" fill="#ffd2db" font-size="28" font-weight="1000" text-anchor="middle">부분</text>
+              </g>
+              <text x="520" y="410" fill="#f6fbff" font-size="24" font-weight="1000" text-anchor="middle">어떤 기준으로 나누면 두 요구를 모두 살릴 수 있을까요?</text>
+            </g>
+
+            <!-- Time scene: before/after comparison - v7 stable layout -->
+            <g class="sceneLayer timeScene">
+              <text x="520" y="78" fill="#ffe6ad" font-size="31" font-weight="1000" text-anchor="middle">시간 분리: 대표 해결이 아니라 사고 확장</text>
+              <text x="520" y="110" fill="#b8cbe0" font-size="18" font-weight="850" text-anchor="middle">칫솔모가 실제로 굵었다가 가늘어지는 것이 아니라, 요구가 필요한 시점을 나누어 봅니다.</text>
+
+              <g class="timeBefore" transform="translate(115 158)">
+                <rect width="350" height="230" rx="34" fill="rgba(120,201,255,.08)" stroke="#78c9ff" stroke-width="4"/>
+                <text x="175" y="45" fill="#d5efff" font-size="28" font-weight="1000" text-anchor="middle">사용 전</text>
+                <text x="175" y="72" fill="#b8cbe0" font-size="16" font-weight="850" text-anchor="middle">힘 지탱 요구를 확인</text>
+                <g transform="translate(67 92) scale(.9)">
+                  <rect x="54" y="42" width="28" height="92" rx="14" fill="#78c9ff"/>
+                  <rect x="122" y="20" width="28" height="114" rx="14" fill="#78c9ff"/>
+                  <rect x="190" y="42" width="28" height="92" rx="14" fill="#78c9ff"/>
+                  <rect x="20" y="134" width="240" height="28" rx="14" fill="#d8edff"/>
+                </g>
+              </g>
+
+              <g>
+                <path d="M490 274 H550" stroke="#ffd166" stroke-width="8" stroke-linecap="round"/>
+                <polygon points="550,274 524,258 524,290" fill="#ffd166"/>
+                <text x="520" y="247" fill="#ffe6ad" font-size="20" font-weight="1000" text-anchor="middle">시간 변화</text>
+              </g>
+
+              <g class="timeDuring" transform="translate(575 158)">
+                <rect width="350" height="230" rx="34" fill="rgba(255,111,138,.08)" stroke="#ff6f8a" stroke-width="4"/>
+                <text x="175" y="45" fill="#ffd2db" font-size="28" font-weight="1000" text-anchor="middle">사용 중</text>
+                <text x="175" y="72" fill="#b8cbe0" font-size="16" font-weight="850" text-anchor="middle">세밀 청소 요구를 확인</text>
+                <g transform="translate(66 90) scale(.9)">
+                  <path d="M45 48 C95 8, 185 8, 235 48" stroke="#ffd2db" stroke-width="7" stroke-linecap="round" fill="none"/>
+                  <rect x="64" y="48" width="12" height="112" rx="6" fill="#ff8fa5"/>
+                  <rect x="128" y="28" width="10" height="132" rx="5" fill="#ff8fa5"/>
+                  <rect x="192" y="48" width="12" height="112" rx="6" fill="#ff8fa5"/>
+                  <rect x="22" y="160" width="240" height="28" rx="14" fill="#d8edff"/>
+                </g>
+              </g>
+
+              <text x="520" y="448" fill="#f6fbff" font-size="23" font-weight="1000" text-anchor="middle">핵심: 시간 분리는 이 사례의 정답보다 “요구 시점”을 찾는 사고 도구입니다.</text>
+            </g>
+
+            <!-- Space scene: top/bottom separation -->
+            <g class="sceneLayer spaceScene">
+              <text x="520" y="88" fill="#ffe6ad" font-size="34" font-weight="1000" text-anchor="middle">공간 분리: 아래쪽과 끝부분의 역할을 나눔</text>
+              <g transform="translate(255 125)">
+                <rect x="40" y="230" width="450" height="56" rx="28" fill="url(#handleGrad)" opacity=".96"/>
+                <rect x="98" y="198" width="335" height="55" rx="20" fill="url(#mintGrad)" opacity=".92"/>
+                <g class="spaceTip">
+                  <path d="M115 88 C190 42, 340 42, 415 88" stroke="#ff8fa5" stroke-width="10" stroke-linecap="round" fill="none"/>
+                  <rect x="150" y="82" width="8" height="154" rx="4" fill="#ff8fa5"/>
+                  <rect x="220" y="66" width="8" height="170" rx="4" fill="#ff8fa5"/>
+                  <rect x="290" y="66" width="8" height="170" rx="4" fill="#ff8fa5"/>
+                  <rect x="360" y="82" width="8" height="154" rx="4" fill="#ff8fa5"/>
+                </g>
+                <g class="spaceBase">
+                  <rect x="116" y="145" width="300" height="92" rx="22" fill="rgba(120,201,255,.18)" stroke="#78c9ff" stroke-width="4"/>
+                  <rect x="135" y="120" width="28" height="118" rx="14" fill="#78c9ff"/>
+                  <rect x="235" y="104" width="28" height="134" rx="14" fill="#78c9ff"/>
+                  <rect x="335" y="120" width="28" height="118" rx="14" fill="#78c9ff"/>
+                </g>
+              </g>
+              <g class="spaceTipLabel">
+                <rect x="350" y="106" width="340" height="56" rx="22" fill="rgba(255,111,138,.12)" stroke="#ff6f8a" stroke-width="3"/>
+                <text x="520" y="143" fill="#ffd2db" font-size="25" font-weight="1000" text-anchor="middle">끝부분 = 가늘게</text>
+              </g>
+              <g class="spaceBaseLabel">
+                <rect x="350" y="360" width="340" height="56" rx="22" fill="rgba(120,201,255,.12)" stroke="#78c9ff" stroke-width="3"/>
+                <text x="520" y="397" fill="#d5efff" font-size="25" font-weight="1000" text-anchor="middle">아래쪽 = 굵게</text>
+              </g>
+            </g>
+
+            <!-- Condition scene: two condition states - v7 stable layout -->
+            <g class="sceneLayer conditionScene">
+              <text x="520" y="78" fill="#ffe6ad" font-size="31" font-weight="1000" text-anchor="middle">조건 분리: 압력 조건에 따라 다르게 작동</text>
+              <text x="520" y="110" fill="#b8cbe0" font-size="18" font-weight="850" text-anchor="middle">단, 소재 탄성과 모 배열 설계가 함께 전제될 때 가능한 보조 해결입니다.</text>
+
+              <g class="softCondition" transform="translate(115 158)">
+                <rect width="350" height="230" rx="34" fill="rgba(75,231,202,.08)" stroke="#4be7ca" stroke-width="4"/>
+                <text x="175" y="45" fill="#c9fff6" font-size="28" font-weight="1000" text-anchor="middle">압력 약함</text>
+                <text x="175" y="72" fill="#b8cbe0" font-size="16" font-weight="850" text-anchor="middle">부드럽게 퍼져 섬세하게 닦음</text>
+                <g transform="translate(60 92) scale(.88)">
+                  <rect x="70" y="40" width="12" height="112" rx="6" fill="#ff8fa5" transform="rotate(-9 76 150)"/>
+                  <rect x="132" y="26" width="10" height="126" rx="5" fill="#ff8fa5"/>
+                  <rect x="194" y="40" width="12" height="112" rx="6" fill="#ff8fa5" transform="rotate(9 200 150)"/>
+                  <path d="M42 42 C92 8, 202 8, 252 42" stroke="#ffb3c0" stroke-width="7" stroke-linecap="round" fill="none"/>
+                  <rect x="22" y="152" width="250" height="28" rx="14" fill="#d8edff"/>
+                </g>
+              </g>
+
+              <g class="strongCondition" transform="translate(575 158)">
+                <rect width="350" height="230" rx="34" fill="rgba(255,209,102,.08)" stroke="#ffd166" stroke-width="4"/>
+                <text x="175" y="45" fill="#ffe6ad" font-size="28" font-weight="1000" text-anchor="middle">압력 강함</text>
+                <text x="175" y="72" fill="#b8cbe0" font-size="16" font-weight="850" text-anchor="middle">모가 모여 힘을 지탱</text>
+                <g class="pressArrow" transform="translate(0 -2)">
+                  <path d="M175 82 L175 118" stroke="#ffd166" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M156 112 L175 146 L194 112 Z" fill="#ffd166"/>
+                </g>
+                <g transform="translate(58 110) scale(.86)">
+                  <rect x="82" y="26" width="22" height="86" rx="11" fill="#78c9ff" transform="rotate(8 93 108)"/>
+                  <rect x="136" y="18" width="20" height="94" rx="10" fill="#78c9ff"/>
+                  <rect x="190" y="26" width="22" height="86" rx="11" fill="#78c9ff" transform="rotate(-8 201 108)"/>
+                  <rect x="28" y="112" width="250" height="28" rx="14" fill="#d8edff"/>
+                </g>
+              </g>
+
+              <text x="520" y="448" fill="#f6fbff" font-size="23" font-weight="1000" text-anchor="middle">핵심: 조건이 바뀌면 같은 대상도 다른 방식으로 작동합니다.</text>
+            </g>
+
+            <!-- Part scene: whole/part roles -->
+            <g class="sceneLayer partScene">
+              <text x="520" y="88" fill="#ffe6ad" font-size="34" font-weight="1000" text-anchor="middle">전체/부분 분리: 전체와 일부의 역할을 나눔</text>
+              <g transform="translate(235 145)">
+                <rect x="55" y="220" width="520" height="60" rx="30" fill="url(#handleGrad)" opacity=".96"/>
+                <rect x="125" y="188" width="380" height="55" rx="20" fill="url(#mintGrad)" opacity=".92"/>
+                <g class="wholeRole">
+                  <rect x="84" y="20" width="210" height="58" rx="22" fill="rgba(120,201,255,.12)" stroke="#78c9ff" stroke-width="4"/>
+                  <text x="189" y="57" fill="#d5efff" font-size="24" font-weight="1000" text-anchor="middle">전체: 지탱</text>
+                  <rect x="110" y="105" width="30" height="122" rx="15" fill="#78c9ff"/>
+                  <rect x="180" y="88" width="30" height="139" rx="15" fill="#78c9ff"/>
+                  <rect x="390" y="88" width="30" height="139" rx="15" fill="#78c9ff"/>
+                  <rect x="460" y="105" width="30" height="122" rx="15" fill="#78c9ff"/>
+                </g>
+                <g class="partRole">
+                  <rect x="330" y="20" width="250" height="58" rx="22" fill="rgba(255,111,138,.12)" stroke="#ff6f8a" stroke-width="4"/>
+                  <text x="455" y="57" fill="#ffd2db" font-size="24" font-weight="1000" text-anchor="middle">일부: 세밀 청소</text>
+                  <rect x="265" y="72" width="10" height="155" rx="5" fill="#ff8fa5"/>
+                  <rect x="325" y="72" width="10" height="155" rx="5" fill="#ff8fa5"/>
+                </g>
+              </g>
+              <text x="520" y="438" fill="#f6fbff" font-size="24" font-weight="1000" text-anchor="middle">하나의 제품 안에서 전체와 일부가 서로 다른 역할을 맡습니다.</text>
+            </g>
+          </svg>
+        </div>
+        <div class="message" id="message">
+          <span>기본 상태에서는 해결 구조를 보여주지 않습니다. 먼저 <span class="blue">굵어야 함</span>과 <span class="pink">가늘어야 함</span>의 충돌만 확인합니다.</span>
+        </div>
+      </section>
+
+      <section class="transferScene" id="transferScene">
+        <div class="transferSceneHeader">
+          <div class="label">4단계 · 프로젝트 전이</div>
+          <h2>칫솔모에서 다른 문제로 확장해 봅시다</h2>
+          <p>아래 6개 사례는 모두 “하나의 특성 = 서로 반대되는 요구” 구조입니다. 각 사례에서 원리별 해결 방식이 어떻게 다른지 구분해 보세요.</p>
+        </div>
+        <div class="transferGrid">
+          <div class="transferCard">
+            <b>교재 두께 문제</b>
+            <div class="formula">특성: 교재 두께<br>모순: 충분한 설명 ↔ 휴대·반복 학습</div>
+            <div class="principleLine">
+              <strong>전체/부분 분리</strong>
+              <span>핵심 개념은 본문에 두고, 사례·보충자료는 부록으로 나눕니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>공간 분리</strong>
+              <span>종이 교재에는 필수 내용만 두고, 추가 자료는 QR·웹 공간으로 분리합니다.</span>
+            </div>
+          </div>
+          <div class="transferCard">
+            <b>항아리 냉장고 문제</b>
+            <div class="formula">특성: 냉각 방식<br>모순: 내부는 시원해야 함 ↔ 에너지 사용은 낮아야 함</div>
+            <div class="principleLine">
+              <strong>조건 분리</strong>
+              <span>물의 증발과 통풍이 가능한 조건에서 냉각 효과가 발생하게 합니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>공간 분리</strong>
+              <span>내부 저장 공간과 외부 증발·통풍 공간의 역할을 나눕니다.</span>
+            </div>
+          </div>
+          <div class="transferCard">
+            <b>마을버스 활성화 문제</b>
+            <div class="formula">특성: 운행 빈도<br>모순: 자주 다녀야 함 ↔ 운영 비용은 낮아야 함</div>
+            <div class="principleLine">
+              <strong>시간 분리</strong>
+              <span>출퇴근·등하교 시간에는 집중 운행하고, 낮은 수요 시간에는 간격을 늘립니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>조건 분리</strong>
+              <span>이용자 수, 요일, 행사 여부에 따라 정규·예약형 운행을 다르게 적용합니다.</span>
+            </div>
+          </div>
+          <div class="transferCard">
+            <b>스마트폰 화면 크기</b>
+            <div class="formula">특성: 화면 크기<br>모순: 크게 봐야 함 ↔ 작게 휴대해야 함</div>
+            <div class="principleLine">
+              <strong>시간 분리</strong>
+              <span>사용할 때는 펼치고, 이동할 때는 접어 작은 상태로 둡니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>전체/부분 분리</strong>
+              <span>기본 본체는 작게 두고, 보조 화면이나 확장 패널이 일부 기능을 맡습니다.</span>
+            </div>
+          </div>
+          <div class="transferCard">
+            <b>강의 영상 길이</b>
+            <div class="formula">특성: 영상 길이<br>모순: 충분히 설명하려면 길어야 함 ↔ 집중하려면 짧아야 함</div>
+            <div class="principleLine">
+              <strong>전체/부분 분리</strong>
+              <span>전체 강의를 핵심·심화·실습·요약 영상으로 나누어 제공합니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>시간 분리</strong>
+              <span>수업 전에는 핵심 예습, 수업 중에는 실습, 수업 후에는 요약 복습을 제공합니다.</span>
+            </div>
+          </div>
+          <div class="transferCard">
+            <b>팀 프로젝트 발표자료</b>
+            <div class="formula">특성: 정보량<br>모순: 근거는 많아야 함 ↔ 화면은 단순해야 함</div>
+            <div class="principleLine">
+              <strong>공간 분리</strong>
+              <span>핵심 메시지는 본 슬라이드에, 세부 근거는 부록·QR·발표자 노트에 둡니다.</span>
+            </div>
+            <div class="principleLine">
+              <strong>전체/부분 분리</strong>
+              <span>전체 보고서는 충분히 유지하되, 발표 화면은 핵심 부분만 보여줍니다.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="principles" id="principles">
+        <button class="principleBtn" data-principle="time" onclick="choosePrinciple('time')">
+          <b>시간 분리</b>
+          <small>사고 확장</small>
+        </button>
+        <button class="principleBtn" data-principle="space" onclick="choosePrinciple('space')">
+          <b>공간 분리</b>
+          <small>대표 해결</small>
+        </button>
+        <button class="principleBtn" data-principle="condition" onclick="choosePrinciple('condition')">
+          <b>조건 분리</b>
+          <small>보조 해결</small>
+        </button>
+        <button class="principleBtn" data-principle="part" onclick="choosePrinciple('part')">
+          <b>전체/부분 분리</b>
+          <small>대표 해결</small>
+        </button>
+      </section>
+    </section>
+
+    <aside class="sidebar">
+      <section class="resultPanel">
+        <div class="resultBadge" id="resultBadge">물리적 모순 확인</div>
+        <div class="suitabilityBadge thinking" id="suitabilityBadge">개념 확인</div>
+        <h2 class="resultTitle" id="resultTitle">먼저 충돌만 봅니다</h2>
+        <p class="resultText" id="resultText">
+          칫솔모 굵기라는 하나의 특성이 <span>굵어야 함</span>과 <span>가늘어야 함</span>이라는 반대 요구를 동시에 받습니다.
+        </p>
+      </section>
+
+      <section class="flowPanel">
+        <h3>4단계 학습 흐름</h3>
+        <div class="steps">
+          <div class="step active" id="flow1"><div class="stepNo">1</div><div class="stepText">물리적 모순 확인</div></div>
+          <div class="step" id="flow2"><div class="stepNo">2</div><div class="stepText">분리원리 선택</div></div>
+          <div class="step" id="flow3"><div class="stepNo">3</div><div class="stepText">구조 변형 확인</div></div>
+          <div class="step" id="flow4"><div class="stepNo">4</div><div class="stepText">프로젝트 적용</div></div>
+        </div>
+      </section>
+
+      <section class="transferPanel" id="transferPanel">
+        <h3>내 프로젝트 적용</h3>
+        <div class="transferPlaceholder">
+          프로젝트 적용 단계에서는 중앙에 6개 전이 사례가 표시됩니다. 오른쪽에는 내 프로젝트 문제를 정리하는 작성 프롬프트가 나타납니다.
+        </div>
+        <div class="transferContent">
+          <div class="caseCards">
+            <div class="caseCard">
+              <b>교재 두께 문제</b>
+              <div class="formula">교재 두께 = 두꺼워야 함 ↔ 얇아야 함</div>
+              <div class="hint">추천 원리: 공간 분리 / 전체·부분 분리<br>핵심은 종이, 부가 자료는 QR·웹·부록으로 분리합니다.</div>
+            </div>
+            <div class="caseCard">
+              <b>항아리 냉장고 문제</b>
+              <div class="formula">냉각 구조 = 차가워야 함 ↔ 에너지 사용은 낮아야 함</div>
+              <div class="hint">추천 원리: 조건 분리 / 공간 분리<br>습도·통풍 조건과 증발 냉각 공간을 분리해 활용합니다.</div>
+            </div>
+            <div class="caseCard">
+              <b>마을버스 활성화 문제</b>
+              <div class="formula">운행 빈도 = 높아야 함 ↔ 운영 비용은 낮아야 함</div>
+              <div class="hint">추천 원리: 시간 분리 / 조건 분리<br>출퇴근 시간에는 집중 운행하고, 수요가 낮을 때는 축소합니다.</div>
+            </div>
+            <div class="caseCard">
+              <b>스마트폰 화면 크기</b>
+              <div class="formula">화면 크기 = 커야 함 ↔ 작아야 함</div>
+              <div class="hint">추천 원리: 시간 분리 / 전체·부분 분리<br>볼 때는 펼치고, 이동할 때는 접거나 보조 화면을 분리합니다.</div>
+            </div>
+            <div class="caseCard">
+              <b>강의 영상 길이</b>
+              <div class="formula">영상 길이 = 길어야 함 ↔ 짧아야 함</div>
+              <div class="hint">추천 원리: 시간 분리 / 전체·부분 분리<br>전체 강의는 유지하되, 핵심 영상과 심화 영상으로 나눕니다.</div>
+            </div>
+            <div class="caseCard">
+              <b>팀 프로젝트 발표자료</b>
+              <div class="formula">정보량 = 많아야 함 ↔ 적어야 함</div>
+              <div class="hint">추천 원리: 공간 분리 / 전체·부분 분리<br>핵심 슬라이드는 단순하게, 세부 근거는 부록·QR·발표자 노트로 분리합니다.</div>
+            </div>
+          </div>
+          <div class="promptBox">
+            <div class="promptTitle">내 프로젝트 적용 작성 프롬프트</div>
+            <div class="promptGrid">
+              <div class="promptLine">내 프로젝트 문제: __________________________</div>
+              <div class="promptLine">하나의 특성: ______________________________</div>
+              <div class="promptLine">반대 요구 A: ______________________________</div>
+              <div class="promptLine">반대 요구 B: ______________________________</div>
+              <div class="promptLine">적용할 분리원리: 시간 / 공간 / 조건 / 전체·부분</div>
+              <div class="promptLine">해결 구조: 언제·어디서·어떤 조건·어느 부분으로 나눌 것인가?</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <section class="card nav">
+    <button class="navBtn secondary" onclick="prevStep()">이전</button>
+    <button class="restartBtn" onclick="replay()">다시 보기</button>
+    <button class="navBtn" onclick="nextStep()">다음</button>
+  </section>
+</div>
+
+<script>
+const stateData = {
+  conflict:{
+    body:"state-conflict",
+    stage:1,
+    badge:"1단계 · 모순 확인",
+    resultBadge:"물리적 모순 확인",
+    suitability:"개념 확인",
+    suitabilityClass:"thinking",
+    title:"먼저 충돌만 봅니다",
+    message:`기본 상태에서는 해결 구조를 보여주지 않습니다. 먼저 <span class="blue">굵어야 함</span>과 <span class="pink">가늘어야 함</span>의 충돌만 확인합니다.`,
+    text:`칫솔모 굵기라는 하나의 특성이 <span>굵어야 함</span>과 <span>가늘어야 함</span>이라는 반대 요구를 동시에 받습니다.`,
+    active:null,
+    transfer:false
+  },
+  select:{
+    body:"state-select",
+    stage:2,
+    badge:"2단계 · 분리원리 선택",
+    resultBadge:"분리원리 선택",
+    suitability:"적합도를 구분해서 봅니다",
+    suitabilityClass:"thinking",
+    title:"모든 원리가 같은 수준으로 적합하지는 않습니다",
+    message:`칫솔모 사례의 핵심 해결은 <span class="accent">공간 분리</span>와 <span class="accent">전체/부분 분리</span>입니다. 시간 분리는 사고 확장으로만 봅니다.`,
+    text:`분리원리는 억지로 모두 적용하는 것이 아니라, 사례에 맞는 원리를 골라야 합니다. 이 사례에서는 <span>공간 분리</span>와 <span>전체/부분 분리</span>가 가장 자연스럽습니다.`,
+    active:null,
+    transfer:false
+  },
+  time:{
+    body:"state-time",
+    stage:3,
+    badge:"3단계 · 시간 분리",
+    resultBadge:"시간 분리",
+    suitability:"사고 확장",
+    suitabilityClass:"thinking",
+    title:"이 사례의 대표 해결책은 아닙니다",
+    message:`<span class="accent">시간 분리</span>: 칫솔모 사례에서는 해결책이라기보다 사용 시점을 나누어 요구를 검토하는 사고 확장입니다.`,
+    text:`칫솔모가 실제로 시간에 따라 굵어졌다가 가늘어지는 것은 자연스럽지 않습니다. 다만 사용 전·사용 중·사용 후를 나누어 <span>언제 힘 지탱이 필요한지, 언제 세밀 청소가 필요한지</span>를 검토할 수 있습니다.`,
+    active:"time",
+    transfer:false
+  },
+  space:{
+    body:"state-space",
+    stage:3,
+    badge:"3단계 · 공간 분리",
+    resultBadge:"공간 분리 적용",
+    suitability:"대표 해결",
+    suitabilityClass:"primary",
+    title:"위치를 나누어 해결합니다",
+    message:`<span class="accent">공간 분리</span>: 아래쪽은 굵게, 끝부분은 가늘게 만들어 위치별 역할을 나눕니다.`,
+    text:`아래쪽은 굵게 만들어 힘을 지탱하고, 끝부분은 가늘게 만들어 치아 사이와 잇몸 틈을 닦습니다. 같은 칫솔모 안에서 <span>위치별 역할</span>을 나누는 대표 해결입니다.`,
+    active:"space",
+    transfer:false
+  },
+  condition:{
+    body:"state-condition",
+    stage:3,
+    badge:"3단계 · 조건 분리",
+    resultBadge:"조건 분리 적용",
+    suitability:"보조 해결",
+    suitabilityClass:"secondary",
+    title:"조건에 따라 다르게 작동할 수 있습니다",
+    message:`<span class="accent">조건 분리</span>: 압력 약함과 압력 강함에 따라 작동이 달라질 수 있습니다. 단, 소재와 구조 설계가 전제되어야 합니다.`,
+    text:`압력이 약할 때는 모가 부드럽게 퍼져 섬세하게 닦고, 압력이 강할 때는 모가 모이거나 눌리며 힘을 지탱하게 설계할 수 있습니다. 다만 이는 <span>소재 탄성, 모 배열, 구조 설계</span>가 함께 전제될 때 가능한 보조 해결입니다.`,
+    active:"condition",
+    transfer:false
+  },
+  part:{
+    body:"state-part",
+    stage:3,
+    badge:"3단계 · 전체/부분 분리",
+    resultBadge:"전체/부분 분리 적용",
+    suitability:"대표 해결",
+    suitabilityClass:"primary",
+    title:"전체와 일부가 역할을 나눕니다",
+    message:`<span class="accent">전체/부분 분리</span>: 전체는 지탱하고 일부는 세밀 청소를 담당하게 합니다.`,
+    text:`전체적으로는 굵은 모를 배치해 기본 지지력을 확보하고, 일부 구역에는 미세모를 배치해 세밀 청소 기능을 담당하게 합니다. 칫솔모 사례에서 <span>공간 분리와 함께 가장 자연스러운 대표 해결</span>입니다.`,
+    active:"part",
+    transfer:false
+  },
+  apply:{
+    body:"state-apply",
+    stage:4,
+    badge:"4단계 · 프로젝트 적용",
+    resultBadge:"프로젝트 적용",
+    suitability:"전이 학습",
+    suitabilityClass:"thinking",
+    title:"이제 내 문제로 옮겨 갑니다",
+    message:`중앙의 6개 사례처럼 <span class="accent">원리별 해결 구조</span>를 구분해서 내 프로젝트 문제에 적용해 보세요.`,
+    text:`물리적 모순은 “중간값”을 찾는 문제가 아닙니다. 사례마다 시간·공간·조건·전체/부분 중 어떤 원리가 실제로 어디에 적용되는지 구분해야 합니다.`,
+    active:null,
+    transfer:true
+  }
+};
+
+const demoOrder = ["conflict","select","space","apply"];
+let current = "conflict";
+let selectedPrinciple = null;
+
+function choosePrinciple(id){
+  selectedPrinciple = id;
+  current = id;
+  render();
+}
+
+function render(){
+  const s = stateData[current];
+  document.body.className = s.body;
+  document.getElementById("stageBadge").textContent = s.badge;
+  document.getElementById("resultBadge").textContent = s.resultBadge;
+  const sb = document.getElementById("suitabilityBadge");
+  sb.textContent = s.suitability;
+  sb.className = "suitabilityBadge " + (s.suitabilityClass === "primary" ? "" : s.suitabilityClass);
+  document.getElementById("resultTitle").textContent = s.title;
+  document.getElementById("resultText").innerHTML = s.text;
+  document.getElementById("message").innerHTML = `<span>${s.message}</span>`;
+  document.getElementById("mainQuestion").textContent = s.transfer ? "이제 내 프로젝트의 물리적 모순을 찾아봅시다" : "칫솔모는 굵어야 할까요, 가늘어야 할까요?";
+
+  document.querySelectorAll(".principleBtn").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.principle === s.active);
+  });
+
+  document.querySelectorAll(".step").forEach((el, idx)=>{
+    el.classList.toggle("active", idx < s.stage);
+  });
+
+  document.getElementById("transferPanel").classList.toggle("show", s.transfer);
+}
+
+function nextStep(){
+  if(current === "conflict"){
+    current = "select";
+  } else if(current === "select"){
+    current = selectedPrinciple || "space";
+  } else if(["time","space","condition","part"].includes(current)){
+    current = "apply";
+  } else {
+    current = "apply";
+  }
+  render();
+}
+
+function prevStep(){
+  if(current === "apply"){
+    current = selectedPrinciple || "space";
+  } else if(["time","space","condition","part"].includes(current)){
+    current = "select";
+  } else if(current === "select"){
+    current = "conflict";
+  } else {
+    current = "conflict";
+  }
+  render();
+}
+
+function replay(){
+  const now = current;
+  document.body.classList.remove("state-time","state-space","state-condition","state-part","state-apply","state-select","state-conflict","replay-flash");
+  void document.body.offsetWidth;
+  current = now;
+  render();
+  document.body.classList.add("replay-flash");
+  setTimeout(() => document.body.classList.remove("replay-flash"), 650);
+}
+
+render();
+</script>
+</body>
+</html>

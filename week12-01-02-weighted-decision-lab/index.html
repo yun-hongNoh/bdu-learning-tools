@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>가중순위 의사결정 실험실 - 3 Cases</title>
+<style>
+:root{
+  --bg:#061323; --panel:#0d2239; --text:#f6fbff; --muted:#b8cbe0;
+  --cyan:#78c9ff; --mint:#4be7ca; --red:#ff6f8a; --yellow:#ffd166;
+  --green:#65e6a4; --purple:#b99cff; --line:rgba(255,255,255,.16);
+  --shadow:rgba(0,0,0,.38);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 15% 8%, rgba(75,231,202,.18), transparent 24%),
+    radial-gradient(circle at 86% 4%, rgba(120,201,255,.15), transparent 28%),
+    linear-gradient(135deg,#050f1c,#0a1c31 55%,#061323);
+  padding:14px;
+  overflow-x:hidden;
+}
+.app{
+  width:min(1260px,100%);
+  min-height:calc(100vh - 28px);
+  margin:0 auto;
+  display:grid;
+  grid-template-rows:auto auto 1fr auto;
+  gap:12px;
+}
+.card{
+  background:rgba(13,34,57,.88);
+  border:1px solid var(--line);
+  border-radius:26px;
+  box-shadow:0 22px 55px var(--shadow);
+  backdrop-filter:blur(14px);
+}
+.header{
+  padding:16px 20px;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:16px;
+  align-items:center;
+}
+.badge{
+  padding:9px 13px;
+  border-radius:999px;
+  background:rgba(75,231,202,.12);
+  border:1px solid rgba(75,231,202,.34);
+  color:#c9fff6;
+  font-weight:900;
+  font-size:15px;
+  white-space:nowrap;
+}
+.titleWrap{text-align:center}
+.title{
+  margin:0;
+  font-size:clamp(28px,4vw,46px);
+  line-height:1.06;
+  letter-spacing:-.045em;
+  font-weight:1000;
+}
+.subtitle{
+  margin:7px 0 0;
+  color:var(--muted);
+  font-size:clamp(15px,1.7vw,18px);
+  font-weight:750;
+}
+.modeBadge{
+  min-width:150px;
+  justify-self:end;
+  text-align:center;
+  padding:10px 14px;
+  border-radius:18px;
+  background:rgba(255,209,102,.12);
+  border:1px solid rgba(255,209,102,.36);
+  color:#ffe6ad;
+  font-weight:1000;
+}
+.caseTabs{
+  padding:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.caseTab{
+  min-height:62px;
+  border:none;
+  border-radius:20px;
+  color:#fff;
+  background:rgba(255,255,255,.075);
+  border:1px solid rgba(255,255,255,.14);
+  cursor:pointer;
+  transition:.14s ease;
+  text-align:left;
+  padding:12px 15px;
+}
+.caseTab:hover,.preset:hover,.actionBtn:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
+}
+.caseTab.active{
+  color:#042033;
+  background:linear-gradient(135deg,var(--mint),#2c9ee0);
+  border-color:transparent;
+}
+.caseTab b{
+  display:block;
+  font-size:clamp(17px,2vw,23px);
+  letter-spacing:-.035em;
+}
+.caseTab small{
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font-weight:850;
+  font-size:13px;
+}
+.caseTab.active small{color:rgba(4,32,51,.76)}
+.main{
+  padding:14px;
+  display:grid;
+  grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);
+  gap:14px;
+}
+.left{
+  display:grid;
+  grid-template-rows:auto auto auto 1fr;
+  gap:12px;
+}
+.context,
+.noteBox,
+.matrix,
+.weights,
+.ranking,
+.explain,
+.formulaPanel,
+.changePanel{
+  padding:16px;
+  border-radius:24px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+}
+.context h2, .matrix h3, .weights h3, .ranking h3, .formulaPanel h3{
+  margin:0 0 10px;
+  font-size:clamp(22px,2.7vw,32px);
+  letter-spacing:-.04em;
+}
+.context p, .noteBox p, .formulaPanel p{
+  margin:0;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.5;
+  font-weight:800;
+}
+.context .alert{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:16px;
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.25);
+  color:#ffe6ad;
+  font-size:15px;
+  font-weight:900;
+}
+.noteBox{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.note{
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.1);
+  padding:12px;
+}
+.note h4{
+  margin:0 0 8px;
+  font-size:18px;
+  letter-spacing:-.03em;
+}
+.note p{
+  font-size:14px;
+  line-height:1.45;
+}
+.ideas{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.idea{
+  position:relative;
+  min-height:224px;
+  border-radius:24px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.13);
+  padding:16px;
+  display:grid;
+  grid-template-rows:auto 1fr auto;
+  gap:10px;
+  overflow:hidden;
+  transition:.2s ease;
+}
+.idea.winner{
+  border-color:rgba(255,209,102,.65);
+  box-shadow:0 0 28px rgba(255,209,102,.14), 0 18px 40px rgba(0,0,0,.25);
+  transform:translateY(-3px);
+}
+.idea.winner::before{
+  content:"현재 1위";
+  position:absolute;
+  right:12px;
+  top:12px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,209,102,.16);
+  border:1px solid rgba(255,209,102,.5);
+  color:#ffe6ad;
+  font-size:13px;
+  font-weight:1000;
+}
+.ideaIcon{
+  width:58px;height:58px;
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  font-size:31px;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.16);
+}
+.idea h3{
+  margin:0;
+  font-size:clamp(19px,2.3vw,26px);
+  letter-spacing:-.04em;
+  line-height:1.15;
+}
+.idea p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.42;
+  font-weight:750;
+}
+.scorePill{
+  width:max-content;
+  max-width:100%;
+  border-radius:999px;
+  padding:8px 11px;
+  background:rgba(75,231,202,.10);
+  border:1px solid rgba(75,231,202,.28);
+  color:#c9fff6;
+  font-weight:1000;
+}
+.scoreTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0 8px;
+}
+.scoreTable th{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+  padding:0 6px;
+}
+.scoreTable th:first-child{text-align:left}
+.scoreTable td{
+  background:rgba(255,255,255,.06);
+  border-top:1px solid rgba(255,255,255,.10);
+  border-bottom:1px solid rgba(255,255,255,.10);
+  padding:10px 8px;
+  text-align:center;
+  font-weight:900;
+  color:#fff;
+}
+.scoreTable td:first-child{
+  border-left:1px solid rgba(255,255,255,.10);
+  border-radius:14px 0 0 14px;
+  text-align:left;
+  color:#f6fbff;
+  font-weight:1000;
+}
+.scoreTable td:last-child{
+  border-right:1px solid rgba(255,255,255,.10);
+  border-radius:0 14px 14px 0;
+}
+.formulaPanel .formula{
+  margin-top:10px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.1);
+  color:#ffe6ad;
+  font-weight:1000;
+  font-size:17px;
+  line-height:1.5;
+}
+.formulaPanel .example{
+  margin-top:10px;
+  color:#c9fff6;
+  font-size:15px;
+  font-weight:850;
+}
+.right{
+  display:grid;
+  grid-template-rows:auto auto auto 1fr auto;
+  gap:12px;
+}
+.weights h3, .ranking h3, .changePanel h3{
+  font-size:clamp(21px,2.5vw,30px);
+}
+.weightList{
+  display:grid;
+  gap:12px;
+}
+.weightItem{
+  display:grid;
+  gap:7px;
+}
+.weightTop{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  font-weight:1000;
+}
+.weightName{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dot{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--mint);
+}
+.weightPercent{
+  color:#ffe6ad;
+  font-weight:1000;
+}
+input[type="range"]{
+  width:100%;
+  accent-color:var(--mint);
+  cursor:pointer;
+}
+.presetGrid{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.preset{
+  min-height:48px;
+  border:none;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.14s ease;
+}
+.presetHelp{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  font-weight:750;
+}
+.rankList{
+  display:grid;
+  gap:9px;
+}
+.rankRow{
+  display:grid;
+  grid-template-columns:42px 1fr 74px;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:8px 10px;
+  border-radius:18px;
+  background:rgba(255,255,255,.065);
+  border:1px solid rgba(255,255,255,.12);
+  transition:.2s ease;
+}
+.rankRow.top{
+  border-color:rgba(255,209,102,.5);
+  background:rgba(255,209,102,.10);
+}
+.rankNo{
+  width:34px;height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-weight:1000;
+  background:rgba(255,255,255,.10);
+}
+.rankRow.top .rankNo{
+  background:#ffd166;
+  color:#042033;
+}
+.rankName{
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.rankScore{
+  text-align:right;
+  color:#c9fff6;
+  font-weight:1000;
+}
+.changePanel{
+  display:grid;
+  gap:8px;
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.25);
+}
+.changePanel h3{
+  margin:0;
+  color:#ffe6ad;
+}
+.changePanel p{
+  margin:0;
+  color:#e7f0fb;
+  line-height:1.45;
+  font-size:15px;
+  font-weight:850;
+}
+.explain{
+  background:rgba(5,16,29,.72);
+  border:1px solid rgba(255,255,255,.15);
+  display:grid;
+  align-content:center;
+  gap:10px;
+}
+.explainBadge{
+  width:max-content;
+  max-width:100%;
+  border-radius:999px;
+  padding:9px 12px;
+  background:rgba(255,209,102,.12);
+  border:1px solid rgba(255,209,102,.35);
+  color:#ffe6ad;
+  font-size:15px;
+  font-weight:1000;
+}
+.explainTitle{
+  margin:0;
+  font-size:clamp(24px,3vw,38px);
+  letter-spacing:-.045em;
+  font-weight:1000;
+}
+.explainText{
+  margin:0;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.48;
+  font-weight:800;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.actionBtn{
+  min-height:54px;
+  border:none;
+  border-radius:18px;
+  color:#042033;
+  background:linear-gradient(135deg,var(--mint),#2c9ee0);
+  font-size:17px;
+  font-weight:1000;
+  cursor:pointer;
+  transition:.14s ease;
+}
+.actionBtn.secondary{
+  color:#fff;
+  background:rgba(255,255,255,.09);
+  border:1px solid var(--line);
+}
+.footer{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:14px;
+}
+.footerBox{
+  border-radius:20px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  padding:14px;
+}
+.footerBox h3{
+  margin:0 0 8px;
+  font-size:20px;
+  letter-spacing:-.035em;
+}
+.footerBox p{
+  margin:0;
+  color:var(--muted);
+  font-weight:850;
+  line-height:1.45;
+  font-size:14px;
+}
+.changeFlash{ animation:flash .45s ease; }
+@keyframes flash{
+  0%{filter:brightness(1)}
+  50%{filter:brightness(1.4)}
+  100%{filter:brightness(1)}
+}
+@media(max-width:1020px){
+  body{padding:8px}
+  .app{min-height:calc(100vh - 16px)}
+  .header{grid-template-columns:1fr}
+  .titleWrap{text-align:left}
+  .modeBadge{justify-self:start}
+  .caseTabs{grid-template-columns:1fr}
+  .main{grid-template-columns:1fr}
+  .ideas{grid-template-columns:1fr}
+  .noteBox,.footer,.presetGrid,.actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="card header">
+    <div class="badge">12주차 · 의사결정</div>
+    <div class="titleWrap">
+      <h1 class="title">가중순위 의사결정 실험실</h1>
+      <p class="subtitle">기준의 중요도를 바꾸면 선택이 달라진다</p>
+    </div>
+    <div class="modeBadge" id="modeBadge">가중순위 평가</div>
+  </header>
+
+  <section class="card caseTabs" id="caseTabs"></section>
+
+  <main class="card main">
+    <section class="left">
+      <section class="context">
+        <h2 id="caseTitle"></h2>
+        <p id="caseIntro"></p>
+        <div class="alert" id="caseConstraint"></div>
+      </section>
+
+      <section class="noteBox">
+        <div class="note">
+          <h4>기준 점수란?</h4>
+          <p id="scoreGuide"></p>
+        </div>
+        <div class="note">
+          <h4>가중치란?</h4>
+          <p id="weightGuide"></p>
+        </div>
+      </section>
+
+      <section class="ideas" id="ideas"></section>
+
+      <section class="matrix">
+        <h3>대안별 기준 점수</h3>
+        <table class="scoreTable" id="scoreTable"></table>
+      </section>
+    </section>
+
+    <aside class="right">
+      <section class="weights">
+        <h3>평가 기준 가중치</h3>
+        <div class="weightList" id="weightList"></div>
+        <div class="presetGrid" id="presetGrid"></div>
+        <div class="presetHelp" id="presetHelp"></div>
+      </section>
+
+      <section class="ranking">
+        <h3>실시간 순위</h3>
+        <div class="rankList" id="rankList"></div>
+      </section>
+
+      <section class="changePanel" id="changePanel">
+        <h3>순위 변화 추적</h3>
+        <p id="changeText">아직 1위 변화는 없습니다. 가중치를 조절해 보세요.</p>
+      </section>
+
+      <section class="explain" id="explain">
+        <div class="explainBadge">현재 1위</div>
+        <h3 class="explainTitle" id="explainTitle"></h3>
+        <p class="explainText" id="explainText"></p>
+      </section>
+
+      <section class="actions">
+        <button class="actionBtn" onclick="showWhy()">왜 순위가 바뀌나요?</button>
+        <button class="actionBtn secondary" onclick="resetWeights()">초기화</button>
+      </section>
+    </aside>
+  </main>
+
+  <section class="card footer">
+    <div class="formulaPanel">
+      <h3>가중순위 계산식</h3>
+      <p>가중순위 결정법의 핵심은 “기준 점수 × 가중치”를 모두 더하여 최종점수를 계산하는 것입니다.</p>
+      <div class="formula" id="formulaText"></div>
+      <div class="example" id="formulaExample"></div>
+    </div>
+    <div class="footerBox">
+      <h3>핵심 메시지</h3>
+      <p id="keyMessage"></p>
+    </div>
+  </section>
+</div>
+
+<script>
+const cases = [
+  {
+    id:"team",
+    tab:"팀 프로젝트",
+    subtitle:"아이디어 선정",
+    title:"팀 프로젝트 아이디어 선정",
+    intro:"팀 프로젝트에서 3개 아이디어 중 하나를 먼저 선택해야 합니다. 모든 아이디어가 괜찮아 보이지만, 과제 기간·팀 역량·발표 평가를 고려하면 우선순위는 달라질 수 있습니다.",
+    constraint:"상황 제약: 발표까지 3주, 팀원 4명, 최종 결과물은 시연 가능한 프로토타입과 발표자료입니다.",
+    scoreGuide:"기준 점수는 각 아이디어가 특정 기준에서 얼마나 강한지를 나타냅니다. 예를 들어 문제해결성 90점은 실제 불편을 잘 해결한다는 뜻입니다.",
+    weightGuide:"가중치는 현재 의사결정에서 그 기준을 얼마나 중요하게 볼지 나타냅니다. 팀이 무엇을 중시하느냐에 따라 선택이 달라집니다.",
+    keyMessage:"아이디어 선정은 인기투표가 아닙니다. 어떤 기준을 중요하게 볼지 드러내고, 그 기준에 따라 선택하는 과정입니다.",
+    criteria:[
+      { id:"problem", name:"문제해결성", icon:"🎯", color:"#78c9ff" },
+      { id:"ease", name:"구현용이성", icon:"🛠️", color:"#4be7ca" },
+      { id:"creativity", name:"창의성", icon:"💡", color:"#ffd166" },
+      { id:"presentation", name:"발표설득력", icon:"📣", color:"#b99cff" }
+    ],
+    options:[
+      { id:"campus", icon:"🗺️", name:"캠퍼스 길찾기 앱", short:"건물·강의실·편의시설 위치를 쉽게 찾도록 돕는 서비스", scores:{ problem:88, ease:72, creativity:62, presentation:78 }, reason:"실제 불편을 해결하는 힘이 강하고 발표에서 문제 상황을 설명하기 쉽습니다." },
+      { id:"meal", icon:"🍱", name:"식단 추천 서비스", short:"예산·건강·취향을 반영해 하루 식단을 추천하는 서비스", scores:{ problem:74, ease:82, creativity:70, presentation:72 }, reason:"구현용이성이 높고 일상성도 좋습니다. 제한된 기간 안에 프로토타입을 만들기 유리합니다." },
+      { id:"lost", icon:"🔎", name:"분실물 공유 플랫폼", short:"잃어버린 물건을 등록하고 검색·연락할 수 있는 플랫폼", scores:{ problem:82, ease:58, creativity:88, presentation:86 }, reason:"창의성과 발표설득력이 강합니다. 다만 구현 범위와 운영 방식은 조정이 필요합니다." }
+    ],
+    defaultWeights:{ problem:35, ease:25, creativity:20, presentation:20 },
+    presets:[
+      { id:"problem", label:"문제해결 중심", weights:{ problem:55, ease:15, creativity:15, presentation:15 } },
+      { id:"practical", label:"실행가능성 중심", weights:{ problem:20, ease:50, creativity:15, presentation:15 } },
+      { id:"creative", label:"창의성 중심", weights:{ problem:20, ease:10, creativity:45, presentation:25 } },
+      { id:"balanced", label:"균형 평가", weights:{ problem:25, ease:25, creativity:25, presentation:25 } }
+    ],
+    presetHelp:"프리셋은 각각 문제해결, 구현 현실성, 창의적 차별성, 균형 판단을 우선할 때의 예시입니다."
+  },
+  {
+    id:"phone",
+    tab:"스마트폰 구매",
+    subtitle:"선택 기준 비교",
+    title:"스마트폰 구매 결정",
+    intro:"새 스마트폰을 고를 때 모든 선택지가 장점과 단점을 가집니다. 성능을 중시할지, 가격을 중시할지, 배터리를 중시할지에 따라 최종 선택은 달라질 수 있습니다.",
+    constraint:"상황 제약: 2년 이상 사용할 스마트폰을 구매해야 하며, 예산과 실제 사용 패턴을 함께 고려해야 합니다.",
+    scoreGuide:"기준 점수는 각 스마트폰 유형이 특정 기준에서 얼마나 강한지를 나타냅니다. 예를 들어 배터리 90점은 오래 사용할 수 있다는 뜻입니다.",
+    weightGuide:"가중치는 지금 구매 상황에서 어떤 기준을 더 중요하게 보는지 나타냅니다. 사용자의 생활 패턴에 따라 선택은 달라집니다.",
+    keyMessage:"좋은 제품은 하나로 고정되지 않습니다. 나에게 중요한 기준을 드러내야 합리적 선택이 가능합니다.",
+    criteria:[
+      { id:"performance", name:"성능", icon:"⚡", color:"#78c9ff" },
+      { id:"price", name:"가격만족도", icon:"💰", color:"#4be7ca" },
+      { id:"battery", name:"배터리", icon:"🔋", color:"#ffd166" },
+      { id:"portability", name:"휴대성", icon:"📱", color:"#b99cff" }
+    ],
+    options:[
+      { id:"flagship", icon:"🚀", name:"고성능 플래그십폰", short:"성능·카메라가 우수하지만 가격과 무게 부담이 있는 선택", scores:{ performance:95, price:48, battery:72, portability:62 }, reason:"성능이 압도적으로 높습니다. 성능 가중치가 높을수록 유리합니다." },
+      { id:"midrange", icon:"⚖️", name:"가성비 중급폰", short:"가격과 성능의 균형이 좋은 무난한 선택", scores:{ performance:74, price:88, battery:76, portability:82 }, reason:"가격만족도와 휴대성이 좋습니다. 균형 평가나 가격 중심에서 강합니다." },
+      { id:"batteryphone", icon:"🔋", name:"배터리 특화폰", short:"오래 쓰기 좋지만 성능·디자인은 보통인 선택", scores:{ performance:62, price:72, battery:94, portability:56 }, reason:"배터리 기준에서 강합니다. 장시간 사용을 중요하게 보면 우선순위가 올라갑니다." }
+    ],
+    defaultWeights:{ performance:30, price:30, battery:25, portability:15 },
+    presets:[
+      { id:"performance", label:"성능 중심", weights:{ performance:55, price:15, battery:15, portability:15 } },
+      { id:"price", label:"가격 중심", weights:{ performance:15, price:55, battery:15, portability:15 } },
+      { id:"battery", label:"배터리 중심", weights:{ performance:15, price:15, battery:55, portability:15 } },
+      { id:"balanced", label:"균형 평가", weights:{ performance:25, price:25, battery:25, portability:25 } }
+    ],
+    presetHelp:"프리셋은 성능, 가격, 배터리, 균형 구매 관점을 비교하기 위한 예시입니다."
+  },
+  {
+    id:"aitool",
+    tab:"AI 도구 선택",
+    subtitle:"과제 수행 도구",
+    title:"과제 수행을 위한 AI 도구 선택",
+    intro:"과제를 할 때 AI 도구를 무조건 많이 쓰는 것이 좋은 것은 아닙니다. 과제의 성격, 사용 난이도, 결과 품질, 시간 절약 효과를 기준으로 적합한 도구 유형을 선택해야 합니다.",
+    constraint:"상황 제약: 이번 주 안에 과제 결과물을 제출해야 하며, 초안 작성·자료 제작·간단한 구현 중 우선 지원받을 AI 도구 유형을 선택해야 합니다.",
+    scoreGuide:"기준 점수는 각 AI 도구 유형이 과제 수행에 얼마나 도움이 되는지를 나타냅니다. 예를 들어 결과품질 90점은 산출물 수준이 높다는 뜻입니다.",
+    weightGuide:"가중치는 이번 과제에서 무엇을 더 중요하게 볼지 나타냅니다. 과제 유형에 따라 적합한 AI 도구는 달라집니다.",
+    keyMessage:"AI 도구 선택도 기준 기반 의사결정입니다. 최신 도구가 아니라, 현재 과제에 가장 적합한 도구를 선택해야 합니다.",
+    criteria:[
+      { id:"fit", name:"과제적합성", icon:"🎯", color:"#78c9ff" },
+      { id:"ease", name:"사용용이성", icon:"👍", color:"#4be7ca" },
+      { id:"quality", name:"결과품질", icon:"🏆", color:"#ffd166" },
+      { id:"time", name:"시간절약", icon:"⏱️", color:"#b99cff" }
+    ],
+    options:[
+      { id:"writing", icon:"✍️", name:"글쓰기 AI", short:"보고서 초안·요약·문장 다듬기에 강한 도구 유형", scores:{ fit:86, ease:90, quality:78, time:88 }, reason:"사용이 쉽고 시간 절약 효과가 큽니다. 글쓰기 과제나 정리 과제에 특히 강합니다." },
+      { id:"visual", icon:"🎨", name:"시각자료 AI", short:"포스터·발표자료·이미지 콘셉트 제작에 강한 도구 유형", scores:{ fit:76, ease:72, quality:86, time:74 }, reason:"결과품질과 시각적 설득력이 좋습니다. 발표자료나 홍보물 과제에서 유리합니다." },
+      { id:"coding", icon:"💻", name:"코딩 보조 AI", short:"웹페이지·프로그램 구조 작성과 오류 해결에 강한 도구 유형", scores:{ fit:82, ease:56, quality:90, time:80 }, reason:"결과품질과 구현 지원 효과가 큽니다. 다만 사용 난이도는 상대적으로 높습니다." }
+    ],
+    defaultWeights:{ fit:35, ease:20, quality:25, time:20 },
+    presets:[
+      { id:"fit", label:"과제적합성 중심", weights:{ fit:55, ease:15, quality:15, time:15 } },
+      { id:"easy", label:"사용쉬움 중심", weights:{ fit:15, ease:55, quality:15, time:15 } },
+      { id:"quality", label:"결과품질 중심", weights:{ fit:20, ease:10, quality:55, time:15 } },
+      { id:"balanced", label:"균형 평가", weights:{ fit:25, ease:25, quality:25, time:25 } }
+    ],
+    presetHelp:"프리셋은 과제 적합성, 쉬운 사용, 결과품질, 균형 판단을 비교하기 위한 예시입니다."
+  }
+];
+
+let currentCaseIndex = 0;
+let rawWeights = {};
+let previousWinner = null;
+let lastChange = null;
+
+function currentCase(){ return cases[currentCaseIndex]; }
+function criteria(){ return currentCase().criteria; }
+function options(){ return currentCase().options; }
+
+function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+
+function selectCase(index){
+  currentCaseIndex = index;
+  rawWeights = clone(currentCase().defaultWeights);
+  previousWinner = null;
+  lastChange = null;
+  render();
+}
+
+function normalizedWeights(){
+  const total = Object.values(rawWeights).reduce((a,b)=>a+b,0) || 1;
+  const out = {};
+  criteria().forEach(c => out[c.id] = rawWeights[c.id] / total);
+  return out;
+}
+function percentWeights(){
+  const nw = normalizedWeights();
+  const rounded = {};
+  let sum = 0;
+  criteria().forEach((c, idx) => {
+    if(idx < criteria().length - 1){
+      rounded[c.id] = Math.round(nw[c.id] * 100);
+      sum += rounded[c.id];
+    } else {
+      rounded[c.id] = 100 - sum;
+    }
+  });
+  return rounded;
+}
+function calculate(){
+  const weights = normalizedWeights();
+  return options().map(option => {
+    const total = criteria().reduce((sum, c) => sum + option.scores[c.id] * weights[c.id], 0);
+    return { ...option, total };
+  }).sort((a,b)=>b.total-a.total);
+}
+function renderTabs(){
+  document.getElementById("caseTabs").innerHTML = cases.map((c, i) => `
+    <button class="caseTab ${i===currentCaseIndex?'active':''}" onclick="selectCase(${i})">
+      <b>${c.tab}</b>
+      <small>${c.subtitle}</small>
+    </button>
+  `).join("");
+}
+function renderContext(){
+  const c = currentCase();
+  document.getElementById("caseTitle").textContent = c.title;
+  document.getElementById("caseIntro").textContent = c.intro;
+  document.getElementById("caseConstraint").textContent = c.constraint;
+  document.getElementById("scoreGuide").textContent = c.scoreGuide;
+  document.getElementById("weightGuide").textContent = c.weightGuide;
+  document.getElementById("presetHelp").textContent = c.presetHelp;
+  document.getElementById("keyMessage").textContent = c.keyMessage;
+  document.getElementById("formulaText").textContent = `최종점수 = ${criteria().map(k => `(${k.name}점수 × 가중치)`).join(" + ")}`;
+}
+function renderIdeas(results){
+  const winner = results[0].id;
+  document.getElementById("ideas").innerHTML = options().map(option => {
+    const result = results.find(r => r.id === option.id);
+    return `
+      <article class="idea ${option.id===winner?'winner':''}" id="idea-${option.id}">
+        <div class="ideaIcon">${option.icon}</div>
+        <div>
+          <h3>${option.name}</h3>
+          <p>${option.short}</p>
+        </div>
+        <div class="scorePill">총점 ${result.total.toFixed(1)}</div>
+      </article>
+    `;
+  }).join("");
+}
+function renderWeights(){
+  const p = percentWeights();
+  document.getElementById("weightList").innerHTML = criteria().map(c => `
+    <div class="weightItem">
+      <div class="weightTop">
+        <div class="weightName"><span class="dot" style="background:${c.color}"></span>${c.icon} ${c.name}</div>
+        <div class="weightPercent">${p[c.id]}%</div>
+      </div>
+      <input type="range" min="1" max="100" value="${rawWeights[c.id]}" oninput="setWeight('${c.id}', this.value)" />
+    </div>
+  `).join("");
+}
+function renderPresets(){
+  document.getElementById("presetGrid").innerHTML = currentCase().presets.map(p => `
+    <button class="preset" onclick="applyPreset('${p.id}')">${p.label}</button>
+  `).join("");
+}
+function renderRank(results){
+  document.getElementById("rankList").innerHTML = results.map((r, idx) => `
+    <div class="rankRow ${idx===0?'top':''}">
+      <div class="rankNo">${idx+1}</div>
+      <div class="rankName">${r.icon} ${r.name}</div>
+      <div class="rankScore">${r.total.toFixed(1)}</div>
+    </div>
+  `).join("");
+}
+function renderTable(){
+  const rows = [
+    `<tr><th>대안</th>${criteria().map(c=>`<th>${c.name}</th>`).join("")}</tr>`,
+    ...options().map(option => `
+      <tr>
+        <td>${option.icon} ${option.name}</td>
+        ${criteria().map(c=>`<td>${option.scores[c.id]}</td>`).join("")}
+      </tr>
+    `)
+  ];
+  document.getElementById("scoreTable").innerHTML = rows.join("");
+}
+function explainWinner(results){
+  const top = results[0];
+  const p = percentWeights();
+  const highWeights = criteria()
+    .filter(c => p[c.id] >= 25)
+    .sort((a,b)=>p[b.id]-p[a.id])
+    .map(c => c.name);
+
+  let weightText = highWeights.length
+    ? `현재는 ${highWeights.join("·")} 기준의 영향이 큽니다.`
+    : "현재는 기준이 비교적 균형 있게 반영되어 있습니다.";
+
+  document.getElementById("explainTitle").textContent = `${top.icon} ${top.name}`;
+  document.getElementById("explainText").textContent =
+    `${weightText} ${top.reason}`;
+}
+function renderFormulaExample(results){
+  const top = results[0];
+  const p = normalizedWeights();
+  const terms = criteria().map(c => `${top.scores[c.id]}×${p[c.id].toFixed(2)}`);
+  const total = results[0].total.toFixed(1);
+  document.getElementById("formulaExample").textContent =
+    `예시(${top.name}): ${terms.join(" + ")} = ${total}`;
+}
+function renderChangePanel(results){
+  const winner = results[0].id;
+  const winnerOption = results[0];
+  const panel = document.getElementById("changePanel");
+  const text = document.getElementById("changeText");
+
+  if(previousWinner && previousWinner !== winner){
+    const prevName = options().find(i => i.id === previousWinner).name;
+    lastChange = `이전 1위: ${prevName} → 현재 1위: ${winnerOption.name}. 가중치 변경으로 우선순위가 바뀌었습니다.`;
+    panel.classList.remove("changeFlash");
+    void panel.offsetWidth;
+    panel.classList.add("changeFlash");
+    document.getElementById("modeBadge").textContent = "1위 변화!";
+  } else {
+    document.getElementById("modeBadge").textContent = "가중순위 평가";
+  }
+
+  if(lastChange){
+    text.textContent = lastChange;
+  } else {
+    text.textContent = `현재 1위는 ${winnerOption.name}입니다. 아직 1위 변화는 없습니다.`;
+  }
+}
+function render(){
+  const results = calculate();
+  const winner = results[0].id;
+  renderTabs();
+  renderContext();
+  renderIdeas(results);
+  renderWeights();
+  renderPresets();
+  renderRank(results);
+  renderTable();
+  explainWinner(results);
+  renderFormulaExample(results);
+  renderChangePanel(results);
+  previousWinner = winner;
+}
+function setWeight(id, value){
+  rawWeights[id] = Number(value);
+  render();
+}
+function applyPreset(presetId){
+  const preset = currentCase().presets.find(p => p.id === presetId);
+  rawWeights = clone(preset.weights);
+  render();
+}
+function resetWeights(){
+  rawWeights = clone(currentCase().defaultWeights);
+  previousWinner = null;
+  lastChange = null;
+  render();
+}
+function showWhy(){
+  const results = calculate();
+  const top = results[0];
+  const p = percentWeights();
+  const contributions = criteria().map(c => ({
+    name:c.name,
+    value: top.scores[c.id] * (p[c.id]/100),
+    weight:p[c.id],
+    score:top.scores[c.id]
+  })).sort((a,b)=>b.value-a.value);
+
+  const main = contributions[0];
+  document.getElementById("explainTitle").textContent = `왜 ${top.name}인가?`;
+  document.getElementById("explainText").textContent =
+    `현재 1위는 ${top.name}입니다. 가장 크게 영향을 준 기준은 ${main.name}입니다. ` +
+    `${main.name}의 가중치가 ${main.weight}%이고, 해당 대안의 ${main.name} 점수가 ${main.score}점이기 때문입니다. ` +
+    `즉, 순위는 대안의 절대적 우수성만으로 결정되지 않고, 어떤 기준을 얼마나 중요하게 보느냐에 따라 달라집니다.`;
+}
+
+rawWeights = clone(currentCase().defaultWeights);
+render();
+</script>
+</body>
+</html>
