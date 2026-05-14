@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRIZ 40 발명원리 · 학습 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300;9..144,400;9..144,500;9..144,600;9..144,800&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/triz.css">
+</head>
+<body>
+<div class="container">
+<header>
+<div class="header-top">
+<div class="eyebrow">TRIZ · Theory of Inventive Problem Solving</div>
+<div class="deco"><span class="big">01 → 40</span>Forty patterns<br>for inventive<br>problem solving</div>
+</div>
+<h1><span class="small">발명을 만드는</span><em>40가지</em> 패턴</h1>
+<p class="subtitle">러시아의 발명가 겐리히 알트슐러가 약 20만 건의 특허를 분석하여 정리한 40가지 발명원리. 문제 속의 '모순(contradiction)'을 만났을 때, 어떤 방향으로 해결할 수 있는지를 보여주는 사고의 지도입니다.</p>
+<p class="guide-text">먼저 40가지 원리를 둘러본 뒤, 사례 퀴즈로 복습하고, 마지막으로 39×39 모순 매트릭스에서 해결 원리를 찾아보세요.</p>
+<div class="meta-row">
+<div class="meta-item"><div class="label">Principles</div><div class="val"><em>40</em>개의 원리</div></div>
+<div class="meta-item"><div class="label">Examples</div><div class="val"><em>240</em>+개의 사례</div></div>
+<div class="meta-item"><div class="label">Matrix</div><div class="val"><em>39</em>×<em>39</em> 매트릭스</div></div>
+<div class="meta-item"><div class="label">Quiz</div><div class="val"><em>10</em>문항 셀프테스트</div></div>
+</div>
+</header>
+<nav class="tabs"><div class="tabs-inner">
+<button class="tab-btn active" data-tab="cards"><span class="tab-num">01</span>원리 둘러보기</button>
+<button class="tab-btn" data-tab="quiz"><span class="tab-num">02</span>사례 퀴즈</button>
+<button class="tab-btn" data-tab="matrix"><span class="tab-num">03</span>모순 매트릭스</button>
+</div></nav>
+<div class="tab-content active" data-tab-content="cards">
+<section class="intro-block">
+<h2>이 자료를 <em>읽는 법</em></h2>
+<div class="intro-content">
+<p>각 카드는 하나의 발명원리를 담고 있습니다. <strong>번호 · 한국어 이름 · 시각 아이콘 · 짧은 설명</strong>으로 구성되어 있으며, 카드를 누르면 <strong>상세한 설명, 어떤 모순을 해결하는지, 고전 사례와 최신 사례, 관련 원리</strong>까지 모두 확인할 수 있습니다.</p>
+<p>왼쪽 색 띠로 카테고리를 구분합니다. <strong>구조 변환</strong>은 물체를 어떻게 나누고 합칠지에 관한 원리, <strong>사전 조치</strong>는 문제가 발생하기 전에 미리 손을 쓰는 원리, <strong>동적 변환</strong>은 시간이나 작용 방식을 바꾸는 원리, <strong>시스템·물질</strong>은 다른 매개체나 재료로 대체하는 원리입니다.</p>
+<p>검색창에 <em>"갤럭시 폴드"</em>, <em>"mRNA"</em>, <em>"AirPods"</em>처럼 익숙한 사례를 넣어보면 어떤 원리에 해당하는지 바로 확인할 수 있습니다.</p>
+</div>
+</section>
+<div class="controls"><div class="controls-inner">
+<div class="search-wrap">
+<svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+<input type="text" class="search-input" placeholder="원리 이름이나 사례 키워드로 검색 (예: 갤럭시 폴드, 백신, API)" id="search" autocomplete="off">
+</div>
+<div class="filters">
+<button class="filter-btn active" data-filter="all">전체</button>
+<button class="filter-btn" data-filter="structure"><span class="dot"></span>구조 변환</button>
+<button class="filter-btn" data-filter="preliminary"><span class="dot"></span>사전 조치</button>
+<button class="filter-btn" data-filter="dynamic"><span class="dot"></span>동적 변환</button>
+<button class="filter-btn" data-filter="system"><span class="dot"></span>시스템·물질</button>
+</div>
+<div class="count"><strong id="countShown">40</strong> / 40 표시중</div>
+</div></div>
+<div class="grid" id="grid"></div>
+</div>
+<div class="tab-content" data-tab-content="quiz">
+<div class="quiz-wrap">
+<div id="quiz-screen-intro">
+<div class="quiz-intro">
+<div class="quiz-intro-eyebrow">SELF-ASSESSMENT</div>
+<h2>사례를 보고<br><em>원리</em>를 찾아보세요</h2>
+<p>총 10문항의 객관식 퀴즈입니다. 일상 속 사례를 보고 어떤 발명원리가 적용되었는지 4개 선택지 중에서 고르세요. 매 문항마다 해설을 제공합니다.</p>
+<button class="btn-primary" id="quizStartBtn">퀴즈 시작 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+</div>
+</div>
+<div id="quiz-screen-question" style="display:none;">
+<div class="quiz-progress">
+<span>문항 <strong id="qNum">1</strong> / 10</span>
+<div class="quiz-bar"><div class="quiz-bar-fill" id="qBar"></div></div>
+<span class="quiz-score"><em id="qScore">0</em> 정답</span>
+</div>
+<div class="quiz-question">
+<div class="quiz-q-label">사례 · CASE</div>
+<div class="quiz-q-text">다음 사례에 적용된 발명원리는?</div>
+<div class="quiz-q-example" id="qExample"></div>
+</div>
+<div class="quiz-options" id="qOptions"></div>
+<div class="quiz-feedback" id="qFeedback">
+<div class="quiz-feedback-result" id="qFeedbackResult"></div>
+<div class="quiz-feedback-explain" id="qFeedbackExplain"></div>
+<button class="btn-secondary" id="qDetailBtn">원리 상세 보기</button>
+</div>
+<div class="quiz-actions">
+<button class="btn-primary" id="qNextBtn" style="display:none;"><span id="qNextLabel">다음 문항</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+</div>
+</div>
+<div id="quiz-screen-results" style="display:none;">
+<div class="quiz-results">
+<div class="quiz-results-score"><em id="rScore">0</em> / 10</div>
+<div class="quiz-results-msg" id="rMsg"></div>
+<div class="quiz-results-sub" id="rSub"></div>
+<div class="quiz-results-actions">
+<button class="btn-primary" id="quizRetryBtn">다시 풀기 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+<button class="btn-secondary" id="quizBackBtn">처음으로</button>
+</div>
+<div class="quiz-review" id="quizReview"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="tab-content" data-tab-content="matrix">
+<div class="matrix-wrap">
+<div class="matrix-intro">
+<h2>모순을 <em>해결</em>하는 매트릭스</h2>
+<p>TRIZ의 진짜 힘은 '모순'을 해결하는 데서 나옵니다. 예를 들어 <strong>"무게는 줄이면서 강도는 유지하고 싶다"</strong> 같은 상황 — 한쪽을 개선하면 다른 쪽이 나빠지는 경우죠.</p>
+<p>알트슐러는 이런 모순을 <strong>39개의 표준 공학적 특성</strong>으로 정리하고, 각 조합마다 어떤 발명원리들이 자주 해결책으로 쓰였는지를 매트릭스로 만들었습니다. 아래에서 <strong>개선하려는 특성</strong>과 <strong>그 결과 악화되는 특성</strong>을 골라보세요. 추천 원리가 표시됩니다.</p>
+<p class="matrix-source"><strong>기반 자료:</strong> Altshuller의 표준 모순 매트릭스(1971). 39개 특성을 7개 그룹으로 분류했으며, 원본 매트릭스에서 추천 원리가 명시되지 않은 셀(약 240여 개)은 비어 있습니다.</p>
+</div>
+<div class="matrix-selector">
+<div class="matrix-field improving"><label>① 개선하려는 특성</label><select id="matImproving"><option value="">— 선택 —</option></select></div>
+<div class="matrix-arrow">vs</div>
+<div class="matrix-field worsening"><label>② 악화되는 특성</label><select id="matWorsening"><option value="">— 선택 —</option></select></div>
+</div>
+<div class="matrix-result" id="matrixResult">
+<div class="matrix-result-empty">
+<div class="empty-num">①+②</div>
+<div class="empty-text">두 특성을 선택하면 추천 원리가 표시됩니다</div>
+</div>
+</div>
+</div>
+</div>
+<footer>
+<div class="footer-inner">
+<div class="footer-left">"There is a method by which problems are solved. It is not magic. It is the science of inventing."<br>— Genrich S. Altshuller</div>
+<div class="footer-right">
+<span>TRIZ 40 INVENTIVE PRINCIPLES</span>
+<span>EDUCATIONAL PLATFORM · 학습용</span>
+<span>SELF-PACED LEARNING</span>
+</div>
+</div>
+</footer>
+</div>
+<button class="to-top" id="toTop" aria-label="맨 위로"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>
+<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modal">
+<button class="modal-close" id="modalClose" aria-label="닫기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<div id="modalContent"></div>
+</div></div>
+<script src="./js/triz-app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9237 @@
+{
+  "icons": {
+    "1": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"8\" width=\"22\" height=\"22\"/><rect x=\"34\" y=\"8\" width=\"22\" height=\"22\"/><rect x=\"8\" y=\"34\" width=\"22\" height=\"22\"/><rect x=\"34\" y=\"34\" width=\"22\" height=\"22\"/></svg>",
+    "2": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"8\" width=\"38\" height=\"38\"/><rect x=\"38\" y=\"38\" width=\"18\" height=\"18\" fill=\"currentColor\" stroke=\"none\"/></svg>",
+    "3": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"8\" width=\"48\" height=\"48\"/><line x1=\"32\" y1=\"8\" x2=\"32\" y2=\"56\"/><line x1=\"8\" y1=\"32\" x2=\"56\" y2=\"32\"/><circle cx=\"20\" cy=\"20\" r=\"3\" fill=\"currentColor\"/><circle cx=\"44\" cy=\"44\" r=\"3\" fill=\"currentColor\"/></svg>",
+    "4": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 14 52 L 42 10 L 56 52 Z\"/></svg>",
+    "5": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"24\" cy=\"32\" r=\"14\"/><circle cx=\"40\" cy=\"32\" r=\"14\"/></svg>",
+    "6": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"32\" cy=\"32\" r=\"10\"/><line x1=\"32\" y1=\"22\" x2=\"32\" y2=\"10\"/><line x1=\"42\" y1=\"32\" x2=\"54\" y2=\"32\"/><line x1=\"32\" y1=\"42\" x2=\"32\" y2=\"54\"/><line x1=\"22\" y1=\"32\" x2=\"10\" y2=\"32\"/></svg>",
+    "7": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"8\" width=\"48\" height=\"48\"/><rect x=\"18\" y=\"18\" width=\"28\" height=\"28\"/><rect x=\"26\" y=\"26\" width=\"12\" height=\"12\"/></svg>",
+    "8": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"10\" y1=\"20\" x2=\"54\" y2=\"20\"/><rect x=\"6\" y=\"14\" width=\"10\" height=\"12\"/><rect x=\"48\" y=\"14\" width=\"10\" height=\"12\"/><line x1=\"32\" y1=\"20\" x2=\"32\" y2=\"48\"/><polygon points=\"32,48 22,56 42,56\"/></svg>",
+    "9": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"22\" y1=\"12\" x2=\"22\" y2=\"52\"/><polyline points=\"14,20 22,12 30,20\"/><line x1=\"42\" y1=\"52\" x2=\"42\" y2=\"12\"/><polyline points=\"34,44 42,52 50,44\"/></svg>",
+    "10": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"32\" cy=\"32\" r=\"20\"/><line x1=\"32\" y1=\"18\" x2=\"32\" y2=\"32\"/><line x1=\"32\" y1=\"32\" x2=\"42\" y2=\"38\"/></svg>",
+    "11": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 32 8 L 52 16 L 52 32 Q 52 48 32 56 Q 12 48 12 32 L 12 16 Z\"/><polyline points=\"24,32 30,38 42,24\"/></svg>",
+    "12": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"8\" y1=\"32\" x2=\"56\" y2=\"32\"/><polyline points=\"16,26 8,32 16,38\"/><polyline points=\"48,26 56,32 48,38\"/><line x1=\"8\" y1=\"48\" x2=\"56\" y2=\"48\" stroke-dasharray=\"3 3\"/></svg>",
+    "13": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 12 22 Q 32 8 52 22\"/><polyline points=\"46,16 52,22 46,28\"/><path d=\"M 52 42 Q 32 56 12 42\"/><polyline points=\"18,48 12,42 18,36\"/></svg>",
+    "14": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 8 44 Q 32 8 56 44\"/><circle cx=\"32\" cy=\"32\" r=\"2.5\" fill=\"currentColor\"/></svg>",
+    "15": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"8\" y1=\"50\" x2=\"22\" y2=\"22\"/><line x1=\"22\" y1=\"22\" x2=\"42\" y2=\"42\"/><line x1=\"42\" y1=\"42\" x2=\"56\" y2=\"14\"/><circle cx=\"22\" cy=\"22\" r=\"3.5\" fill=\"currentColor\"/><circle cx=\"42\" cy=\"42\" r=\"3.5\" fill=\"currentColor\"/></svg>",
+    "16": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"16\" y=\"18\" width=\"32\" height=\"34\"/><line x1=\"6\" y1=\"32\" x2=\"58\" y2=\"32\" stroke-dasharray=\"3 3\"/></svg>",
+    "17": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"14,22 14,52 44,52\"/><polyline points=\"14,22 22,14 52,14 52,44 44,52\"/><line x1=\"44\" y1=\"22\" x2=\"52\" y2=\"14\"/><line x1=\"14\" y1=\"22\" x2=\"44\" y2=\"22\"/><line x1=\"44\" y1=\"22\" x2=\"44\" y2=\"52\"/></svg>",
+    "18": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 6 32 Q 14 14 22 32 T 38 32 T 54 32\"/></svg>",
+    "19": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"6,42 14,42 14,22 22,22 22,42 32,42 32,22 40,22 40,42 50,42 50,22 58,22\"/></svg>",
+    "20": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 6 32 Q 14 16 22 32 T 38 32 T 54 32\"/><line x1=\"54\" y1=\"32\" x2=\"58\" y2=\"32\"/></svg>",
+    "21": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"22\" y1=\"32\" x2=\"54\" y2=\"32\"/><polyline points=\"46,24 54,32 46,40\"/><line x1=\"6\" y1=\"20\" x2=\"14\" y2=\"20\"/><line x1=\"6\" y1=\"32\" x2=\"16\" y2=\"32\"/><line x1=\"6\" y1=\"44\" x2=\"14\" y2=\"44\"/></svg>",
+    "22": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 12 12 Q 12 40 32 40 Q 52 40 52 56\"/><polyline points=\"46,50 52,56 58,50\"/></svg>",
+    "23": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 50 18 A 18 18 0 1 0 50 46\"/><polyline points=\"44,12 50,18 44,24\"/></svg>",
+    "24": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"32\" r=\"6\"/><circle cx=\"32\" cy=\"32\" r=\"8\"/><circle cx=\"52\" cy=\"32\" r=\"6\"/><line x1=\"18\" y1=\"32\" x2=\"24\" y2=\"32\"/><line x1=\"40\" y1=\"32\" x2=\"46\" y2=\"32\"/></svg>",
+    "25": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"32\" cy=\"32\" r=\"20\"/><path d=\"M 22 32 Q 22 22 32 22 Q 42 22 42 32\"/><polyline points=\"38,28 42,32 46,28\"/></svg>",
+    "26": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"18\" width=\"24\" height=\"28\"/><rect x=\"32\" y=\"18\" width=\"24\" height=\"28\" stroke-dasharray=\"3 3\"/></svg>",
+    "27": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6\" y=\"10\" width=\"14\" height=\"14\"/><rect x=\"25\" y=\"10\" width=\"14\" height=\"14\"/><rect x=\"44\" y=\"10\" width=\"14\" height=\"14\"/><rect x=\"6\" y=\"40\" width=\"14\" height=\"14\"/><rect x=\"25\" y=\"40\" width=\"14\" height=\"14\"/></svg>",
+    "28": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"20\" cy=\"32\" r=\"10\"/><line x1=\"20\" y1=\"18\" x2=\"20\" y2=\"14\"/><line x1=\"20\" y1=\"46\" x2=\"20\" y2=\"50\"/><line x1=\"6\" y1=\"32\" x2=\"10\" y2=\"32\"/><line x1=\"30\" y1=\"32\" x2=\"34\" y2=\"32\"/><path d=\"M 38 32 L 44 22 L 50 42 L 58 32\"/></svg>",
+    "29": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 20 12 C 12 24, 12 38, 20 44 C 28 38, 28 24, 20 12 Z\"/><path d=\"M 44 22 C 38 30, 38 40, 44 44 C 50 40, 50 30, 44 22 Z\"/></svg>",
+    "30": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 6 22 Q 14 14 22 22 T 38 22 T 54 22\"/><path d=\"M 6 42 Q 14 34 22 42 T 38 42 T 54 42\"/></svg>",
+    "31": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"8\" width=\"48\" height=\"48\"/><circle cx=\"20\" cy=\"20\" r=\"3\"/><circle cx=\"38\" cy=\"20\" r=\"3\"/><circle cx=\"28\" cy=\"34\" r=\"3\"/><circle cx=\"46\" cy=\"40\" r=\"3\"/><circle cx=\"16\" cy=\"46\" r=\"3\"/></svg>",
+    "32": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"8\" y=\"18\" width=\"24\" height=\"28\"/><rect x=\"32\" y=\"18\" width=\"24\" height=\"28\" fill=\"currentColor\" stroke=\"none\"/></svg>",
+    "33": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"22\" cy=\"32\" r=\"10\" fill=\"currentColor\"/><circle cx=\"42\" cy=\"32\" r=\"10\" fill=\"currentColor\"/></svg>",
+    "34": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M 14 22 L 32 12 L 50 22\"/><path d=\"M 50 22 L 56 40 L 38 50\"/><path d=\"M 14 22 L 8 40 L 26 50\"/><path d=\"M 26 50 L 38 50\"/></svg>",
+    "35": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"32,10 54,50 10,50\"/></svg>",
+    "36": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"6\" y=\"38\" width=\"14\" height=\"14\"/><circle cx=\"32\" cy=\"45\" r=\"7\"/><path d=\"M 44 50 Q 47 38 50 50 Q 53 38 56 50\"/></svg>",
+    "37": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"10\" y=\"38\" width=\"12\" height=\"12\"/><rect x=\"32\" y=\"16\" width=\"24\" height=\"34\"/><line x1=\"22\" y1=\"44\" x2=\"32\" y2=\"33\" stroke-dasharray=\"2 2\"/></svg>",
+    "38": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"22\" cy=\"34\" r=\"7\"/><circle cx=\"42\" cy=\"34\" r=\"7\"/><line x1=\"32\" y1=\"12\" x2=\"32\" y2=\"20\"/><line x1=\"14\" y1=\"14\" x2=\"18\" y2=\"20\"/><line x1=\"50\" y1=\"14\" x2=\"46\" y2=\"20\"/></svg>",
+    "39": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"32\" cy=\"32\" r=\"22\"/><line x1=\"22\" y1=\"22\" x2=\"42\" y2=\"42\"/></svg>",
+    "40": "<svg viewBox=\"0 0 64 64\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"8\" y1=\"18\" x2=\"56\" y2=\"18\"/><line x1=\"8\" y1=\"28\" x2=\"56\" y2=\"28\"/><line x1=\"8\" y1=\"38\" x2=\"56\" y2=\"38\"/><line x1=\"8\" y1=\"48\" x2=\"56\" y2=\"48\"/></svg>"
+  },
+  "principles": [
+    {
+      "n": 1,
+      "ko": "분할",
+      "en": "Segmentation",
+      "cat": "structure",
+      "short": "물체를 독립적인 부분들로 나눈다. 분해와 조립이 가능한 구조로 만든다.",
+      "desc": [
+        "하나의 큰 시스템을 더 작은 독립 단위로 나누면 관리, 운반, 기능 변경이 쉬워집니다. 또한 한 부분의 고장이 전체로 번지는 것도 막을 수 있죠.",
+        "분할의 정도를 더 끌어올리면 새로운 기능이 생기기도 합니다. 예를 들어 종이를 잘게 자르면 곱슬한 충전재가 되고, 더 잘게 자르면 펄프가 됩니다."
+      ],
+      "contradiction": "물체의 효율성과 강력함을 유지하면서도, 처리·보관·교체가 가능한 단위로 만들고 싶을 때.",
+      "classic": [
+        {
+          "name": "모듈형 가구",
+          "detail": "필요한 부품만 교체·확장 가능"
+        },
+        {
+          "name": "블라인드",
+          "detail": "통창 대신 가로살로 빛을 단계별 조절"
+        },
+        {
+          "name": "분리수거함",
+          "detail": "재질별로 칸을 나누어 처리"
+        }
+      ],
+      "modern": [
+        {
+          "name": "갤럭시 폴드/플립",
+          "detail": "하나의 화면을 둘로 나눠 휴대성과 화면 크기 모두 확보"
+        },
+        {
+          "name": "마이크로서비스 아키텍처",
+          "detail": "거대한 시스템을 독립 서비스 단위로 나눠 배포·확장"
+        },
+        {
+          "name": "Framework 노트북",
+          "detail": "CPU·메모리·포트까지 모두 모듈화하여 사용자 교체 가능"
+        }
+      ],
+      "related": [
+        2,
+        5,
+        7,
+        17
+      ],
+      "reflection": "당신이 자주 쓰는 앱이나 서비스 중에서 \"분할\"의 원리가 적용된 사례를 떠올려보세요. 만약 그것이 분할되어 있지 않았다면 어떤 불편이 있었을까요?"
+    },
+    {
+      "n": 2,
+      "ko": "추출·분리",
+      "en": "Taking Out / Extraction",
+      "cat": "structure",
+      "short": "물체에서 필요한 부분이나 특성만 분리한다. 또는 방해되는 부분만 골라서 제거한다.",
+      "desc": [
+        "전체에서 필요한 한 가지 속성만 추출하거나, 반대로 골치 아픈 한 가지만 제거하는 원리입니다. 전체를 다 바꾸는 대신 핵심에만 손을 대는 거죠.",
+        "요즘은 AI 기술 덕분에 \"원하는 것만 분리\"가 훨씬 정교해졌습니다. 음성에서 잡음만, 영상에서 배경만, 음악에서 보컬만 빼내는 식으로요."
+      ],
+      "contradiction": "필요한 기능은 그대로 두고, 방해되는 요소만 골라서 제거하고 싶을 때.",
+      "classic": [
+        {
+          "name": "디카페인 커피",
+          "detail": "향과 맛은 유지, 카페인만 제거"
+        },
+        {
+          "name": "개 짖는 소리 도난방지기",
+          "detail": "개 자체가 아닌 짖는 소리만 추출해 활용"
+        },
+        {
+          "name": "에어컨 실외기",
+          "detail": "더운 공기는 밖으로 분리, 시원한 공기만 실내에"
+        }
+      ],
+      "modern": [
+        {
+          "name": "AirPods Pro 노이즈 캔슬링",
+          "detail": "주변 소음만 인식해 역위상 음파로 제거"
+        },
+        {
+          "name": "Zoom·Teams 배경 제거",
+          "detail": "AI가 사람과 배경을 실시간으로 분리"
+        },
+        {
+          "name": "Spotify 보컬 분리(Karaoke)",
+          "detail": "음원에서 보컬 트랙만 추출하여 MR 제공"
+        }
+      ],
+      "related": [
+        1,
+        6,
+        33
+      ],
+      "reflection": "당신 주변에 \"사실 필요한 건 한 가지뿐\"인 제품이나 서비스가 있다면? 그 한 가지만 분리해서 제공한다면 어떤 형태가 될까요?"
+    },
+    {
+      "n": 3,
+      "ko": "국소적 품질",
+      "en": "Local Quality",
+      "cat": "structure",
+      "short": "균일한 구조를 부분마다 다르게 만든다. 각 부분이 자기 역할에 가장 잘 맞도록 한다.",
+      "desc": [
+        "\"전체가 똑같다\"는 가정에서 벗어나, 각 부위마다 다른 조건이나 기능을 부여하는 원리입니다. 부분 최적화를 통해 전체 효율을 끌어올립니다.",
+        "반도체와 디스플레이 분야에서 이 원리가 정점에 와 있습니다. 같은 화면 안에서도 어두운 영역과 밝은 영역이 다르게 작동하고, 같은 칩 안에서도 작업에 따라 다른 코어가 깨어납니다."
+      ],
+      "contradiction": "전체를 단순하게 유지하면서, 각 부분이 자신만의 역할에 최적화되도록 만들고 싶을 때.",
+      "classic": [
+        {
+          "name": "지우개 달린 연필",
+          "detail": "한쪽은 쓰기, 한쪽은 지우기"
+        },
+        {
+          "name": "부위별 강도 다른 운동화 밑창",
+          "detail": "발의 압력 분포에 따라 다른 재질"
+        },
+        {
+          "name": "다구역 냉장고",
+          "detail": "야채칸·냉동칸·김치칸마다 다른 온도·습도"
+        }
+      ],
+      "modern": [
+        {
+          "name": "미니LED 존 디밍 TV",
+          "detail": "화면 영역별 백라이트를 개별 제어해 명암비 극대화"
+        },
+        {
+          "name": "인텔 P-core/E-core",
+          "detail": "한 CPU에 고성능 코어와 효율 코어가 작업에 따라 분담"
+        },
+        {
+          "name": "기능성 운동복 부위별 통기성",
+          "detail": "땀이 많은 등·겨드랑이만 메시 소재"
+        }
+      ],
+      "related": [
+        5,
+        33,
+        4
+      ],
+      "reflection": "당신이 사용하는 제품 중에서 \"모든 부분이 똑같은 게 오히려 비효율\"인 것이 있나요? 어디를 어떻게 다르게 만들면 좋을까요?"
+    },
+    {
+      "n": 4,
+      "ko": "비대칭",
+      "en": "Asymmetry",
+      "cat": "structure",
+      "short": "대칭 형태를 비대칭으로 바꾼다. 이미 비대칭이라면 그 정도를 더 키운다.",
+      "desc": [
+        "\"좌우가 똑같다\"는 미적·구조적 관습을 깨고, 기능에 맞춰 한쪽을 다르게 만드는 원리입니다.",
+        "대칭은 안정감을 주지만, 비대칭은 새로운 기능을 가능하게 합니다. 사람의 손이 좌우 대칭이 아닌 것처럼, 도구도 사용자의 비대칭에 맞춰 비대칭이 되어야 더 잘 작동합니다."
+      ],
+      "contradiction": "대칭의 단순한 미관·구조를 포기하더라도 기능적 효율을 확보하고 싶을 때.",
+      "classic": [
+        {
+          "name": "한쪽이 큰 깔때기 입구",
+          "detail": "액체를 빠르게 받아 좁은 입구로 모음"
+        },
+        {
+          "name": "오른손잡이용 가위",
+          "detail": "손의 각도에 맞춰 날을 비대칭으로 배치"
+        },
+        {
+          "name": "비대칭 타이어 트레드",
+          "detail": "안과 바깥 패턴이 달라 코너링·배수 성능 향상"
+        }
+      ],
+      "modern": [
+        {
+          "name": "AirPods Pro의 비대칭 형태",
+          "detail": "귓속 구조에 맞춰 한쪽으로 기울어진 디자인"
+        },
+        {
+          "name": "스마트폰 비대칭 카메라 모듈",
+          "detail": "센서마다 크기·역할이 달라 의도적 비대칭 배열"
+        },
+        {
+          "name": "F1 자동차 비대칭 서스펜션",
+          "detail": "특정 코너 방향에 맞춰 좌우 다른 세팅"
+        }
+      ],
+      "related": [
+        14,
+        3,
+        17
+      ],
+      "reflection": "주변에서 \"대칭이지만 사실 비대칭이 더 좋았을\" 제품을 찾아보세요. 마우스, 가방 끈, 신발... 어떤 게 떠오르나요?"
+    },
+    {
+      "n": 5,
+      "ko": "통합·결합",
+      "en": "Merging / Combining",
+      "cat": "structure",
+      "short": "유사한 물체나 작동을 공간적으로 결합하거나 시간적으로 함께 처리한다.",
+      "desc": [
+        "따로 있던 것들을 하나로 합치면 공간·시간·비용이 절약됩니다. 사용자도 한 번에 여러 작업을 처리할 수 있죠.",
+        "현대 디지털 기술의 핵심은 이 원리입니다. 한때 카메라·전화·MP3·내비게이션·시계가 따로 있었는데 지금은 모두 스마트폰 하나에 들어와 있습니다."
+      ],
+      "contradiction": "부품 수와 공간을 줄이면서도 더 많은 기능을 제공하고 싶을 때.",
+      "classic": [
+        {
+          "name": "복합기",
+          "detail": "프린터·스캐너·복사기·팩스를 한 기계에"
+        },
+        {
+          "name": "다중칼날 면도기",
+          "detail": "한 번의 동작으로 여러 번 면도하는 효과"
+        },
+        {
+          "name": "스위스 군용칼",
+          "detail": "한 손잡이에 칼·드라이버·가위·핀셋"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Apple Vision Pro",
+          "detail": "AR과 VR을 한 디바이스에 결합한 공간 컴퓨팅"
+        },
+        {
+          "name": "USB-C",
+          "detail": "전원·데이터·영상·오디오 전송을 하나의 케이블로"
+        },
+        {
+          "name": "ChatGPT·Claude 등 LLM",
+          "detail": "검색·작문·코딩·번역·요약을 하나의 인터페이스로"
+        }
+      ],
+      "related": [
+        1,
+        6,
+        33
+      ],
+      "reflection": "당신이 매일 따로따로 처리하는 작업 중에서 \"사실 하나로 합쳐도 되는\" 것이 있나요?"
+    },
+    {
+      "n": 6,
+      "ko": "다용도",
+      "en": "Universality",
+      "cat": "structure",
+      "short": "한 물체가 여러 기능을 동시에 수행하게 만든다. 다른 부품의 필요성을 없앤다.",
+      "desc": [
+        "결합(5번)이 여러 가지를 한데 묶는 것이라면, 다용도는 하나가 여러 역할을 \"겸직\"하는 것입니다. 부품 수가 줄어 시스템이 단순해지고 신뢰성이 올라갑니다.",
+        "요즘은 소프트웨어 기반 제품이 늘면서 \"하드웨어는 그대로 두고 기능만 추가\"하는 방식도 다용도의 한 형태가 됩니다."
+      ],
+      "contradiction": "기능 수를 늘리면서도 부품 수와 공간은 줄이고 싶을 때.",
+      "classic": [
+        {
+          "name": "소파베드",
+          "detail": "소파와 침대를 한 가구로"
+        },
+        {
+          "name": "다용도 헤어드라이어",
+          "detail": "머리·옷 건조·접착제 굳히기 모두 가능"
+        },
+        {
+          "name": "식탁 겸 작업대",
+          "detail": "한 가구가 식사·작업·미팅을 모두 소화"
+        }
+      ],
+      "modern": [
+        {
+          "name": "스마트폰",
+          "detail": "전화·카메라·컴퓨터·지갑·열쇠·교통카드까지"
+        },
+        {
+          "name": "스마트워치",
+          "detail": "시계·헬스 트래커·결제·메시지·심전도까지"
+        },
+        {
+          "name": "Tesla의 OTA 업데이트",
+          "detail": "같은 하드웨어가 펌웨어로 새 기능을 지속적으로 획득"
+        }
+      ],
+      "related": [
+        5,
+        25,
+        33
+      ],
+      "reflection": "지금 당신의 책상이나 가방 속에서 \"한 가지 기능만 하는 물건\"을 찾아보세요. 그 물건의 기능을 다른 무엇이 흡수할 수 있을까요?"
+    },
+    {
+      "n": 7,
+      "ko": "포개기",
+      "en": "Nested Doll",
+      "cat": "structure",
+      "short": "한 물체를 다른 물체 안에 넣는다. 또는 부품들이 서로 포개지듯 늘었다 줄었다 하게 한다.",
+      "desc": [
+        "사용할 때는 크게, 보관할 때는 작게. \"쓸 때의 크기\"와 \"안 쓸 때의 크기\"를 분리할 수 있는 원리입니다.",
+        "우주, 군사, 모바일 분야에서 특히 중요합니다. 발사체에 실어 보내야 하지만 펼치면 거대해야 하는 위성 안테나처럼요."
+      ],
+      "contradiction": "작동 시 큰 크기가 필요하면서도 보관·운반 시에는 작아야 할 때.",
+      "classic": [
+        {
+          "name": "러시아 마트료시카 인형",
+          "detail": "인형 안에 인형이 계속 들어있는 구조"
+        },
+        {
+          "name": "접이식 망원경 안테나",
+          "detail": "늘려서 길게, 줄여서 짧게"
+        },
+        {
+          "name": "마트 카트",
+          "detail": "사용 후 서로 겹쳐 보관해 공간 절약"
+        }
+      ],
+      "modern": [
+        {
+          "name": "James Webb 우주망원경",
+          "detail": "발사 후 우주에서 6.5m 거울을 펼치는 접이 구조"
+        },
+        {
+          "name": "폴더블 스마트폰",
+          "detail": "주머니 크기로 접었다가 펴서 태블릿처럼 사용"
+        },
+        {
+          "name": "스페이스X 페이로드 페어링",
+          "detail": "발사 후 화물 보호 덮개가 자동으로 분리"
+        }
+      ],
+      "related": [
+        1,
+        17,
+        30
+      ],
+      "reflection": "당신이 가지고 다니는 물건 중에서 \"더 작게 접거나 포갤 수 있다면 훨씬 편할\" 것은 무엇인가요?"
+    },
+    {
+      "n": 8,
+      "ko": "평형추",
+      "en": "Anti-weight / Counterweight",
+      "cat": "system",
+      "short": "물체의 무게나 단점을 다른 물체·힘과 결합하여 상쇄한다.",
+      "desc": [
+        "싸우려 하지 말고, 균형을 잡으라는 원리입니다. 단점 자체를 없애기보다 그 단점을 상쇄해줄 \"반대\"의 힘을 추가하는 거죠.",
+        "중력 같은 자연의 힘은 없앨 수 없으므로, 평형추(또는 양력 같은 반대 힘)로 \"느껴지지 않게\" 만드는 것이 핵심입니다."
+      ],
+      "contradiction": "시스템의 무게나 단점을 직접 없앨 수 없을 때, 그것을 상쇄할 다른 힘을 끌어들이고 싶을 때.",
+      "classic": [
+        {
+          "name": "엘리베이터 평형추",
+          "detail": "케이지 무게를 추가 무게로 상쇄해 모터 부담 절감"
+        },
+        {
+          "name": "카타마란(쌍동선)",
+          "detail": "한쪽 선체가 다른 쪽의 기울어짐을 상쇄"
+        },
+        {
+          "name": "비행기의 양력",
+          "detail": "날개가 만드는 양력으로 중력을 상쇄"
+        }
+      ],
+      "modern": [
+        {
+          "name": "드론의 짐벌",
+          "detail": "카메라의 흔들림을 반대 방향 회전으로 상쇄"
+        },
+        {
+          "name": "세그웨이·전동킥보드 자이로",
+          "detail": "사용자의 무게중심 변화를 모터가 즉시 상쇄"
+        },
+        {
+          "name": "능동소음제어(ANC)",
+          "detail": "소음과 정반대 위상의 음파를 더해 상쇄"
+        }
+      ],
+      "related": [
+        12,
+        22,
+        24
+      ],
+      "reflection": "당신이 가진 단점·약점 중에서 \"없애려고 애쓰는 대신 다른 강점으로 상쇄\"할 수 있는 것이 있나요? 이 원리는 비즈니스에도 적용됩니다."
+    },
+    {
+      "n": 9,
+      "ko": "사전 반대조치",
+      "en": "Preliminary Anti-action",
+      "cat": "preliminary",
+      "short": "어떤 작용이 해로운 효과도 가져온다면, 미리 그 반대 작용을 가해 효과를 상쇄해둔다.",
+      "desc": [
+        "\"백신\"이 이 원리를 가장 잘 보여줍니다. 진짜 병원체가 오기 전에, 약화된 항원을 미리 노출시켜 면역 시스템에 \"예행 연습\"을 시키는 거죠.",
+        "공학에서도 마찬가지입니다. 콘크리트는 인장력에 약하니까, 부어 굳히는 단계에서 미리 압축응력을 \"예금\"해두면 나중에 인장력이 들어와도 깨지지 않습니다."
+      ],
+      "contradiction": "필요한 강한 작용이 일어날 때 부작용이 생길 것을 알면서도 그 작용은 꼭 필요할 때.",
+      "classic": [
+        {
+          "name": "프리스트레스트 콘크리트",
+          "detail": "미리 압축응력을 부여해 인장력에 대비"
+        },
+        {
+          "name": "백신",
+          "detail": "약화된 항원을 미리 노출시켜 면역 형성"
+        },
+        {
+          "name": "충격 흡수 포장재",
+          "detail": "배송 전 미리 완충재 삽입"
+        }
+      ],
+      "modern": [
+        {
+          "name": "mRNA 백신",
+          "detail": "바이러스 자체가 아닌 단백질 설계도를 미리 학습시키는 정밀한 사전 반대조치"
+        },
+        {
+          "name": "자동차 크럼플존",
+          "detail": "충돌이 일어날 영역을 미리 \"찌그러지도록\" 설계"
+        },
+        {
+          "name": "카본 자전거 잔류응력 설계",
+          "detail": "주행 시 발생할 응력을 미리 반대 방향으로 분포"
+        }
+      ],
+      "related": [
+        10,
+        11,
+        22
+      ],
+      "reflection": "당신이 미리 알고 있는 \"언젠가 닥칠 부작용\"이 있나요? 지금 어떤 반대 작용을 미리 해두면 충격을 완화할 수 있을까요?"
+    },
+    {
+      "n": 10,
+      "ko": "사전 조치",
+      "en": "Preliminary Action",
+      "cat": "preliminary",
+      "short": "필요한 변화를 부분적으로 또는 전체적으로 미리 수행해둔다.",
+      "desc": [
+        "\"쓸 때 하지 말고 미리 해두자\"는 원리입니다. 사용 순간을 더 빠르고 편하게 만들기 위해 일부 작업을 앞당기는 거죠.",
+        "9번 원리(사전 반대조치)가 \"부작용 대비\"에 가깝다면, 10번은 단순히 \"작업 시간 단축\"에 더 가깝습니다."
+      ],
+      "contradiction": "사용 시점에 들어가는 시간·노력을 줄이고 싶지만, 사전 준비도 부담스러울 때.",
+      "classic": [
+        {
+          "name": "포스트잇",
+          "detail": "미리 풀칠된 메모지 — 사용 시 바로 붙임"
+        },
+        {
+          "name": "인스턴트 식품",
+          "detail": "조리 과정을 공장에서 미리 절반 완료"
+        },
+        {
+          "name": "미리 자른 식빵",
+          "detail": "매번 자르는 수고를 공장에서 한 번에"
+        }
+      ],
+      "modern": [
+        {
+          "name": "밀키트(HelloFresh, 마켓컬리)",
+          "detail": "재료 손질·계량을 미리 완료해 집에선 조리만"
+        },
+        {
+          "name": "사전 학습된 AI 모델",
+          "detail": "대규모 데이터로 미리 학습 후 사용자 맞춤만 추가"
+        },
+        {
+          "name": "모듈형 조립식 건축(prefab)",
+          "detail": "공장에서 벽체·욕실을 미리 만들어 현장에선 조립만"
+        }
+      ],
+      "related": [
+        9,
+        11,
+        26
+      ],
+      "reflection": "반복되는 일상 작업 중에서 \"미리 해두면 매번 시간을 절약할 수 있는\" 것이 있나요?"
+    },
+    {
+      "n": 11,
+      "ko": "사전 예방",
+      "en": "Beforehand Cushioning",
+      "cat": "preliminary",
+      "short": "신뢰성이 낮거나 위험할 수 있는 시스템에 미리 비상수단을 갖춰둔다.",
+      "desc": [
+        "\"만에 하나\"를 위한 보험을 미리 들어두는 원리입니다. 평소엔 쓸 일이 없지만, 일이 터지면 결정적인 역할을 하죠.",
+        "이중화(redundancy), 백업, 페일세이프 등 현대 시스템 설계의 핵심 개념이 모두 여기에 속합니다."
+      ],
+      "contradiction": "시스템을 단순·저렴하게 유지하면서도 만일의 상황에 대비하고 싶을 때.",
+      "classic": [
+        {
+          "name": "에어백·안전벨트",
+          "detail": "평소엔 쓸 일 없지만 사고 시 생명을 지킴"
+        },
+        {
+          "name": "비상조명·화재경보기",
+          "detail": "정전·화재 같은 비상상황 대비"
+        },
+        {
+          "name": "보험",
+          "detail": "평소엔 비용이지만 사고 시 큰 손실 방지"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Apple Find My",
+          "detail": "기기 분실에 대비해 항상 위치 추적 가능 상태 유지"
+        },
+        {
+          "name": "iCloud·구글 자동 백업",
+          "detail": "데이터 손실 가능성에 대비한 상시 백업"
+        },
+        {
+          "name": "자동긴급제동(AEB)",
+          "detail": "운전자가 못 본 충돌을 차가 미리 대비해 자동 제동"
+        }
+      ],
+      "related": [
+        9,
+        10,
+        27
+      ],
+      "reflection": "당신의 일·생활에서 \"한 번 잘못되면 큰 손해\"가 될 일이 있나요? 지금 어떤 \"쿠션\"을 미리 마련해두면 좋을까요?"
+    },
+    {
+      "n": 12,
+      "ko": "높이 맞추기",
+      "en": "Equipotentiality",
+      "cat": "preliminary",
+      "short": "작업 환경의 위치 변화(올리고 내림)를 없애 들어올리는 에너지·노력을 줄인다.",
+      "desc": [
+        "중력에 거슬러 무언가를 올리는 데에는 에너지가 듭니다. 그 자체를 안 해도 되는 환경을 만들면 효율이 크게 올라가죠.",
+        "대규모 물류·자동화 시스템의 핵심 원리이기도 합니다. 같은 높이로 흐르게 하면 컨베이어와 로봇이 단순해집니다."
+      ],
+      "contradiction": "작업 효율을 높이고 싶지만, 들어올리고 내리는 데 드는 에너지를 줄일 수 없을 때.",
+      "classic": [
+        {
+          "name": "자동차 정비 리프트",
+          "detail": "정비사가 허리를 굽힐 필요 없는 작업 환경"
+        },
+        {
+          "name": "운하의 갑문",
+          "detail": "수위를 맞춰 배가 자연스럽게 이동"
+        },
+        {
+          "name": "동일 높이 컨베이어 환적",
+          "detail": "화물을 들어올리지 않고 옆으로만 이동"
+        }
+      ],
+      "modern": [
+        {
+          "name": "아마존 Kiva·자율 물류 로봇",
+          "detail": "선반을 통째로 사람 앞에 가져와 \"사람이 움직이는 거리\" 0"
+        },
+        {
+          "name": "표준 컨테이너 + 갠트리 크레인",
+          "detail": "규격을 맞춰 들어올리는 작업을 단순화"
+        },
+        {
+          "name": "스마트팩토리 AGV 라인",
+          "detail": "생산 라인 전체가 동일 평면에서 작동하도록 설계"
+        }
+      ],
+      "related": [
+        8,
+        24,
+        17
+      ],
+      "reflection": "당신의 작업 환경에서 \"반복적으로 들어올리고 내리는\" 동작이 있나요? 그 자체를 없앨 수 있을까요?"
+    },
+    {
+      "n": 13,
+      "ko": "반대로 하기",
+      "en": "Inversion",
+      "cat": "dynamic",
+      "short": "일반적인 작용 대신 반대 작용을 사용한다. 움직이는 것을 고정하고, 고정된 것을 움직이게 한다.",
+      "desc": [
+        "\"꼭 그렇게 해야 할까?\"라는 질문이 핵심입니다. 당연시되던 방향·순서·관계를 뒤집어 보는 거죠.",
+        "이 원리는 종종 거대한 패러다임 전환을 만듭니다. \"운전자가 차를 운전한다\"를 뒤집어 \"차가 사람을 운전한다\"로 가면 자율주행이 됩니다."
+      ],
+      "contradiction": "기존 방식의 한계가 명확한데, 그 방식을 점진적으로 개선해서는 답이 안 나올 때.",
+      "classic": [
+        {
+          "name": "러닝머신",
+          "detail": "사람이 멈춰 있고 바닥이 움직임"
+        },
+        {
+          "name": "풍동 실험",
+          "detail": "비행기를 날리지 않고 바람을 흐르게 함"
+        },
+        {
+          "name": "무빙워크·에스컬레이터",
+          "detail": "사람의 걸음 대신 바닥이 이동"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Tesla 회생제동",
+          "detail": "바퀴가 모터를 돌려 에너지를 회수 — 가속의 반대"
+        },
+        {
+          "name": "히트펌프",
+          "detail": "열을 만들지 않고 \"옮긴다\" — 차가운 곳에서 따뜻한 곳으로"
+        },
+        {
+          "name": "자율주행",
+          "detail": "운전자가 차를 모는 것이 아니라 차가 사람을 모심"
+        }
+      ],
+      "related": [
+        22,
+        15,
+        35
+      ],
+      "reflection": "당신의 업무·생활 중에서 \"왜 꼭 이 방향으로?\"라고 의심해볼 만한 것이 있나요? 거꾸로 하면 어떤 새로운 가능성이 열릴까요?"
+    },
+    {
+      "n": 14,
+      "ko": "곡선화",
+      "en": "Spheroidality / Curvature",
+      "cat": "structure",
+      "short": "직선·평면을 곡선·구체로 바꾼다. 직선 운동을 회전 운동으로 변환한다.",
+      "desc": [
+        "뾰족하고 각진 것보다 둥글고 곡선인 것이 마찰·응력·공기저항 면에서 유리한 경우가 많습니다. 자연이 곡선을 선호하는 데에는 이유가 있죠.",
+        "심미적 이유 외에도, 같은 부피에 더 많은 표면적을 담거나 응력 집중을 분산시킬 때 곡선이 효과적입니다."
+      ],
+      "contradiction": "기능성·내구성·효율을 높이고 싶은데 직선 구조의 한계에 부딪혔을 때.",
+      "classic": [
+        {
+          "name": "볼 베어링",
+          "detail": "구의 점접촉으로 마찰을 최소화"
+        },
+        {
+          "name": "둥근 모서리 가구·차량",
+          "detail": "충돌 시 부상 가능성 감소"
+        },
+        {
+          "name": "아치형 다리·돔 지붕",
+          "detail": "하중을 곡선을 따라 분산"
+        }
+      ],
+      "modern": [
+        {
+          "name": "전기차 에어로다이내믹 디자인",
+          "detail": "주행거리를 늘리기 위해 차체를 매끄러운 곡선으로"
+        },
+        {
+          "name": "폴더블·곡선형 OLED",
+          "detail": "유연한 곡면이 새로운 폼팩터를 만듦"
+        },
+        {
+          "name": "다이슨의 곡선 공기 흐름",
+          "detail": "팬·청소기·헤어드라이어에서 곡선 채널이 핵심"
+        }
+      ],
+      "related": [
+        4,
+        17,
+        15
+      ],
+      "reflection": "당신 주변의 \"각진 제품\"을 둥글게 만들면 어떤 점이 좋아질까요?"
+    },
+    {
+      "n": 15,
+      "ko": "역동성",
+      "en": "Dynamics",
+      "cat": "dynamic",
+      "short": "정적인 시스템을 동적으로, 단계별로 조정 가능하게 만든다. 환경 변화에 적응하도록.",
+      "desc": [
+        "\"고정된 형태\"가 곧 한계인 경우가 많습니다. 사용자·환경·용도가 변할 때 자기 모습도 함께 바뀔 수 있다면 같은 시스템으로 훨씬 많은 일을 할 수 있죠.",
+        "요즘은 하드웨어뿐 아니라 소프트웨어도 \"적응형\"이 트렌드입니다. 사용자에 맞춰 UI가 변하는 어댑티브 디자인도 이 원리에 속합니다."
+      ],
+      "contradiction": "구조는 단순하게 유지하고 싶지만, 다양한 사용 조건에 모두 대응해야 할 때.",
+      "classic": [
+        {
+          "name": "접이식 자전거 핸들",
+          "detail": "주행 시 펴고, 보관 시 접음"
+        },
+        {
+          "name": "조정 가능한 자동차 시트",
+          "detail": "운전자 체형에 맞춰 적응"
+        },
+        {
+          "name": "관절형 로봇팔",
+          "detail": "다양한 각도·작업에 자유롭게 대응"
+        }
+      ],
+      "modern": [
+        {
+          "name": "갤럭시 폴드/플립",
+          "detail": "한 기기가 폰·태블릿 두 형태로 변환"
+        },
+        {
+          "name": "어댑티브 크루즈 컨트롤",
+          "detail": "앞차 속도에 맞춰 자동으로 속도 조절"
+        },
+        {
+          "name": "F1·고급차 가변 배기",
+          "detail": "엔진 회전수에 따라 배기 경로가 자동 변경"
+        }
+      ],
+      "related": [
+        13,
+        17,
+        30
+      ],
+      "reflection": "당신이 자주 쓰는 도구·앱이 \"더 유연하게 변할 수 있다면\" 어떤 사용 시나리오가 가능해질까요?"
+    },
+    {
+      "n": 16,
+      "ko": "과부족 조치",
+      "en": "Partial or Excessive Action",
+      "cat": "dynamic",
+      "short": "정확히 100% 달성이 어렵다면, 의도적으로 부족하게 또는 과하게 시행한 뒤 보완한다.",
+      "desc": [
+        "\"한 번에 딱 맞추려고 애쓰지 말고, 좀 넘치게 한 다음 깎거나, 모자라게 한 다음 더하라\"는 원리입니다. 정확도의 짐을 후속 공정으로 옮기는 거죠.",
+        "제조업뿐 아니라 머신러닝에서도 활용됩니다. 모델을 \"과학습\"시킨 다음 가지치기(pruning)로 다듬는 방식이 대표적입니다."
+      ],
+      "contradiction": "한 번에 정확한 결과를 얻기 어려운데, 그렇다고 결과 품질을 포기할 수도 없을 때.",
+      "classic": [
+        {
+          "name": "페인트 두껍게 칠한 후 사포로 다듬기",
+          "detail": "평탄도를 한 번에 못 맞추니 과하게 칠한 뒤 깎음"
+        },
+        {
+          "name": "과량 도금 후 연마",
+          "detail": "두께가 부족하지 않게 넉넉히 입힌 후 표면 가공"
+        },
+        {
+          "name": "옷·목재를 길게 자른 후 다듬기",
+          "detail": "짧게 자르면 복구 불가, 길게 자르면 다듬어 맞춤"
+        }
+      ],
+      "modern": [
+        {
+          "name": "3D 프린팅 후 CNC 가공",
+          "detail": "적층 후 정밀 가공으로 표면·치수 보정"
+        },
+        {
+          "name": "신경망 과학습 후 가지치기",
+          "detail": "큰 모델을 학습시킨 뒤 불필요한 연결을 제거"
+        },
+        {
+          "name": "반도체 웨이퍼 과식각 후 보정",
+          "detail": "식각을 더 깊게 한 뒤 후처리로 정확도 확보"
+        }
+      ],
+      "related": [
+        35,
+        21,
+        2
+      ],
+      "reflection": "당신의 작업 중에서 \"완벽하게 한 번에\"를 고집하다 진도가 안 나가는 일이 있나요?"
+    },
+    {
+      "n": 17,
+      "ko": "차원 전환",
+      "en": "Another Dimension",
+      "cat": "structure",
+      "short": "1차원을 2차원으로, 2차원을 3차원으로 확장한다. 다층·기울임·회전을 활용한다.",
+      "desc": [
+        "수평으로 한계가 오면 수직으로 가라. 한 면에서 안 되면 다른 면을 활용하라. \"평면적 사고\"에서 벗어나는 원리입니다.",
+        "도시화·물류·반도체 등 공간이 핵심인 분야에서 가장 강력하게 작동합니다."
+      ],
+      "contradiction": "주어진 공간·차원의 한계를 늘릴 수 없을 때, 활용 가능한 영역을 더 확보하고 싶을 때.",
+      "classic": [
+        {
+          "name": "다층 주차장",
+          "detail": "평면 부지를 입체로 활용해 주차 대수 ×N"
+        },
+        {
+          "name": "나선형 계단·입체 교차로",
+          "detail": "평면 동선을 입체로 풀어 충돌·간섭 제거"
+        },
+        {
+          "name": "테이프(카세트·릴)",
+          "detail": "1차원 자기띠를 감아 2차원 저장 매체로"
+        }
+      ],
+      "modern": [
+        {
+          "name": "수직농장(Vertical Farm)",
+          "detail": "단층 농지를 다층으로 적층해 도심에서 생산"
+        },
+        {
+          "name": "3D NAND 플래시 메모리",
+          "detail": "평면에 셀을 늘릴 한계에 도달해 셀을 수직 적층"
+        },
+        {
+          "name": "아마존 입체 물류센터(MFC)",
+          "detail": "다층 자동화 창고로 도심 배송 시간 단축"
+        }
+      ],
+      "related": [
+        1,
+        7,
+        14
+      ],
+      "reflection": "당신의 일터·생활 공간에서 \"1차원 또는 2차원적으로만 쓰던 공간\"을 한 차원 위로 끌어올린다면?"
+    },
+    {
+      "n": 18,
+      "ko": "기계적 진동",
+      "en": "Mechanical Vibration",
+      "cat": "dynamic",
+      "short": "물체에 진동, 음파, 초음파를 가한다. 진동의 주파수를 활용한다.",
+      "desc": [
+        "\"가만히 누르는 힘\"보다 \"빠르게 떨리는 힘\"이 훨씬 더 큰 일을 합니다. 진동은 작은 에너지로 큰 효과를 낼 수 있는 강력한 메커니즘이죠.",
+        "초음파·햅틱 기술이 발전하면서 진동은 점점 정밀하고 \"들리지 않는\" 영역으로 확장되고 있습니다."
+      ],
+      "contradiction": "강한 작용이 필요하지만 시스템에 큰 힘을 가하긴 어려울 때.",
+      "classic": [
+        {
+          "name": "전동칫솔",
+          "detail": "미세 진동으로 손으로는 닿지 않는 영역까지 청결"
+        },
+        {
+          "name": "콘크리트 진동 다지기",
+          "detail": "고주파 진동으로 공기 방울을 빼 강도 확보"
+        },
+        {
+          "name": "초음파 세척기",
+          "detail": "안경·금속 부품의 미세 오염을 비접촉 제거"
+        }
+      ],
+      "modern": [
+        {
+          "name": "iPhone Taptic Engine",
+          "detail": "정밀 햅틱 진동으로 클릭감을 \"시뮬레이션\""
+        },
+        {
+          "name": "PlayStation·Xbox 햅틱",
+          "detail": "게임 내 상황을 진동의 강도·패턴으로 표현"
+        },
+        {
+          "name": "초음파 가습기·치료기",
+          "detail": "고주파 진동으로 물 미립자 분무, 결석 분쇄"
+        }
+      ],
+      "related": [
+        19,
+        20,
+        28
+      ],
+      "reflection": "\"세게 누르거나 강하게 닦는 대신 진동시켰다면\" 더 좋아질 일이 있을까요?"
+    },
+    {
+      "n": 19,
+      "ko": "주기적 작용",
+      "en": "Periodic Action",
+      "cat": "dynamic",
+      "short": "연속적인 작용 대신 주기적·맥동적 작용으로 바꾼다. 작용 사이의 \"쉼\"을 활용한다.",
+      "desc": [
+        "끊임없이 작용하는 것보다 \"짧게 끊어서 반복\"하는 것이 효과적일 때가 많습니다. 사이의 휴식 동안 시스템이 회복되고, 강한 자극이 더 잘 인식되죠.",
+        "경고등이 계속 켜져 있는 것보다 깜빡일 때 더 잘 보이는 이유, 펄스 충전이 효율적인 이유가 모두 이 원리에서 나옵니다."
+      ],
+      "contradiction": "연속 작용은 비효율적·부담스럽지만, 작용 자체는 충분히 강해야 할 때.",
+      "classic": [
+        {
+          "name": "경고등 깜빡임",
+          "detail": "연속 점등보다 시선을 끄는 효과 ×2"
+        },
+        {
+          "name": "AED(자동제세동기)",
+          "detail": "심정지에 주기적 전기충격으로 리듬 복구"
+        },
+        {
+          "name": "펄스 레이저",
+          "detail": "짧고 강한 펄스로 평균 출력 이상의 효과"
+        }
+      ],
+      "modern": [
+        {
+          "name": "펄스 급속충전",
+          "detail": "전류를 펄스로 흘려 배터리 손상 없이 빠른 충전"
+        },
+        {
+          "name": "인터미턴트 패스팅",
+          "detail": "\"먹는 시간\"과 \"쉬는 시간\"을 주기적으로 나눠 대사 효율 개선"
+        },
+        {
+          "name": "Wi-Fi·블루투스 절전 모드",
+          "detail": "필요할 때만 짧게 깨어 전력 소모 최소화"
+        }
+      ],
+      "related": [
+        18,
+        20,
+        21
+      ],
+      "reflection": "당신이 \"쉬지 않고 계속 하면 오히려 손해\"인 일을 하고 있지는 않나요?"
+    },
+    {
+      "n": 20,
+      "ko": "유익한 작용의 지속",
+      "en": "Continuity of Useful Action",
+      "cat": "dynamic",
+      "short": "시스템의 모든 부품이 쉬는 시간 없이 계속 유익하게 작동하도록 한다.",
+      "desc": [
+        "19번이 \"끊어서 효과를 키운다\"면, 20번은 반대로 \"멈추지 않게 해서 효율을 키운다\"입니다. 작동 안 하는 시간(idle time)이 곧 손실이죠.",
+        "데이터센터, 발전소처럼 24시간 가동되는 시스템부터, 회생제동처럼 \"멈출 때조차 일하게\" 만드는 기술까지 모두 이 원리입니다."
+      ],
+      "contradiction": "시스템의 작동률을 100%에 가깝게 끌어올리고 싶지만, 자연스러운 \"유휴\" 구간이 존재할 때.",
+      "classic": [
+        {
+          "name": "양방향 인쇄 프린터",
+          "detail": "프린트 헤드가 좌→우, 우→좌 양방향 모두 인쇄"
+        },
+        {
+          "name": "24시간 풀가동 공장",
+          "detail": "설비 가동률을 끌어올려 단위 시간당 생산성 ↑"
+        },
+        {
+          "name": "다이얼 자물쇠 연속 회전",
+          "detail": "한 번 돌리는 동안 여러 숫자를 동시 조작"
+        }
+      ],
+      "modern": [
+        {
+          "name": "전기차 회생제동",
+          "detail": "브레이크 밟을 때조차 발전기로 에너지 회수"
+        },
+        {
+          "name": "클라우드 오토스케일링",
+          "detail": "유휴 자원을 자동으로 다른 작업에 할당"
+        },
+        {
+          "name": "데이터센터 폐열로 난방",
+          "detail": "서버가 만드는 열을 인근 주거지·온실 난방으로"
+        }
+      ],
+      "related": [
+        18,
+        19,
+        25
+      ],
+      "reflection": "당신의 도구·시스템 중에서 \"대부분의 시간은 놀고 있는\" 것이 있나요?"
+    },
+    {
+      "n": 21,
+      "ko": "고속 처리",
+      "en": "Skipping / Rushing Through",
+      "cat": "dynamic",
+      "short": "해롭거나 위험한 과정은 매우 빠르게 통과해버린다.",
+      "desc": [
+        "\"위험한 단계라면 그 단계에 머무는 시간 자체를 최소화하라\"는 원리입니다. 처리 시간 = 부작용 노출 시간이라는 관점이죠.",
+        "치과 드릴이 빠르게 돌수록 통증과 열 손상이 줄어들고, 식품을 순간적으로 고온 살균하면 영양 손실 없이 멸균 가능한 이유입니다."
+      ],
+      "contradiction": "위험·부작용을 동반하는 작용이 필요하지만, 그 과정을 길게 끌수록 손해가 커질 때.",
+      "classic": [
+        {
+          "name": "치과 고속 드릴",
+          "detail": "빠른 회전으로 통증·열 누적 시간을 줄임"
+        },
+        {
+          "name": "순간 살균(HTST/UHT)",
+          "detail": "아주 짧은 시간 초고온 처리로 영양 손실 최소화"
+        },
+        {
+          "name": "플라스틱 신속 절단",
+          "detail": "열로 변형되기 전에 잘라냄"
+        }
+      ],
+      "modern": [
+        {
+          "name": "EV 급속충전 (350kW급)",
+          "detail": "배터리에 부담이 가기 전에 빠르게 채움"
+        },
+        {
+          "name": "NVMe SSD·플래시 메모리",
+          "detail": "데이터를 메모리 셀에 머무는 시간을 줄여 손상 방지"
+        },
+        {
+          "name": "고속 PCR(코로나 진단)",
+          "detail": "사이클을 빠르게 돌려 짧은 시간에 결과 도출"
+        }
+      ],
+      "related": [
+        19,
+        18,
+        16
+      ],
+      "reflection": "당신이 \"오래 끌수록 더 나빠지는\" 작업을 하고 있나요? 더 빠르게 끝낼 방법은 무엇일까요?"
+    },
+    {
+      "n": 22,
+      "ko": "전화위복",
+      "en": "Convert Harm to Benefit",
+      "cat": "dynamic",
+      "short": "해로운 요소나 환경을 오히려 유익하게 활용한다.",
+      "desc": [
+        "\"문제를 없애려 하지 말고, 자원으로 바꿔라\"는 원리입니다. 폐기물·소음·진동·열 — 모두 누군가에겐 골칫거리지만 시각을 바꾸면 자원이 될 수 있습니다.",
+        "지속가능성·순환경제의 핵심 사고방식이며, 산업폐기물부터 사이버보안의 \"레드팀\"까지 폭넓게 적용됩니다."
+      ],
+      "contradiction": "없애기 어려운 해로운 요소가 있지만, 그것을 그냥 버리기엔 자원 낭비일 때.",
+      "classic": [
+        {
+          "name": "폐열 회수 발전",
+          "detail": "공장에서 버려지는 열로 전기 생산"
+        },
+        {
+          "name": "쓰레기 소각열 지역난방",
+          "detail": "처치 곤란이던 폐기물이 에너지원으로"
+        },
+        {
+          "name": "산불 후 토양 비옥화",
+          "detail": "재가 영양분이 되어 자연이 회복"
+        }
+      ],
+      "modern": [
+        {
+          "name": "비트코인 채굴 폐열 활용",
+          "detail": "전기→열의 \"손해\"를 농업·양식 에너지로 전환"
+        },
+        {
+          "name": "매립가스(메탄) 회수 발전",
+          "detail": "유해 온실가스를 포집해 전력 생산"
+        },
+        {
+          "name": "레드팀·버그바운티",
+          "detail": "해커의 공격 능력을 보안 강화의 자원으로 \"고용\""
+        }
+      ],
+      "related": [
+        13,
+        35,
+        8
+      ],
+      "reflection": "당신 일이나 조직의 \"골칫거리\" 중에 \"관점을 바꾸면 자원이 될\" 것이 있나요?"
+    },
+    {
+      "n": 23,
+      "ko": "피드백",
+      "en": "Feedback",
+      "cat": "system",
+      "short": "결과를 측정해 입력에 다시 반영하는 피드백 루프를 도입한다.",
+      "desc": [
+        "\"설정만 해두고 잊는\" 시스템은 환경이 바뀌면 무용지물입니다. 결과를 측정해 다시 반영하는 루프가 있어야 시스템이 진짜로 \"스마트\"해지죠.",
+        "현대 AI·자동화·자율주행의 모든 핵심에 피드백 원리가 있습니다. 사실 학습(learning) 자체가 거대한 피드백 루프죠."
+      ],
+      "contradiction": "시스템을 단순하게 유지하고 싶지만, 변화하는 환경에서도 정확한 제어가 필요할 때.",
+      "classic": [
+        {
+          "name": "자동 온도조절기",
+          "detail": "실내 온도를 재서 보일러·에어컨 조절"
+        },
+        {
+          "name": "크루즈 컨트롤",
+          "detail": "속도를 재서 액셀 자동 조절"
+        },
+        {
+          "name": "자동초점 카메라",
+          "detail": "거리·콘트라스트를 측정해 렌즈 위치 조정"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Nest 스마트 온도조절기",
+          "detail": "사용자 행동까지 학습해 능동적으로 제어"
+        },
+        {
+          "name": "자율주행",
+          "detail": "센서→판단→조작→다시 센서, 초당 수십 번의 피드백 루프"
+        },
+        {
+          "name": "AI 학습 (Gradient Descent)",
+          "detail": "예측 오차를 다시 모델에 반영하는 거대한 피드백 시스템"
+        }
+      ],
+      "related": [
+        25,
+        28,
+        24
+      ],
+      "reflection": "당신의 일·습관 중에 \"결과를 측정해서 다음 입력에 반영하는\" 루프가 없는 것이 있나요?"
+    },
+    {
+      "n": 24,
+      "ko": "매개체",
+      "en": "Intermediary",
+      "cat": "system",
+      "short": "다른 물체나 매개를 거쳐 작용을 전달한다. 직접 접촉하지 않고 중간 매개를 활용.",
+      "desc": [
+        "직접 만나면 위험하거나 비효율적인 경우, 사이에 \"중간자\"를 두면 깔끔하게 해결됩니다. 이 중간자는 물리적 도구일 수도, 사람일 수도, 추상적 규약일 수도 있죠.",
+        "특히 디지털 시대에 \"매개체\"의 위력이 폭발했습니다. 운영체제, API, 블록체인, AI 어시스턴트는 모두 강력한 매개체입니다."
+      ],
+      "contradiction": "두 요소를 직접 연결하면 충돌·낭비·위험이 발생하지만, 연결 자체는 꼭 필요할 때.",
+      "classic": [
+        {
+          "name": "냄비 받침대",
+          "detail": "뜨거운 냄비와 식탁 사이의 매개"
+        },
+        {
+          "name": "통역사",
+          "detail": "서로 다른 언어 화자 사이의 매개"
+        },
+        {
+          "name": "효소·촉매",
+          "detail": "화학반응을 가능하게 하지만 자신은 변하지 않음"
+        }
+      ],
+      "modern": [
+        {
+          "name": "API",
+          "detail": "서비스와 서비스를 연결하는 표준화된 매개"
+        },
+        {
+          "name": "블록체인",
+          "detail": "중앙기관 없이 \"합의\" 자체를 매개로 신뢰를 만듦"
+        },
+        {
+          "name": "ChatGPT·Claude",
+          "detail": "사람과 컴퓨터·정보 사이의 자연어 매개"
+        }
+      ],
+      "related": [
+        8,
+        12,
+        28
+      ],
+      "reflection": "당신이 직접 처리하느라 힘든 일 중에서, \"중간에 매개체를 두면\" 훨씬 수월해질 일이 있나요?"
+    },
+    {
+      "n": 25,
+      "ko": "셀프서비스",
+      "en": "Self-service",
+      "cat": "system",
+      "short": "시스템이 스스로 기능을 수행하거나 자기 자신을 유지·복구하도록 만든다.",
+      "desc": [
+        "외부에서 일일이 관리하지 말고, 시스템이 알아서 돌아가게 만들라는 원리입니다. 자율성이 곧 효율이죠.",
+        "로봇·자동화의 진정한 모습입니다. \"누가 시키지 않아도\" 시스템이 자기 일을 알아서 처리합니다."
+      ],
+      "contradiction": "외부 관리에 드는 시간·비용을 줄이고 싶지만, 시스템의 정상 작동은 유지해야 할 때.",
+      "classic": [
+        {
+          "name": "자가세척 오븐",
+          "detail": "고온으로 내부 잔여물을 자동 분해"
+        },
+        {
+          "name": "자가윤활 베어링",
+          "detail": "사용 중 마찰열로 윤활제가 자동 공급"
+        },
+        {
+          "name": "자판기",
+          "detail": "직원 없이 24시간 결제·재고 관리"
+        }
+      ],
+      "modern": [
+        {
+          "name": "CI/CD 자동화 파이프라인",
+          "detail": "코드 변경→빌드→테스트→배포까지 자동"
+        },
+        {
+          "name": "로봇청소기·잔디깎이",
+          "detail": "스스로 충전하고, 길을 찾고, 청소를 마침"
+        },
+        {
+          "name": "자가복구 OLED 코팅",
+          "detail": "표면 흠집이 시간이 지나면 스스로 메워짐"
+        }
+      ],
+      "related": [
+        23,
+        34,
+        20
+      ],
+      "reflection": "당신이 매번 손으로 처리하는 작업 중에서, 시스템이 \"스스로 알아서\" 할 수 있는 것이 있나요?"
+    },
+    {
+      "n": 26,
+      "ko": "복제",
+      "en": "Copying",
+      "cat": "system",
+      "short": "비싸거나 깨지기 쉬운 실물 대신 복제품·모형·시뮬레이션을 사용한다.",
+      "desc": [
+        "실물로 시험하면 비싸거나 위험할 때, 그것의 \"복사본\"이나 \"디지털 쌍둥이\"를 사용해 같은 결과를 얻는 원리입니다.",
+        "과거엔 모형이나 사진이 복제의 전부였지만, 이제는 VR·디지털 트윈이 등장하면서 실물과 거의 구분이 안 가는 복제가 가능해졌습니다."
+      ],
+      "contradiction": "실물 검증의 정확성을 원하면서도, 그 비용·위험은 피하고 싶을 때.",
+      "classic": [
+        {
+          "name": "VR 항공 시뮬레이터",
+          "detail": "실제 비행기 없이 훈련"
+        },
+        {
+          "name": "박물관 복제 전시품",
+          "detail": "원본은 보호하고 관람객엔 동일 경험"
+        },
+        {
+          "name": "영화 스턴트 더미",
+          "detail": "배우 대신 위험한 장면을 촬영"
+        }
+      ],
+      "modern": [
+        {
+          "name": "디지털 트윈",
+          "detail": "공장·건물·도시를 가상 공간에 그대로 복제해 시뮬레이션"
+        },
+        {
+          "name": "AR 가상 피팅·메이크업",
+          "detail": "실제 옷·화장품 없이 미리 적용해 확인"
+        },
+        {
+          "name": "메타버스·게임 엔진 사전 시각화",
+          "detail": "영화·건축물을 실제 제작 전에 가상으로 확인"
+        }
+      ],
+      "related": [
+        27,
+        32,
+        15
+      ],
+      "reflection": "당신이 \"실제로 해보기 전에 미리 가상으로 시도해볼 수 있다면\" 좋을 일이 있나요?"
+    },
+    {
+      "n": 27,
+      "ko": "저렴한 일회용",
+      "en": "Cheap Short-living Objects",
+      "cat": "preliminary",
+      "short": "비싸고 오래 가는 한 개를 만드는 대신, 싸고 짧게 쓰는 여러 개로 대체한다.",
+      "desc": [
+        "모든 것을 비싸게, 영구적으로 만들려고 하지 말라는 원리입니다. 특정 용도에서는 \"쓰고 버리는\" 게 오히려 안전하고 위생적이며 경제적입니다.",
+        "일회용품의 환경 문제 때문에 비판도 받지만, 의료·식품·소프트웨어 등 일부 분야에서는 여전히 필수입니다. 최근엔 생분해성 소재가 발전 중입니다."
+      ],
+      "contradiction": "견고함·내구성을 갖춘 한 개를 만드는 비용·위험과 자원 낭비 사이의 균형이 안 맞을 때.",
+      "classic": [
+        {
+          "name": "일회용 주사기",
+          "detail": "재사용 감염 위험을 원천 차단"
+        },
+        {
+          "name": "종이컵·일회용 마스크",
+          "detail": "한 번 쓰고 폐기해 위생 확보"
+        },
+        {
+          "name": "카드보드 박스",
+          "detail": "한 번 쓰고 폐기"
+        }
+      ],
+      "modern": [
+        {
+          "name": "코로나19 KF94 마스크",
+          "detail": "고성능 필터를 단기간 일회용으로 제공"
+        },
+        {
+          "name": "클라우드 컨테이너(Docker)",
+          "detail": "쓰고 폐기하는 일회용 실행환경"
+        },
+        {
+          "name": "스냅챗 자동삭제 메시지",
+          "detail": "정보 자체가 일회용 → 프라이버시 보호"
+        }
+      ],
+      "related": [
+        11,
+        34,
+        10
+      ],
+      "reflection": "당신의 일에서 \"비싸고 오래 가는 한 개\" 대신 \"싸고 짧은 여러 개\"로 바꾸면 좋아질 일이 있나요?"
+    },
+    {
+      "n": 28,
+      "ko": "기계 시스템 대체",
+      "en": "Mechanics Substitution",
+      "cat": "system",
+      "short": "기계적 시스템을 광학·음향·전자·자기 시스템으로 대체한다.",
+      "desc": [
+        "움직이는 기계 부품은 마모·소음·고장의 원천입니다. 같은 기능을 빛·소리·전기·자기로 구현할 수 있다면 시스템이 훨씬 단순하고 신뢰성이 올라갑니다.",
+        "스마트폰의 발전이 이 원리를 가장 잘 보여줍니다. 한때 필요했던 셔터·다이얼·키패드가 모두 정전식 터치·소프트웨어로 대체되었죠."
+      ],
+      "contradiction": "기계적 부품의 한계(마모·소음·복잡성)를 벗어나고 싶지만, 그 기능은 그대로 유지하고 싶을 때.",
+      "classic": [
+        {
+          "name": "광센서",
+          "detail": "기계식 스위치 대신 빛으로 감지"
+        },
+        {
+          "name": "자기부상열차",
+          "detail": "바퀴 없는 부상 — 마찰 제거"
+        },
+        {
+          "name": "RFID 태그·음성 인식",
+          "detail": "물리적 키 대신 신호로 식별·조작"
+        }
+      ],
+      "modern": [
+        {
+          "name": "iPhone Taptic Engine",
+          "detail": "기계식 홈버튼을 햅틱·소프트웨어로 시뮬레이션"
+        },
+        {
+          "name": "정전식 터치스크린",
+          "detail": "물리키 대신 손가락 전기 신호로 입력"
+        },
+        {
+          "name": "무선충전",
+          "detail": "금속 접점 대신 자기장으로 전력 전달"
+        }
+      ],
+      "related": [
+        23,
+        24,
+        18
+      ],
+      "reflection": "주변에서 \"여전히 기계적인 부품\"을 쓰고 있는데 신호·전자로 바꿀 수 있는 것이 있나요?"
+    },
+    {
+      "n": 29,
+      "ko": "공압·유압",
+      "en": "Pneumatics & Hydraulics",
+      "cat": "system",
+      "short": "고체 부품 대신 기체나 액체를 사용한다.",
+      "desc": [
+        "딱딱한 부품으로 처리하던 일을 부드러운 매체(공기·물·기름)로 대체하면 더 부드럽고, 더 강하고, 더 정밀해질 수 있습니다.",
+        "공기 쿠션, 유압 브레이크처럼 일상적인 사례부터 워터젯 절단처럼 극한의 응용까지 폭넓은 원리입니다."
+      ],
+      "contradiction": "고체 부품의 무게·복잡성을 줄이면서, 동작은 더 부드럽거나 강력하게 만들고 싶을 때.",
+      "classic": [
+        {
+          "name": "에어 쿠션·에어백",
+          "detail": "딱딱한 충격 흡수재를 공기로 대체"
+        },
+        {
+          "name": "유압 브레이크·엘리베이터",
+          "detail": "액체로 큰 힘을 부드럽게 전달"
+        },
+        {
+          "name": "워터젯 절단",
+          "detail": "물의 압력으로 금속까지 자름"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Tesla 에어 서스펜션",
+          "detail": "노면 상태에 따라 공기 압력으로 차고 조절"
+        },
+        {
+          "name": "나이키 에어/줌 쿠셔닝",
+          "detail": "운동화 밑창에 가스 캡슐로 충격 흡수"
+        },
+        {
+          "name": "소프트 로보틱스",
+          "detail": "공기 압력으로 움직이는 유연한 로봇 그리퍼"
+        }
+      ],
+      "related": [
+        30,
+        31,
+        15
+      ],
+      "reflection": "당신 주변에서 \"딱딱한 부품\"이 처리하는 일을 \"기체·액체\"로 바꾸면 어떻게 될까요?"
+    },
+    {
+      "n": 30,
+      "ko": "유연한 막",
+      "en": "Flexible Shells / Thin Films",
+      "cat": "structure",
+      "short": "딱딱한 고체 구조 대신 유연한 막이나 얇은 필름을 사용한다.",
+      "desc": [
+        "\"같은 보호·기능을 얇고 가벼운 막으로 할 수 있다면?\" 두꺼운 벽 대신 얇은 막은 가볍고 유연하며 종종 더 우수합니다.",
+        "폴더블 디스플레이, 웨어러블 디바이스, 의료용 박막 센서 등 첨단 분야에서 이 원리가 빛납니다."
+      ],
+      "contradiction": "견고함·보호 기능은 유지하면서 무게·부피·유연성을 확보하고 싶을 때.",
+      "classic": [
+        {
+          "name": "비닐하우스",
+          "detail": "유리 온실 대신 얇은 비닐로 같은 효과"
+        },
+        {
+          "name": "콘택트렌즈",
+          "detail": "안경 대신 눈에 직접 닿는 얇은 막"
+        },
+        {
+          "name": "텐트·우산·풍선",
+          "detail": "유연한 막이 공간을 만들거나 보호"
+        }
+      ],
+      "modern": [
+        {
+          "name": "폴더블 OLED 디스플레이",
+          "detail": "유리 대신 유연한 폴리이미드 필름으로 접힘 가능"
+        },
+        {
+          "name": "스마트 패브릭·웨어러블 센서",
+          "detail": "옷에 내장 가능한 박막 센서"
+        },
+        {
+          "name": "그래핀 멤브레인",
+          "detail": "한 원자 두께의 막으로 정수·기체 분리"
+        }
+      ],
+      "related": [
+        15,
+        29,
+        31
+      ],
+      "reflection": "두껍거나 무거운 보호장치를 \"얇은 막\"으로 대체할 수 있는 영역이 있나요?"
+    },
+    {
+      "n": 31,
+      "ko": "다공질 재료",
+      "en": "Porous Materials",
+      "cat": "system",
+      "short": "물체를 다공질로 만들거나, 다공질 요소를 추가하여 무게·여과·흡수 등을 활용한다.",
+      "desc": [
+        "속이 비어 있는 구조는 가볍고, 표면적이 넓고, 흡수·통과 능력이 뛰어납니다. 자연의 뼈, 식물의 잎, 우리 폐가 모두 다공질 구조입니다.",
+        "첨단 소재 분야에서 다공질은 핵심 키워드입니다. 그래핀 에어로젤, MOF(금속-유기 골격체) 등은 모두 극도로 다공질한 신소재입니다."
+      ],
+      "contradiction": "무게를 줄이면서 강도·표면적·기능을 유지하거나 늘리고 싶을 때.",
+      "classic": [
+        {
+          "name": "스펀지",
+          "detail": "다공질이라 흡수성과 가벼움 동시 확보"
+        },
+        {
+          "name": "활성탄 정수 필터",
+          "detail": "미세 다공질로 거대한 표면적 → 흡착"
+        },
+        {
+          "name": "통기성 운동복 메시",
+          "detail": "구멍을 통해 공기·땀이 빠져나감"
+        }
+      ],
+      "modern": [
+        {
+          "name": "KF94 다층 필터",
+          "detail": "다공질 부직포가 미세입자만 걸러냄"
+        },
+        {
+          "name": "MOF(금속-유기 골격체)",
+          "detail": "다공질 신소재로 CO2 포집·수소 저장"
+        },
+        {
+          "name": "그래핀 에어로젤",
+          "detail": "세계에서 가장 가벼운 다공질 고체"
+        }
+      ],
+      "related": [
+        29,
+        30,
+        40
+      ],
+      "reflection": "당신이 다루는 재료·구조에서 \"구멍을 더 많이 뚫으면\" 어떤 점이 좋아질까요?"
+    },
+    {
+      "n": 32,
+      "ko": "색 변경",
+      "en": "Color Changes",
+      "cat": "system",
+      "short": "물체의 색이나 투명도를 변화시키거나, 색의 변화를 신호로 활용한다.",
+      "desc": [
+        "색은 정보입니다. 색을 바꿈으로써 상태·온도·존재 여부 등 다양한 정보를 시각적으로 전달할 수 있죠.",
+        "요즘은 디스플레이 기술의 발전으로 \"능동적 색 변경\"이 모든 곳에서 일어납니다. 같은 화면이 다양한 색을 표시하고, 같은 표면이 적응적으로 색을 바꾸는 시대입니다."
+      ],
+      "contradiction": "정보를 효과적으로 전달하면서 시스템은 단순하게 유지하고 싶을 때.",
+      "classic": [
+        {
+          "name": "자외선 감지 팔찌",
+          "detail": "자외선 노출 시 색이 변해 차단제 도포 시점 알림"
+        },
+        {
+          "name": "변색 안경",
+          "detail": "햇빛 세기에 따라 어두워졌다 밝아짐"
+        },
+        {
+          "name": "적외선 야간투시경",
+          "detail": "사람 눈에 안 보이는 열을 색으로 변환"
+        }
+      ],
+      "modern": [
+        {
+          "name": "True Tone·자동 다크모드",
+          "detail": "주변 조명에 맞춰 디스플레이 색조 자동 조정"
+        },
+        {
+          "name": "전자종이(E-ink)",
+          "detail": "전기 신호로 색·패턴을 바꿔 정보 표시"
+        },
+        {
+          "name": "스마트 윈도우(SageGlass)",
+          "detail": "전압으로 유리 투명도를 실시간 변경"
+        }
+      ],
+      "related": [
+        26,
+        28,
+        15
+      ],
+      "reflection": "당신이 일하는 환경에서 \"색이나 투명도가 바뀐다면 즉시 알 수 있는 정보\"는 어떤 것이 있을까요?"
+    },
+    {
+      "n": 33,
+      "ko": "동질성",
+      "en": "Homogeneity",
+      "cat": "structure",
+      "short": "상호작용하는 물체들을 같은 재료나 비슷한 특성을 가진 재료로 만든다.",
+      "desc": [
+        "서로 만나는 부품들을 비슷한 재질로 만들면 호환성·접합성·내구성이 좋아집니다. 다른 재질끼리는 열팽창률·강도 차이로 갈등이 생기기 쉽죠.",
+        "첨단 산업에서는 \"수직 통합\"이 비슷한 사고입니다. 칩·OS·앱을 한 회사가 다 만들면 호환성이 극대화되는 식이죠."
+      ],
+      "contradiction": "다양한 재료·시스템의 장점을 활용하면서도 호환성·통합성을 잃지 않고 싶을 때.",
+      "classic": [
+        {
+          "name": "다이아몬드 절삭공구로 다이아몬드 가공",
+          "detail": "같은 경도로 정밀 가공"
+        },
+        {
+          "name": "티타늄 임플란트",
+          "detail": "생체에 친화적인 재질로 거부반응 최소화"
+        },
+        {
+          "name": "같은 재질끼리의 용접",
+          "detail": "결합 강도 우수, 부식 적음"
+        }
+      ],
+      "modern": [
+        {
+          "name": "Apple Silicon(M시리즈)",
+          "detail": "CPU·GPU·메모리를 한 칩에 통합 → ARM 아키텍처 통일"
+        },
+        {
+          "name": "생체적합 의료기기",
+          "detail": "몸과 거부반응이 없는 동질 재료"
+        },
+        {
+          "name": "동일 합금 적층 제조",
+          "detail": "3D 프린팅에서 한 재료로 전체 부품 제작"
+        }
+      ],
+      "related": [
+        3,
+        5,
+        40
+      ],
+      "reflection": "당신의 작업이나 시스템에서 \"서로 다른 종류가 섞여서 문제\"가 되는 경우가 있나요?"
+    },
+    {
+      "n": 34,
+      "ko": "폐기 및 재생",
+      "en": "Discarding & Recovering",
+      "cat": "preliminary",
+      "short": "역할을 마친 부품은 폐기하거나, 작용 중에 다시 재생되도록 한다.",
+      "desc": [
+        "\"한 번 쓸 부품은 미련 없이 떼어내고, 필요한 부품은 사용 중에도 끊임없이 보충한다.\" 시스템을 단계적으로 가볍게 만드는 원리입니다.",
+        "특히 우주·항공·의료에서 강력합니다. 사용된 부분은 자연 분해되거나 분리되고, 필요한 부분은 끊임없이 재생됩니다."
+      ],
+      "contradiction": "필요한 부품을 모두 처음부터 끝까지 가지고 있기엔 부담이지만, 그 기능은 단계별로 다 필요할 때.",
+      "classic": [
+        {
+          "name": "로켓 분리 단",
+          "detail": "다 쓴 단계는 떨어뜨려 무게 감소"
+        },
+        {
+          "name": "생분해 봉합사",
+          "detail": "몸 안에서 자연 흡수되어 제거 수술 불필요"
+        },
+        {
+          "name": "얼음 거푸집",
+          "detail": "녹으면 알아서 사라짐"
+        }
+      ],
+      "modern": [
+        {
+          "name": "SpaceX 재사용 로켓 + 페어링 분리",
+          "detail": "다 쓴 부품은 분리, 사용 가능한 부품은 회수해 재사용"
+        },
+        {
+          "name": "생분해 플라스틱 캡슐",
+          "detail": "커피·약 캡슐이 사용 후 자연 분해"
+        },
+        {
+          "name": "스냅챗 자동삭제·자동 만료 토큰",
+          "detail": "정보가 시간이 지나면 스스로 폐기"
+        }
+      ],
+      "related": [
+        27,
+        25,
+        11
+      ],
+      "reflection": "당신의 작업 흐름에서 \"다 쓴 뒤에도 계속 짊어지고 다니는\" 것이 있나요? 적절히 폐기·재활용하는 시점은?"
+    },
+    {
+      "n": 35,
+      "ko": "속성 변환",
+      "en": "Parameter Changes",
+      "cat": "dynamic",
+      "short": "물질의 물리적 상태(고체·액체·기체), 농도, 유연성, 온도 등을 변경한다.",
+      "desc": [
+        "\"이 물질을 다른 상태로 바꾸면 어떻게 될까?\"라는 원리입니다. 액체를 기체로, 단단한 것을 부드럽게, 차가운 것을 뜨겁게 — 상태가 달라지면 활용 가능성이 완전히 달라집니다.",
+        "LNG(액화천연가스)가 대표적 예시입니다. 기체 상태로는 운송이 어렵지만 액화하면 부피가 600분의 1로 줄어 전 세계 무역이 가능해지죠."
+      ],
+      "contradiction": "물질의 본질은 유지하면서 다루기·운반·저장의 효율을 높이고 싶을 때.",
+      "classic": [
+        {
+          "name": "LNG (액화천연가스)",
+          "detail": "기체를 액체로 → 부피 600분의 1"
+        },
+        {
+          "name": "동결건조 식품",
+          "detail": "얼린 뒤 진공 승화 → 가볍고 장기 보관"
+        },
+        {
+          "name": "폼 비누·폼 클렌징",
+          "detail": "액체를 거품으로 → 적은 양으로 더 넓은 면"
+        }
+      ],
+      "modern": [
+        {
+          "name": "슈퍼크리티컬 CO2 디카페인",
+          "detail": "CO2를 초임계 상태로 만들어 용매로 활용"
+        },
+        {
+          "name": "액침 냉각 데이터센터",
+          "detail": "서버를 절연 액체에 담가 냉각 효율 극대화"
+        },
+        {
+          "name": "젤·하이드로겔 의료 소재",
+          "detail": "고체와 액체 중간 상태로 다양한 의료 응용"
+        }
+      ],
+      "related": [
+        16,
+        36,
+        37
+      ],
+      "reflection": "당신이 다루는 무언가의 \"상태나 형태\"를 바꾸면 어떤 새로운 가능성이 생길까요?"
+    },
+    {
+      "n": 36,
+      "ko": "상전이",
+      "en": "Phase Transitions",
+      "cat": "dynamic",
+      "short": "상변화(고체↔액체↔기체)가 일어날 때 발생하는 부피·온도·에너지 변화를 활용한다.",
+      "desc": [
+        "물질이 상을 바꿀 때(녹거나 끓거나 얼 때) 엄청난 에너지가 흡수되거나 방출됩니다. 그 에너지 자체를 사용하는 원리죠.",
+        "히트파이프, 핫팩, 에어컨, 인덕션 등 우리가 매일 쓰는 많은 기술이 상전이를 활용합니다."
+      ],
+      "contradiction": "단순한 구조로 큰 에너지 전달·저장·이동 효과를 얻고 싶을 때.",
+      "classic": [
+        {
+          "name": "히트파이프",
+          "detail": "증발·응결의 상전이로 열을 효율적으로 이동"
+        },
+        {
+          "name": "휴대용 손난로(상변화 축열)",
+          "detail": "결정화 시 열을 방출"
+        },
+        {
+          "name": "열펌프·에어컨",
+          "detail": "냉매의 상변화로 열을 옮김"
+        }
+      ],
+      "modern": [
+        {
+          "name": "인덕션 쿠킹",
+          "detail": "자기장으로 금속에 직접 열 발생, 상변화 없는 단순 가열도 가능"
+        },
+        {
+          "name": "PCM(상변화 축열재) 건물 외벽",
+          "detail": "낮의 열을 저장, 밤에 방출해 냉난방 부하 감소"
+        },
+        {
+          "name": "증기 발전·증기 살균",
+          "detail": "물→증기 상전이로 거대한 에너지·살균 효과"
+        }
+      ],
+      "related": [
+        35,
+        37,
+        29
+      ],
+      "reflection": "당신이 \"단순한 가열·냉각\"으로 처리하던 일을 상전이를 활용하면 더 효율적이지 않을까요?"
+    },
+    {
+      "n": 37,
+      "ko": "열팽창",
+      "en": "Thermal Expansion",
+      "cat": "dynamic",
+      "short": "재료가 열을 받으면 팽창하고 식으면 수축하는 성질을 활용한다.",
+      "desc": [
+        "\"온도가 변하면 크기가 변한다\"는 단순한 물리적 사실을 영리하게 활용하는 원리입니다. 외부 동력 없이도 작동하는 시스템을 만들 수 있죠.",
+        "형상기억합금이 대표적입니다. 특정 온도에서 원래 형태로 돌아가는 성질을 활용해 의료·항공 분야에서 정교한 응용이 가능합니다."
+      ],
+      "contradiction": "외부 제어 없이 자동으로 작동하는 메커니즘이 필요할 때.",
+      "classic": [
+        {
+          "name": "바이메탈 온도계",
+          "detail": "두 금속의 팽창 차이로 온도 측정"
+        },
+        {
+          "name": "열수축 튜브",
+          "detail": "가열하면 줄어들어 케이블을 단단히 감쌈"
+        },
+        {
+          "name": "기차 레일의 신축이음",
+          "detail": "여름 팽창을 미리 고려한 틈"
+        }
+      ],
+      "modern": [
+        {
+          "name": "형상기억합금 스텐트",
+          "detail": "체온에서 자동으로 펴져 혈관을 확장"
+        },
+        {
+          "name": "자가복구 콘크리트",
+          "detail": "온도·수분 변화에 미생물이 균열을 메움"
+        },
+        {
+          "name": "형상기억 의류·패션",
+          "detail": "온도에 따라 짜임새가 바뀌어 통기성 자동 조절"
+        }
+      ],
+      "related": [
+        35,
+        36,
+        15
+      ],
+      "reflection": "온도 변화만으로 자동 작동하는 시스템을 만들 수 있다면, 어떤 응용이 가능할까요?"
+    },
+    {
+      "n": 38,
+      "ko": "산화 가속",
+      "en": "Strong Oxidants",
+      "cat": "system",
+      "short": "일반 공기 대신 산소가 풍부한 환경이나 산화제를 사용하여 반응을 가속한다.",
+      "desc": [
+        "산소 농도를 높이면 화학반응이 훨씬 빠르고 강력하게 일어납니다. 의료·살균·연소·발효 등 다양한 분야에서 활용됩니다.",
+        "코로나 이후 오존·자외선 살균이 일상화되면서 이 원리가 더 친숙해졌습니다."
+      ],
+      "contradiction": "반응 속도·강도를 높이고 싶지만 시간·공간 제약이 있을 때.",
+      "classic": [
+        {
+          "name": "고압산소 치료실",
+          "detail": "산소 농도를 높여 상처 회복 촉진"
+        },
+        {
+          "name": "오존 살균",
+          "detail": "O3의 강력한 산화로 세균·바이러스 제거"
+        },
+        {
+          "name": "산소 용접",
+          "detail": "순산소 환경에서 고온 화염"
+        }
+      ],
+      "modern": [
+        {
+          "name": "고압산소 챔버 (의료·스포츠)",
+          "detail": "운동 후 회복·뇌졸중 후유증 치료"
+        },
+        {
+          "name": "코로나 시대 오존·UV-C 살균기",
+          "detail": "마스크·실내 공기 살균에 일상적으로 사용"
+        },
+        {
+          "name": "산소 강화 양어장",
+          "detail": "좁은 공간에서도 산소 농도로 양식 효율 ↑"
+        }
+      ],
+      "related": [
+        39,
+        29,
+        22
+      ],
+      "reflection": "반응이나 작용을 더 강하게 만들고 싶을 때 \"환경 자체를 바꾸는\" 방법이 가능할까요?"
+    },
+    {
+      "n": 39,
+      "ko": "불활성 환경",
+      "en": "Inert Atmosphere",
+      "cat": "system",
+      "short": "일반 환경을 불활성 기체나 진공으로 대체하여 산화·반응을 막는다.",
+      "desc": [
+        "38번이 \"반응을 가속\"하는 원리라면, 39번은 정반대로 \"반응을 막는\" 원리입니다. 산소와 만나면 변질되는 것들을 보호하는 데 핵심적이죠.",
+        "식품·반도체·문화재 보존 등에서 핵심 원리입니다."
+      ],
+      "contradiction": "물질의 변질·산화·반응을 막으면서 그것을 다루거나 가공해야 할 때.",
+      "classic": [
+        {
+          "name": "진공포장 식품",
+          "detail": "공기 자체를 제거해 산패·미생물 차단"
+        },
+        {
+          "name": "질소 충전 과자봉지",
+          "detail": "산소 대신 질소를 채워 신선도 유지"
+        },
+        {
+          "name": "아르곤 용접",
+          "detail": "금속이 공기와 반응하지 못하게 차단"
+        }
+      ],
+      "modern": [
+        {
+          "name": "OLED 디스플레이 봉지",
+          "detail": "유기물 보호를 위해 내부를 완전 밀폐·불활성"
+        },
+        {
+          "name": "반도체 클린룸 + 질소 분위기",
+          "detail": "미세한 산화도 결함이 되므로 불활성 환경에서 작업"
+        },
+        {
+          "name": "미술품·문화재 질소 보관",
+          "detail": "유기물 손상 방지"
+        }
+      ],
+      "related": [
+        38,
+        29,
+        11
+      ],
+      "reflection": "당신 주변에서 \"공기와 만나면 변질되는\" 것이 있나요? 어떻게 보호할 수 있을까요?"
+    },
+    {
+      "n": 40,
+      "ko": "복합재료",
+      "en": "Composite Materials",
+      "cat": "structure",
+      "short": "단일 재료 대신 여러 재료의 장점을 합친 복합재료를 사용한다.",
+      "desc": [
+        "\"한 가지 재료로 모든 요구를 충족시킬 수 없다면, 여러 재료를 합쳐서 새로운 재료를 만들자\"는 원리입니다. 가볍지만 강한, 부드럽지만 단단한 — 모순적인 성질을 한 재료에 담을 수 있죠.",
+        "첨단 산업의 핵심 키워드입니다. 항공기 절반 이상이 복합재료이고, 전기차 배터리 케이스도 점점 복합재료로 바뀌고 있습니다."
+      ],
+      "contradiction": "단일 재료의 한계(가벼움 vs 강도, 유연성 vs 내구성 등)를 넘어서고 싶을 때.",
+      "classic": [
+        {
+          "name": "철근 콘크리트",
+          "detail": "콘크리트의 인장 약점을 철근으로 보완"
+        },
+        {
+          "name": "합판",
+          "detail": "얇은 목재 여러 장을 결을 엇갈리게 적층"
+        },
+        {
+          "name": "유리섬유 + 수지(FRP)",
+          "detail": "가벼우면서도 단단한 보트·욕조 소재"
+        }
+      ],
+      "modern": [
+        {
+          "name": "탄소섬유강화플라스틱(CFRP)",
+          "detail": "자전거·항공기·F1·전기차에서 무게-강도 비율 극대화"
+        },
+        {
+          "name": "그래핀 복합재",
+          "detail": "배터리·센서·필터까지 차세대 응용"
+        },
+        {
+          "name": "전기차 배터리 케이스 (복합 알루미늄)",
+          "detail": "화재 저항·경량·강성을 동시 만족"
+        }
+      ],
+      "related": [
+        31,
+        33,
+        5
+      ],
+      "reflection": "당신이 사용하는 제품 중에서 \"한 가지 재료의 한계\"가 보이는 것이 있나요? 어떤 다른 재료와 결합하면 좋아질까요?"
+    }
+  ],
+  "CAT_LABEL": {
+    "structure": "구조 변환",
+    "preliminary": "사전 조치",
+    "dynamic": "동적 변환",
+    "system": "시스템·물질"
+  },
+  "matrixParams": [
+    {
+      "id": 1,
+      "name": "움직이는 물체의 무게",
+      "en": "Weight of moving object",
+      "g": "phys"
+    },
+    {
+      "id": 2,
+      "name": "정지된 물체의 무게",
+      "en": "Weight of stationary object",
+      "g": "phys"
+    },
+    {
+      "id": 3,
+      "name": "움직이는 물체의 길이",
+      "en": "Length of moving object",
+      "g": "phys"
+    },
+    {
+      "id": 4,
+      "name": "정지된 물체의 길이",
+      "en": "Length of stationary object",
+      "g": "phys"
+    },
+    {
+      "id": 5,
+      "name": "움직이는 물체의 면적",
+      "en": "Area of moving object",
+      "g": "phys"
+    },
+    {
+      "id": 6,
+      "name": "정지된 물체의 면적",
+      "en": "Area of stationary object",
+      "g": "phys"
+    },
+    {
+      "id": 7,
+      "name": "움직이는 물체의 부피",
+      "en": "Volume of moving object",
+      "g": "phys"
+    },
+    {
+      "id": 8,
+      "name": "정지된 물체의 부피",
+      "en": "Volume of stationary object",
+      "g": "phys"
+    },
+    {
+      "id": 9,
+      "name": "속도",
+      "en": "Speed",
+      "g": "motion"
+    },
+    {
+      "id": 10,
+      "name": "힘 / 작용",
+      "en": "Force / Intensity",
+      "g": "motion"
+    },
+    {
+      "id": 11,
+      "name": "응력 / 압력",
+      "en": "Stress / Pressure",
+      "g": "motion"
+    },
+    {
+      "id": 12,
+      "name": "모양",
+      "en": "Shape",
+      "g": "motion"
+    },
+    {
+      "id": 13,
+      "name": "물체 구성의 안정성",
+      "en": "Stability of object's composition",
+      "g": "motion"
+    },
+    {
+      "id": 14,
+      "name": "강도",
+      "en": "Strength",
+      "g": "motion"
+    },
+    {
+      "id": 15,
+      "name": "움직이는 물체의 작용 지속시간",
+      "en": "Duration of action of moving object",
+      "g": "time"
+    },
+    {
+      "id": 16,
+      "name": "정지된 물체의 작용 지속시간",
+      "en": "Duration of action of stationary object",
+      "g": "time"
+    },
+    {
+      "id": 25,
+      "name": "시간 손실",
+      "en": "Loss of time",
+      "g": "time"
+    },
+    {
+      "id": 19,
+      "name": "움직이는 물체의 에너지 사용",
+      "en": "Use of energy by moving object",
+      "g": "energy"
+    },
+    {
+      "id": 20,
+      "name": "정지된 물체의 에너지 사용",
+      "en": "Use of energy by stationary object",
+      "g": "energy"
+    },
+    {
+      "id": 21,
+      "name": "동력 / 출력",
+      "en": "Power",
+      "g": "energy"
+    },
+    {
+      "id": 22,
+      "name": "에너지 손실",
+      "en": "Loss of energy",
+      "g": "energy"
+    },
+    {
+      "id": 17,
+      "name": "온도",
+      "en": "Temperature",
+      "g": "env"
+    },
+    {
+      "id": 18,
+      "name": "조명도 / 밝기",
+      "en": "Illumination intensity",
+      "g": "env"
+    },
+    {
+      "id": 23,
+      "name": "물질 손실",
+      "en": "Loss of substance",
+      "g": "env"
+    },
+    {
+      "id": 24,
+      "name": "정보 손실",
+      "en": "Loss of information",
+      "g": "env"
+    },
+    {
+      "id": 26,
+      "name": "물질의 양",
+      "en": "Quantity of substance",
+      "g": "env"
+    },
+    {
+      "id": 27,
+      "name": "신뢰성",
+      "en": "Reliability",
+      "g": "acc"
+    },
+    {
+      "id": 28,
+      "name": "측정 정확성",
+      "en": "Measurement accuracy",
+      "g": "acc"
+    },
+    {
+      "id": 29,
+      "name": "제조 정밀도",
+      "en": "Manufacturing precision",
+      "g": "acc"
+    },
+    {
+      "id": 30,
+      "name": "물체에 작용하는 외부 유해성",
+      "en": "External harm affecting object",
+      "g": "acc"
+    },
+    {
+      "id": 31,
+      "name": "물체가 발생시키는 유해 요소",
+      "en": "Object-generated harmful factors",
+      "g": "acc"
+    },
+    {
+      "id": 37,
+      "name": "측정·감지의 어려움",
+      "en": "Difficulty of detecting",
+      "g": "acc"
+    },
+    {
+      "id": 32,
+      "name": "제조 용이성",
+      "en": "Ease of manufacture",
+      "g": "prod"
+    },
+    {
+      "id": 33,
+      "name": "사용 용이성",
+      "en": "Ease of operation",
+      "g": "prod"
+    },
+    {
+      "id": 34,
+      "name": "수리 용이성",
+      "en": "Ease of repair",
+      "g": "prod"
+    },
+    {
+      "id": 35,
+      "name": "적응성 / 다용도성",
+      "en": "Adaptability / Versatility",
+      "g": "prod"
+    },
+    {
+      "id": 36,
+      "name": "장치의 복잡성",
+      "en": "Device complexity",
+      "g": "prod"
+    },
+    {
+      "id": 38,
+      "name": "자동화 정도",
+      "en": "Extent of automation",
+      "g": "prod"
+    },
+    {
+      "id": 39,
+      "name": "생산성",
+      "en": "Productivity",
+      "g": "prod"
+    }
+  ],
+  "matrixGroups": [
+    {
+      "id": "phys",
+      "name": "물리적 속성"
+    },
+    {
+      "id": "motion",
+      "name": "운동·힘·모양"
+    },
+    {
+      "id": "time",
+      "name": "시간"
+    },
+    {
+      "id": "energy",
+      "name": "에너지"
+    },
+    {
+      "id": "env",
+      "name": "물질·환경"
+    },
+    {
+      "id": "acc",
+      "name": "정확성·유해성"
+    },
+    {
+      "id": "prod",
+      "name": "생산성·편의성"
+    }
+  ],
+  "matrix": {
+    "1-3": [
+      15,
+      8,
+      29,
+      34
+    ],
+    "1-5": [
+      29,
+      17,
+      38,
+      34
+    ],
+    "1-7": [
+      29,
+      2,
+      40,
+      28
+    ],
+    "1-9": [
+      2,
+      8,
+      15,
+      38
+    ],
+    "1-10": [
+      8,
+      10,
+      18,
+      37
+    ],
+    "1-11": [
+      10,
+      36,
+      37,
+      40
+    ],
+    "1-12": [
+      10,
+      14,
+      35,
+      40
+    ],
+    "1-13": [
+      1,
+      35,
+      19,
+      39
+    ],
+    "1-14": [
+      28,
+      27,
+      18,
+      40
+    ],
+    "1-15": [
+      5,
+      34,
+      31,
+      35
+    ],
+    "1-17": [
+      6,
+      29,
+      4,
+      38
+    ],
+    "1-18": [
+      19,
+      1,
+      32
+    ],
+    "1-19": [
+      35,
+      12,
+      34,
+      31
+    ],
+    "1-21": [
+      12,
+      36,
+      18,
+      31
+    ],
+    "1-22": [
+      6,
+      2,
+      34,
+      19
+    ],
+    "1-23": [
+      5,
+      35,
+      3,
+      31
+    ],
+    "1-24": [
+      10,
+      24,
+      35
+    ],
+    "1-25": [
+      10,
+      35,
+      20,
+      28
+    ],
+    "1-26": [
+      3,
+      26,
+      18,
+      31
+    ],
+    "1-27": [
+      1,
+      3,
+      11,
+      27
+    ],
+    "1-28": [
+      28,
+      27,
+      35,
+      26
+    ],
+    "1-29": [
+      28,
+      35,
+      26,
+      18
+    ],
+    "1-30": [
+      22,
+      21,
+      18,
+      27
+    ],
+    "1-31": [
+      22,
+      35,
+      31,
+      39
+    ],
+    "1-32": [
+      27,
+      28,
+      1,
+      36
+    ],
+    "1-33": [
+      35,
+      3,
+      2,
+      24
+    ],
+    "1-34": [
+      2,
+      27,
+      28,
+      11
+    ],
+    "1-35": [
+      29,
+      5,
+      15,
+      8
+    ],
+    "1-36": [
+      26,
+      30,
+      36,
+      34
+    ],
+    "1-37": [
+      28,
+      29,
+      26,
+      32
+    ],
+    "1-38": [
+      26,
+      35,
+      18,
+      19
+    ],
+    "1-39": [
+      35,
+      3,
+      24,
+      37
+    ],
+    "2-4": [
+      10,
+      1,
+      29,
+      35
+    ],
+    "2-6": [
+      35,
+      30,
+      13,
+      2
+    ],
+    "2-8": [
+      5,
+      35,
+      14,
+      2
+    ],
+    "2-10": [
+      8,
+      10,
+      19,
+      35
+    ],
+    "2-11": [
+      13,
+      29,
+      10,
+      18
+    ],
+    "2-12": [
+      13,
+      10,
+      29,
+      14
+    ],
+    "2-13": [
+      26,
+      39,
+      1,
+      40
+    ],
+    "2-14": [
+      28,
+      2,
+      10,
+      27
+    ],
+    "2-16": [
+      2,
+      27,
+      19,
+      6
+    ],
+    "2-17": [
+      28,
+      19,
+      32,
+      22
+    ],
+    "2-18": [
+      19,
+      32,
+      35
+    ],
+    "2-20": [
+      18,
+      19,
+      28,
+      1
+    ],
+    "2-21": [
+      15,
+      19,
+      18,
+      22
+    ],
+    "2-22": [
+      18,
+      19,
+      28,
+      15
+    ],
+    "2-23": [
+      5,
+      8,
+      13,
+      30
+    ],
+    "2-24": [
+      10,
+      15,
+      35
+    ],
+    "2-25": [
+      10,
+      20,
+      35,
+      26
+    ],
+    "2-26": [
+      19,
+      6,
+      18,
+      26
+    ],
+    "2-27": [
+      10,
+      28,
+      8,
+      3
+    ],
+    "2-28": [
+      18,
+      26,
+      28
+    ],
+    "2-29": [
+      10,
+      1,
+      35,
+      17
+    ],
+    "2-30": [
+      2,
+      19,
+      22,
+      37
+    ],
+    "2-31": [
+      35,
+      22,
+      1,
+      39
+    ],
+    "2-32": [
+      28,
+      1,
+      9
+    ],
+    "2-33": [
+      6,
+      13,
+      1,
+      32
+    ],
+    "2-34": [
+      2,
+      27,
+      28,
+      11
+    ],
+    "2-35": [
+      19,
+      15,
+      29
+    ],
+    "2-36": [
+      1,
+      10,
+      26,
+      39
+    ],
+    "2-37": [
+      25,
+      28,
+      17,
+      15
+    ],
+    "2-38": [
+      2,
+      26,
+      35
+    ],
+    "2-39": [
+      1,
+      28,
+      15,
+      35
+    ],
+    "3-1": [
+      8,
+      15,
+      29,
+      34
+    ],
+    "3-5": [
+      15,
+      17,
+      4
+    ],
+    "3-7": [
+      7,
+      17,
+      4,
+      35
+    ],
+    "3-9": [
+      13,
+      4,
+      8
+    ],
+    "3-10": [
+      17,
+      10,
+      4
+    ],
+    "3-11": [
+      1,
+      8,
+      35
+    ],
+    "3-12": [
+      1,
+      8,
+      10,
+      29
+    ],
+    "3-13": [
+      1,
+      8,
+      15,
+      34
+    ],
+    "3-14": [
+      8,
+      35,
+      29,
+      34
+    ],
+    "3-15": [
+      19
+    ],
+    "3-17": [
+      10,
+      15,
+      19
+    ],
+    "3-18": [
+      32
+    ],
+    "3-19": [
+      8,
+      35,
+      24
+    ],
+    "3-21": [
+      1,
+      35
+    ],
+    "3-22": [
+      7,
+      2,
+      35,
+      39
+    ],
+    "3-23": [
+      4,
+      29,
+      23,
+      10
+    ],
+    "3-24": [
+      1,
+      24
+    ],
+    "3-25": [
+      15,
+      2,
+      29
+    ],
+    "3-26": [
+      29,
+      35
+    ],
+    "3-27": [
+      10,
+      14,
+      29,
+      40
+    ],
+    "3-28": [
+      28,
+      32,
+      4
+    ],
+    "3-29": [
+      10,
+      28,
+      29,
+      37
+    ],
+    "3-30": [
+      1,
+      15,
+      17,
+      24
+    ],
+    "3-31": [
+      17,
+      15
+    ],
+    "3-32": [
+      1,
+      29,
+      17
+    ],
+    "3-33": [
+      15,
+      29,
+      35,
+      4
+    ],
+    "3-34": [
+      1,
+      28,
+      10
+    ],
+    "3-35": [
+      14,
+      15,
+      1,
+      16
+    ],
+    "3-36": [
+      1,
+      19,
+      26,
+      24
+    ],
+    "3-37": [
+      35,
+      1,
+      26,
+      24
+    ],
+    "3-38": [
+      17,
+      24,
+      26,
+      16
+    ],
+    "3-39": [
+      14,
+      4,
+      28,
+      29
+    ],
+    "4-2": [
+      35,
+      28,
+      40,
+      29
+    ],
+    "4-6": [
+      17,
+      7,
+      10,
+      40
+    ],
+    "4-8": [
+      35,
+      8,
+      2,
+      14
+    ],
+    "4-10": [
+      28,
+      10
+    ],
+    "4-11": [
+      1,
+      14,
+      35
+    ],
+    "4-12": [
+      13,
+      14,
+      15,
+      7
+    ],
+    "4-13": [
+      39,
+      37,
+      35
+    ],
+    "4-14": [
+      15,
+      14,
+      28,
+      26
+    ],
+    "4-16": [
+      1,
+      10,
+      35
+    ],
+    "4-17": [
+      3,
+      35,
+      38,
+      18
+    ],
+    "4-18": [
+      3,
+      25
+    ],
+    "4-21": [
+      12,
+      8
+    ],
+    "4-22": [
+      6,
+      28
+    ],
+    "4-23": [
+      10,
+      28,
+      24,
+      35
+    ],
+    "4-24": [
+      24,
+      26
+    ],
+    "4-25": [
+      30,
+      29,
+      14
+    ],
+    "4-27": [
+      15,
+      29,
+      28
+    ],
+    "4-28": [
+      32,
+      28,
+      3
+    ],
+    "4-29": [
+      2,
+      32,
+      10
+    ],
+    "4-30": [
+      1,
+      18
+    ],
+    "4-32": [
+      15,
+      17,
+      27
+    ],
+    "4-33": [
+      2,
+      25
+    ],
+    "4-34": [
+      3
+    ],
+    "4-35": [
+      1,
+      35
+    ],
+    "4-36": [
+      1,
+      26
+    ],
+    "4-37": [
+      26
+    ],
+    "4-39": [
+      30,
+      14,
+      7,
+      26
+    ],
+    "5-1": [
+      2,
+      17,
+      29,
+      4
+    ],
+    "5-3": [
+      14,
+      15,
+      18,
+      4
+    ],
+    "5-7": [
+      7,
+      14,
+      17,
+      4
+    ],
+    "5-9": [
+      29,
+      30,
+      4,
+      34
+    ],
+    "5-10": [
+      19,
+      30,
+      35,
+      2
+    ],
+    "5-11": [
+      10,
+      15,
+      36,
+      28
+    ],
+    "5-12": [
+      5,
+      34,
+      29,
+      4
+    ],
+    "5-13": [
+      11,
+      2,
+      13,
+      39
+    ],
+    "5-14": [
+      3,
+      15,
+      40,
+      14
+    ],
+    "5-15": [
+      6,
+      3
+    ],
+    "5-17": [
+      2,
+      15,
+      16
+    ],
+    "5-18": [
+      15,
+      32,
+      19,
+      13
+    ],
+    "5-19": [
+      19,
+      32
+    ],
+    "5-21": [
+      19,
+      10,
+      32,
+      18
+    ],
+    "5-22": [
+      15,
+      17,
+      30,
+      26
+    ],
+    "5-23": [
+      10,
+      35,
+      2,
+      39
+    ],
+    "5-24": [
+      30,
+      26
+    ],
+    "5-25": [
+      26,
+      4
+    ],
+    "5-26": [
+      29,
+      30,
+      6,
+      13
+    ],
+    "5-27": [
+      29,
+      9
+    ],
+    "5-28": [
+      26,
+      28,
+      32,
+      3
+    ],
+    "5-29": [
+      2,
+      32
+    ],
+    "5-30": [
+      22,
+      33,
+      28,
+      1
+    ],
+    "5-31": [
+      17,
+      2,
+      18,
+      39
+    ],
+    "5-32": [
+      13,
+      1,
+      26,
+      24
+    ],
+    "5-33": [
+      15,
+      17,
+      13,
+      16
+    ],
+    "5-34": [
+      15,
+      13,
+      10,
+      1
+    ],
+    "5-35": [
+      15,
+      30
+    ],
+    "5-36": [
+      14,
+      1,
+      13
+    ],
+    "5-37": [
+      2,
+      36,
+      26,
+      18
+    ],
+    "5-38": [
+      14,
+      30,
+      28,
+      23
+    ],
+    "5-39": [
+      10,
+      26,
+      34,
+      2
+    ],
+    "6-2": [
+      30,
+      2,
+      14,
+      18
+    ],
+    "6-4": [
+      26,
+      7,
+      9,
+      39
+    ],
+    "6-10": [
+      1,
+      18,
+      35,
+      36
+    ],
+    "6-11": [
+      10,
+      15,
+      36,
+      37
+    ],
+    "6-13": [
+      2,
+      38
+    ],
+    "6-14": [
+      40
+    ],
+    "6-16": [
+      2,
+      10,
+      19,
+      30
+    ],
+    "6-17": [
+      35,
+      39,
+      38
+    ],
+    "6-21": [
+      17,
+      32
+    ],
+    "6-22": [
+      17,
+      7,
+      30
+    ],
+    "6-23": [
+      10,
+      14,
+      18,
+      39
+    ],
+    "6-24": [
+      30,
+      16
+    ],
+    "6-25": [
+      10,
+      35,
+      4,
+      18
+    ],
+    "6-26": [
+      2,
+      18,
+      40,
+      4
+    ],
+    "6-27": [
+      32,
+      35,
+      40,
+      4
+    ],
+    "6-28": [
+      26,
+      28,
+      32,
+      3
+    ],
+    "6-29": [
+      2,
+      29,
+      18,
+      36
+    ],
+    "6-30": [
+      27,
+      2,
+      39,
+      35
+    ],
+    "6-31": [
+      22,
+      1,
+      40
+    ],
+    "6-32": [
+      40,
+      16
+    ],
+    "6-33": [
+      16,
+      4
+    ],
+    "6-34": [
+      16
+    ],
+    "6-35": [
+      15,
+      16
+    ],
+    "6-36": [
+      1,
+      18,
+      36
+    ],
+    "6-37": [
+      2,
+      35,
+      30,
+      18
+    ],
+    "6-38": [
+      23
+    ],
+    "6-39": [
+      10,
+      15,
+      17,
+      7
+    ],
+    "7-1": [
+      2,
+      26,
+      29,
+      40
+    ],
+    "7-3": [
+      1,
+      7,
+      4,
+      35
+    ],
+    "7-5": [
+      1,
+      7,
+      4,
+      17
+    ],
+    "7-9": [
+      29,
+      4,
+      38,
+      34
+    ],
+    "7-10": [
+      15,
+      35,
+      36,
+      37
+    ],
+    "7-11": [
+      6,
+      35,
+      36,
+      37
+    ],
+    "7-12": [
+      1,
+      15,
+      29,
+      4
+    ],
+    "7-13": [
+      28,
+      10,
+      1,
+      39
+    ],
+    "7-14": [
+      9,
+      14,
+      15,
+      7
+    ],
+    "7-15": [
+      6,
+      35,
+      4
+    ],
+    "7-17": [
+      34,
+      39,
+      10,
+      18
+    ],
+    "7-18": [
+      2,
+      13,
+      10
+    ],
+    "7-19": [
+      35
+    ],
+    "7-21": [
+      35,
+      6,
+      13,
+      18
+    ],
+    "7-22": [
+      7,
+      15,
+      13,
+      16
+    ],
+    "7-23": [
+      36,
+      39,
+      34,
+      10
+    ],
+    "7-24": [
+      2,
+      22
+    ],
+    "7-25": [
+      2,
+      6,
+      34,
+      10
+    ],
+    "7-26": [
+      29,
+      30,
+      7
+    ],
+    "7-27": [
+      14,
+      1,
+      40,
+      11
+    ],
+    "7-28": [
+      25,
+      26,
+      28
+    ],
+    "7-29": [
+      25,
+      28,
+      2,
+      16
+    ],
+    "7-30": [
+      22,
+      21,
+      27,
+      35
+    ],
+    "7-31": [
+      17,
+      2,
+      40,
+      1
+    ],
+    "7-32": [
+      29,
+      1,
+      40
+    ],
+    "7-33": [
+      15,
+      13,
+      30,
+      12
+    ],
+    "7-34": [
+      10
+    ],
+    "7-35": [
+      15,
+      29
+    ],
+    "7-36": [
+      26,
+      1
+    ],
+    "7-37": [
+      29,
+      26,
+      4
+    ],
+    "7-38": [
+      35,
+      34,
+      16,
+      24
+    ],
+    "7-39": [
+      10,
+      6,
+      2,
+      34
+    ],
+    "8-2": [
+      35,
+      10,
+      19,
+      14
+    ],
+    "8-3": [
+      19,
+      14
+    ],
+    "8-4": [
+      35,
+      8,
+      2,
+      14
+    ],
+    "8-10": [
+      2,
+      18,
+      37
+    ],
+    "8-11": [
+      24,
+      35
+    ],
+    "8-12": [
+      7,
+      2,
+      35
+    ],
+    "8-13": [
+      34,
+      28,
+      35,
+      40
+    ],
+    "8-14": [
+      9,
+      14,
+      17,
+      15
+    ],
+    "8-16": [
+      35,
+      34,
+      38
+    ],
+    "8-17": [
+      35,
+      6,
+      4
+    ],
+    "8-21": [
+      30,
+      6
+    ],
+    "8-23": [
+      10,
+      39,
+      35,
+      34
+    ],
+    "8-25": [
+      35,
+      16,
+      32,
+      18
+    ],
+    "8-26": [
+      35,
+      3
+    ],
+    "8-27": [
+      2,
+      35,
+      16
+    ],
+    "8-29": [
+      35,
+      10,
+      25
+    ],
+    "8-30": [
+      34,
+      39,
+      19,
+      27
+    ],
+    "8-31": [
+      30,
+      18,
+      35,
+      4
+    ],
+    "8-32": [
+      35
+    ],
+    "8-34": [
+      1
+    ],
+    "8-36": [
+      1,
+      31
+    ],
+    "8-37": [
+      2,
+      17,
+      26
+    ],
+    "8-39": [
+      35,
+      37,
+      10,
+      2
+    ],
+    "9-1": [
+      2,
+      28,
+      13,
+      38
+    ],
+    "9-3": [
+      13,
+      14,
+      8
+    ],
+    "9-5": [
+      29,
+      30,
+      34
+    ],
+    "9-7": [
+      7,
+      29,
+      34
+    ],
+    "9-10": [
+      13,
+      28,
+      15,
+      19
+    ],
+    "9-11": [
+      6,
+      18,
+      38,
+      40
+    ],
+    "9-12": [
+      35,
+      15,
+      18,
+      34
+    ],
+    "9-13": [
+      28,
+      33,
+      1,
+      18
+    ],
+    "9-14": [
+      8,
+      3,
+      26,
+      14
+    ],
+    "9-15": [
+      3,
+      19,
+      35,
+      5
+    ],
+    "9-17": [
+      28,
+      30,
+      36,
+      2
+    ],
+    "9-18": [
+      10,
+      13,
+      19
+    ],
+    "9-19": [
+      8,
+      15,
+      35,
+      38
+    ],
+    "9-21": [
+      19,
+      35,
+      38,
+      2
+    ],
+    "9-22": [
+      14,
+      20,
+      19,
+      35
+    ],
+    "9-23": [
+      10,
+      13,
+      28,
+      38
+    ],
+    "9-24": [
+      13,
+      26
+    ],
+    "9-26": [
+      10,
+      19,
+      29,
+      38
+    ],
+    "9-27": [
+      11,
+      35,
+      27,
+      28
+    ],
+    "9-28": [
+      28,
+      32,
+      1,
+      24
+    ],
+    "9-29": [
+      10,
+      28,
+      32,
+      25
+    ],
+    "9-30": [
+      1,
+      28,
+      35,
+      23
+    ],
+    "9-31": [
+      2,
+      24,
+      35,
+      21
+    ],
+    "9-32": [
+      35,
+      13,
+      8,
+      1
+    ],
+    "9-33": [
+      32,
+      28,
+      13,
+      12
+    ],
+    "9-34": [
+      34,
+      2,
+      28,
+      27
+    ],
+    "9-35": [
+      15,
+      10,
+      26
+    ],
+    "9-36": [
+      10,
+      28,
+      4,
+      34
+    ],
+    "9-37": [
+      3,
+      34,
+      27,
+      16
+    ],
+    "9-38": [
+      10,
+      18
+    ],
+    "10-1": [
+      8,
+      1,
+      37,
+      18
+    ],
+    "10-2": [
+      18,
+      13,
+      1,
+      28
+    ],
+    "10-3": [
+      17,
+      19,
+      9,
+      36
+    ],
+    "10-4": [
+      28,
+      10
+    ],
+    "10-5": [
+      19,
+      10,
+      15
+    ],
+    "10-6": [
+      1,
+      18,
+      36,
+      37
+    ],
+    "10-7": [
+      15,
+      9,
+      12,
+      37
+    ],
+    "10-8": [
+      2,
+      36,
+      18,
+      37
+    ],
+    "10-9": [
+      13,
+      28,
+      15,
+      12
+    ],
+    "10-11": [
+      18,
+      21,
+      11
+    ],
+    "10-12": [
+      10,
+      35,
+      40,
+      34
+    ],
+    "10-13": [
+      35,
+      10,
+      21
+    ],
+    "10-14": [
+      35,
+      10,
+      14,
+      27
+    ],
+    "10-15": [
+      19,
+      2
+    ],
+    "10-17": [
+      35,
+      10,
+      21
+    ],
+    "10-19": [
+      19,
+      17,
+      10
+    ],
+    "10-20": [
+      1,
+      16,
+      36,
+      37
+    ],
+    "10-21": [
+      19,
+      35,
+      18,
+      37
+    ],
+    "10-22": [
+      14,
+      15
+    ],
+    "10-23": [
+      8,
+      35,
+      40,
+      5
+    ],
+    "10-25": [
+      10,
+      37,
+      36
+    ],
+    "10-26": [
+      14,
+      29,
+      18,
+      36
+    ],
+    "10-27": [
+      3,
+      35,
+      13,
+      21
+    ],
+    "10-28": [
+      35,
+      10,
+      23,
+      24
+    ],
+    "10-29": [
+      28,
+      29,
+      37,
+      36
+    ],
+    "10-30": [
+      1,
+      35,
+      40,
+      18
+    ],
+    "10-31": [
+      13,
+      3,
+      36,
+      24
+    ],
+    "10-32": [
+      15,
+      37,
+      18,
+      1
+    ],
+    "10-33": [
+      1,
+      28,
+      3,
+      25
+    ],
+    "10-34": [
+      15,
+      1,
+      11
+    ],
+    "10-35": [
+      15,
+      17,
+      18,
+      20
+    ],
+    "10-36": [
+      26,
+      35,
+      10,
+      18
+    ],
+    "10-37": [
+      36,
+      37,
+      10,
+      19
+    ],
+    "10-38": [
+      2,
+      35
+    ],
+    "10-39": [
+      3,
+      28,
+      35,
+      37
+    ],
+    "11-1": [
+      10,
+      36,
+      37,
+      40
+    ],
+    "11-2": [
+      13,
+      29,
+      10,
+      18
+    ],
+    "11-3": [
+      35,
+      10,
+      36
+    ],
+    "11-4": [
+      35,
+      1,
+      14,
+      16
+    ],
+    "11-5": [
+      10,
+      15,
+      36,
+      28
+    ],
+    "11-6": [
+      10,
+      15,
+      36,
+      37
+    ],
+    "11-7": [
+      6,
+      35,
+      10
+    ],
+    "11-8": [
+      35,
+      24
+    ],
+    "11-9": [
+      6,
+      35,
+      36
+    ],
+    "11-10": [
+      36,
+      35,
+      21
+    ],
+    "11-12": [
+      35,
+      4,
+      15,
+      10
+    ],
+    "11-13": [
+      35,
+      33,
+      2,
+      40
+    ],
+    "11-14": [
+      9,
+      18,
+      3,
+      40
+    ],
+    "11-15": [
+      19,
+      3,
+      27
+    ],
+    "11-17": [
+      35,
+      39,
+      19,
+      2
+    ],
+    "11-19": [
+      14,
+      24,
+      10,
+      37
+    ],
+    "11-21": [
+      10,
+      35,
+      14
+    ],
+    "11-22": [
+      2,
+      36,
+      25
+    ],
+    "11-23": [
+      10,
+      36,
+      3,
+      37
+    ],
+    "11-25": [
+      37,
+      36,
+      4
+    ],
+    "11-26": [
+      10,
+      14,
+      36
+    ],
+    "11-27": [
+      10,
+      13,
+      19,
+      35
+    ],
+    "11-28": [
+      6,
+      28,
+      25
+    ],
+    "11-29": [
+      3,
+      35
+    ],
+    "11-30": [
+      22,
+      2,
+      37
+    ],
+    "11-31": [
+      2,
+      33,
+      27,
+      18
+    ],
+    "11-32": [
+      1,
+      35,
+      16
+    ],
+    "11-33": [
+      11
+    ],
+    "11-34": [
+      2
+    ],
+    "11-35": [
+      35
+    ],
+    "11-36": [
+      19,
+      1,
+      35
+    ],
+    "11-37": [
+      2,
+      36,
+      37
+    ],
+    "11-38": [
+      35,
+      24
+    ],
+    "11-39": [
+      10,
+      14,
+      35,
+      37
+    ],
+    "12-1": [
+      8,
+      10,
+      29,
+      40
+    ],
+    "12-2": [
+      15,
+      10,
+      26,
+      3
+    ],
+    "12-3": [
+      29,
+      34,
+      5,
+      4
+    ],
+    "12-4": [
+      13,
+      14,
+      10,
+      7
+    ],
+    "12-5": [
+      5,
+      34,
+      4,
+      10
+    ],
+    "12-7": [
+      14,
+      4,
+      15,
+      22
+    ],
+    "12-8": [
+      7,
+      2,
+      35
+    ],
+    "12-9": [
+      35,
+      15,
+      34,
+      18
+    ],
+    "12-10": [
+      35,
+      10,
+      37,
+      40
+    ],
+    "12-11": [
+      34,
+      15,
+      10,
+      14
+    ],
+    "12-13": [
+      33,
+      1,
+      18,
+      4
+    ],
+    "12-14": [
+      30,
+      14,
+      10,
+      40
+    ],
+    "12-15": [
+      14,
+      26,
+      9,
+      25
+    ],
+    "12-17": [
+      22,
+      14,
+      19,
+      32
+    ],
+    "12-18": [
+      13,
+      15,
+      32
+    ],
+    "12-19": [
+      2,
+      6,
+      34,
+      14
+    ],
+    "12-21": [
+      4,
+      6,
+      2
+    ],
+    "12-22": [
+      14
+    ],
+    "12-23": [
+      35,
+      29,
+      3,
+      5
+    ],
+    "12-25": [
+      14,
+      10,
+      34,
+      17
+    ],
+    "12-26": [
+      36,
+      22
+    ],
+    "12-27": [
+      10,
+      40,
+      16
+    ],
+    "12-28": [
+      28,
+      32,
+      1
+    ],
+    "12-29": [
+      32,
+      30,
+      40
+    ],
+    "12-30": [
+      22,
+      1,
+      2,
+      35
+    ],
+    "12-31": [
+      35,
+      1
+    ],
+    "12-32": [
+      1,
+      32,
+      17,
+      28
+    ],
+    "12-33": [
+      32,
+      15,
+      26
+    ],
+    "12-34": [
+      2,
+      13,
+      1
+    ],
+    "12-35": [
+      1,
+      15,
+      29
+    ],
+    "12-36": [
+      16,
+      29,
+      1,
+      28
+    ],
+    "12-37": [
+      15,
+      13,
+      39
+    ],
+    "12-38": [
+      15,
+      1,
+      32
+    ],
+    "12-39": [
+      17,
+      26,
+      34,
+      10
+    ],
+    "13-1": [
+      21,
+      35,
+      2,
+      39
+    ],
+    "13-2": [
+      26,
+      39,
+      1,
+      40
+    ],
+    "13-3": [
+      13,
+      15,
+      1,
+      28
+    ],
+    "13-4": [
+      37
+    ],
+    "13-5": [
+      2,
+      11,
+      13
+    ],
+    "13-6": [
+      39
+    ],
+    "13-7": [
+      28,
+      10,
+      19,
+      39
+    ],
+    "13-8": [
+      34,
+      28,
+      35,
+      40
+    ],
+    "13-9": [
+      33,
+      15,
+      28,
+      18
+    ],
+    "13-10": [
+      10,
+      35,
+      21,
+      16
+    ],
+    "13-11": [
+      2,
+      35,
+      40
+    ],
+    "13-12": [
+      22,
+      1,
+      18,
+      4
+    ],
+    "13-14": [
+      17,
+      9,
+      15
+    ],
+    "13-15": [
+      13,
+      27,
+      10,
+      35
+    ],
+    "13-16": [
+      39,
+      3,
+      35,
+      23
+    ],
+    "13-17": [
+      35,
+      1,
+      32
+    ],
+    "13-18": [
+      32,
+      3,
+      27,
+      16
+    ],
+    "13-19": [
+      13,
+      19
+    ],
+    "13-20": [
+      27,
+      4,
+      29,
+      18
+    ],
+    "13-21": [
+      32,
+      35,
+      27,
+      31
+    ],
+    "13-22": [
+      14,
+      2,
+      39,
+      6
+    ],
+    "13-23": [
+      2,
+      14,
+      30,
+      40
+    ],
+    "13-25": [
+      35,
+      27
+    ],
+    "13-26": [
+      15,
+      32,
+      35
+    ],
+    "13-28": [
+      13
+    ],
+    "13-29": [
+      18
+    ],
+    "13-30": [
+      35,
+      24,
+      30,
+      18
+    ],
+    "13-31": [
+      35,
+      40,
+      27,
+      39
+    ],
+    "13-32": [
+      35,
+      19
+    ],
+    "13-33": [
+      32,
+      35,
+      30
+    ],
+    "13-34": [
+      2,
+      35,
+      10,
+      16
+    ],
+    "13-35": [
+      35,
+      30,
+      34,
+      2
+    ],
+    "13-36": [
+      2,
+      35,
+      22,
+      26
+    ],
+    "13-37": [
+      35,
+      22,
+      39,
+      23
+    ],
+    "13-38": [
+      1,
+      8,
+      35
+    ],
+    "13-39": [
+      23,
+      35,
+      40,
+      3
+    ],
+    "14-1": [
+      1,
+      8,
+      40,
+      15
+    ],
+    "14-2": [
+      40,
+      26,
+      27,
+      1
+    ],
+    "14-3": [
+      1,
+      15,
+      8,
+      35
+    ],
+    "14-4": [
+      15,
+      14,
+      28,
+      26
+    ],
+    "14-5": [
+      3,
+      34,
+      40,
+      29
+    ],
+    "14-6": [
+      9,
+      40,
+      28
+    ],
+    "14-7": [
+      10,
+      15,
+      14,
+      7
+    ],
+    "14-8": [
+      9,
+      14,
+      17,
+      15
+    ],
+    "14-9": [
+      8,
+      13,
+      26,
+      14
+    ],
+    "14-10": [
+      10,
+      18,
+      3,
+      14
+    ],
+    "14-11": [
+      10,
+      3,
+      18,
+      40
+    ],
+    "14-12": [
+      10,
+      30,
+      35,
+      40
+    ],
+    "14-13": [
+      13,
+      17,
+      35
+    ],
+    "14-15": [
+      27,
+      3,
+      26
+    ],
+    "14-17": [
+      30,
+      10,
+      40
+    ],
+    "14-18": [
+      35,
+      19
+    ],
+    "14-19": [
+      19,
+      35,
+      10
+    ],
+    "14-20": [
+      35
+    ],
+    "14-21": [
+      10,
+      26,
+      35,
+      28
+    ],
+    "14-22": [
+      35
+    ],
+    "14-23": [
+      35,
+      28,
+      31,
+      40
+    ],
+    "14-25": [
+      29,
+      3,
+      28,
+      10
+    ],
+    "14-26": [
+      29,
+      10,
+      27
+    ],
+    "14-27": [
+      11,
+      3
+    ],
+    "14-28": [
+      3,
+      27,
+      16
+    ],
+    "14-29": [
+      3,
+      27
+    ],
+    "14-30": [
+      18,
+      35,
+      37,
+      1
+    ],
+    "14-31": [
+      15,
+      35,
+      22,
+      2
+    ],
+    "14-32": [
+      11,
+      3,
+      10,
+      32
+    ],
+    "14-33": [
+      32,
+      40,
+      25,
+      2
+    ],
+    "14-34": [
+      27,
+      11,
+      3
+    ],
+    "14-35": [
+      15,
+      3,
+      32
+    ],
+    "14-36": [
+      2,
+      13,
+      25,
+      28
+    ],
+    "14-37": [
+      27,
+      3,
+      15,
+      40
+    ],
+    "14-38": [
+      15
+    ],
+    "14-39": [
+      29,
+      35,
+      10,
+      14
+    ],
+    "15-1": [
+      19,
+      5,
+      34,
+      31
+    ],
+    "15-3": [
+      2,
+      19,
+      9
+    ],
+    "15-5": [
+      3,
+      17,
+      19
+    ],
+    "15-7": [
+      10,
+      2,
+      19,
+      30
+    ],
+    "15-9": [
+      3,
+      35,
+      5
+    ],
+    "15-10": [
+      19,
+      2,
+      16
+    ],
+    "15-11": [
+      19,
+      3,
+      27
+    ],
+    "15-12": [
+      14,
+      26,
+      28,
+      25
+    ],
+    "15-13": [
+      13,
+      3,
+      35
+    ],
+    "15-14": [
+      27,
+      3,
+      10
+    ],
+    "15-17": [
+      19,
+      35,
+      39
+    ],
+    "15-18": [
+      2,
+      19,
+      4,
+      35
+    ],
+    "15-19": [
+      28,
+      6,
+      35,
+      18
+    ],
+    "15-21": [
+      19,
+      10,
+      35,
+      38
+    ],
+    "15-23": [
+      28,
+      27,
+      3,
+      18
+    ],
+    "15-24": [
+      10
+    ],
+    "15-25": [
+      20,
+      10,
+      28,
+      18
+    ],
+    "15-26": [
+      3,
+      35,
+      10,
+      40
+    ],
+    "15-27": [
+      11,
+      2,
+      13
+    ],
+    "15-28": [
+      3
+    ],
+    "15-29": [
+      3,
+      27,
+      16,
+      40
+    ],
+    "15-30": [
+      22,
+      15,
+      33,
+      28
+    ],
+    "15-31": [
+      21,
+      39,
+      16,
+      22
+    ],
+    "15-32": [
+      27,
+      1,
+      4
+    ],
+    "15-33": [
+      12,
+      27
+    ],
+    "15-34": [
+      29,
+      10,
+      27
+    ],
+    "15-35": [
+      1,
+      35,
+      13
+    ],
+    "15-36": [
+      10,
+      4,
+      29,
+      15
+    ],
+    "15-37": [
+      19,
+      29,
+      39,
+      35
+    ],
+    "15-38": [
+      6,
+      10
+    ],
+    "15-39": [
+      35,
+      17,
+      14,
+      19
+    ],
+    "16-2": [
+      6,
+      27,
+      19,
+      16
+    ],
+    "16-4": [
+      1,
+      40,
+      35
+    ],
+    "16-8": [
+      35,
+      34,
+      38
+    ],
+    "16-13": [
+      39,
+      3,
+      35,
+      23
+    ],
+    "16-17": [
+      19,
+      18,
+      36,
+      40
+    ],
+    "16-21": [
+      16
+    ],
+    "16-23": [
+      27,
+      16,
+      18,
+      38
+    ],
+    "16-24": [
+      10
+    ],
+    "16-25": [
+      28,
+      20,
+      10,
+      16
+    ],
+    "16-26": [
+      3,
+      35,
+      31
+    ],
+    "16-27": [
+      34,
+      27,
+      6,
+      40
+    ],
+    "16-28": [
+      10,
+      26,
+      24
+    ],
+    "16-30": [
+      17,
+      1,
+      40,
+      33
+    ],
+    "16-31": [
+      22
+    ],
+    "16-32": [
+      35,
+      10
+    ],
+    "16-33": [
+      1
+    ],
+    "16-34": [
+      1
+    ],
+    "16-35": [
+      2
+    ],
+    "16-37": [
+      25,
+      34,
+      6,
+      35
+    ],
+    "16-38": [
+      1
+    ],
+    "16-39": [
+      20,
+      10,
+      16,
+      38
+    ],
+    "17-1": [
+      36,
+      22,
+      6,
+      38
+    ],
+    "17-2": [
+      22,
+      35,
+      32
+    ],
+    "17-3": [
+      15,
+      19,
+      9
+    ],
+    "17-4": [
+      15,
+      19,
+      9
+    ],
+    "17-5": [
+      3,
+      35,
+      39,
+      18
+    ],
+    "17-6": [
+      35,
+      38
+    ],
+    "17-7": [
+      34,
+      39,
+      40,
+      18
+    ],
+    "17-8": [
+      35,
+      6,
+      4
+    ],
+    "17-9": [
+      2,
+      28,
+      36,
+      30
+    ],
+    "17-10": [
+      35,
+      10,
+      3,
+      21
+    ],
+    "17-11": [
+      35,
+      39,
+      19,
+      2
+    ],
+    "17-12": [
+      14,
+      22,
+      19,
+      32
+    ],
+    "17-13": [
+      1,
+      35,
+      32
+    ],
+    "17-14": [
+      10,
+      30,
+      22,
+      40
+    ],
+    "17-15": [
+      19,
+      13,
+      39
+    ],
+    "17-16": [
+      19,
+      18,
+      36,
+      40
+    ],
+    "17-18": [
+      32,
+      30,
+      21,
+      16
+    ],
+    "17-19": [
+      19,
+      15,
+      3,
+      17
+    ],
+    "17-21": [
+      2,
+      14,
+      17,
+      25
+    ],
+    "17-22": [
+      21,
+      17,
+      35,
+      38
+    ],
+    "17-23": [
+      21,
+      36,
+      29,
+      31
+    ],
+    "17-25": [
+      35,
+      28,
+      21,
+      18
+    ],
+    "17-26": [
+      3,
+      17,
+      30,
+      39
+    ],
+    "17-27": [
+      19,
+      35,
+      3,
+      10
+    ],
+    "17-28": [
+      32,
+      19,
+      24
+    ],
+    "17-29": [
+      24
+    ],
+    "17-30": [
+      22,
+      33,
+      35,
+      2
+    ],
+    "17-31": [
+      22,
+      35,
+      2,
+      24
+    ],
+    "17-32": [
+      26,
+      27
+    ],
+    "17-33": [
+      26,
+      27
+    ],
+    "17-34": [
+      4,
+      10,
+      16
+    ],
+    "17-35": [
+      2,
+      18,
+      27
+    ],
+    "17-36": [
+      2,
+      17,
+      16
+    ],
+    "17-37": [
+      3,
+      27,
+      35,
+      31
+    ],
+    "17-38": [
+      26,
+      2,
+      19,
+      16
+    ],
+    "17-39": [
+      15,
+      28,
+      35
+    ],
+    "18-1": [
+      19,
+      1,
+      32
+    ],
+    "18-2": [
+      2,
+      35,
+      32
+    ],
+    "18-3": [
+      19,
+      32,
+      16
+    ],
+    "18-5": [
+      19,
+      32,
+      26
+    ],
+    "18-7": [
+      2,
+      13,
+      10
+    ],
+    "18-9": [
+      10,
+      13,
+      19
+    ],
+    "18-10": [
+      26,
+      19,
+      6
+    ],
+    "18-12": [
+      32,
+      30
+    ],
+    "18-13": [
+      32,
+      3,
+      27
+    ],
+    "18-14": [
+      35,
+      19
+    ],
+    "18-15": [
+      2,
+      19,
+      6
+    ],
+    "18-17": [
+      32,
+      35,
+      19
+    ],
+    "18-19": [
+      32,
+      1,
+      19
+    ],
+    "18-20": [
+      32,
+      35,
+      1,
+      15
+    ],
+    "18-21": [
+      32
+    ],
+    "18-22": [
+      13,
+      16,
+      1,
+      6
+    ],
+    "18-23": [
+      13,
+      1
+    ],
+    "18-24": [
+      1,
+      6
+    ],
+    "18-25": [
+      19,
+      1,
+      26,
+      17
+    ],
+    "18-26": [
+      1,
+      19
+    ],
+    "18-28": [
+      11,
+      15,
+      32
+    ],
+    "18-29": [
+      3,
+      32
+    ],
+    "18-30": [
+      15,
+      19
+    ],
+    "18-31": [
+      35,
+      19,
+      32,
+      39
+    ],
+    "18-32": [
+      19,
+      35,
+      28,
+      26
+    ],
+    "18-33": [
+      28,
+      26,
+      19
+    ],
+    "18-34": [
+      15,
+      17,
+      13,
+      16
+    ],
+    "18-35": [
+      15,
+      1,
+      19
+    ],
+    "18-36": [
+      6,
+      32,
+      13
+    ],
+    "18-37": [
+      32,
+      15
+    ],
+    "18-38": [
+      2,
+      26,
+      10
+    ],
+    "18-39": [
+      2,
+      25,
+      16
+    ],
+    "19-1": [
+      12,
+      18,
+      28,
+      31
+    ],
+    "19-3": [
+      12,
+      28
+    ],
+    "19-5": [
+      15,
+      19,
+      25
+    ],
+    "19-7": [
+      35,
+      13,
+      18
+    ],
+    "19-9": [
+      8,
+      35,
+      35
+    ],
+    "19-10": [
+      16,
+      26,
+      21,
+      2
+    ],
+    "19-11": [
+      23,
+      14,
+      25
+    ],
+    "19-12": [
+      12,
+      2,
+      29
+    ],
+    "19-13": [
+      19,
+      13,
+      17,
+      24
+    ],
+    "19-14": [
+      5,
+      19,
+      9,
+      35
+    ],
+    "19-15": [
+      28,
+      35,
+      6,
+      18
+    ],
+    "19-17": [
+      19,
+      24,
+      3,
+      14
+    ],
+    "19-18": [
+      2,
+      15,
+      19
+    ],
+    "19-21": [
+      6,
+      19,
+      37,
+      18
+    ],
+    "19-22": [
+      12,
+      22,
+      15,
+      24
+    ],
+    "19-23": [
+      35,
+      24,
+      18,
+      5
+    ],
+    "19-25": [
+      35,
+      38,
+      19,
+      18
+    ],
+    "19-26": [
+      34,
+      23,
+      16,
+      18
+    ],
+    "19-27": [
+      19,
+      21,
+      11,
+      27
+    ],
+    "19-28": [
+      3,
+      1,
+      32
+    ],
+    "19-30": [
+      1,
+      35,
+      6,
+      27
+    ],
+    "19-31": [
+      2,
+      35,
+      6
+    ],
+    "19-32": [
+      28,
+      26,
+      30
+    ],
+    "19-33": [
+      19,
+      35
+    ],
+    "19-34": [
+      1,
+      15,
+      17,
+      28
+    ],
+    "19-35": [
+      15,
+      17,
+      13,
+      16
+    ],
+    "19-36": [
+      2,
+      29,
+      27,
+      28
+    ],
+    "19-37": [
+      35,
+      38
+    ],
+    "19-38": [
+      32,
+      2
+    ],
+    "19-39": [
+      12,
+      28,
+      35
+    ],
+    "20-2": [
+      19,
+      9,
+      6,
+      27
+    ],
+    "20-10": [
+      36,
+      37
+    ],
+    "20-13": [
+      27,
+      4,
+      29,
+      18
+    ],
+    "20-14": [
+      35
+    ],
+    "20-18": [
+      19,
+      2,
+      35,
+      32
+    ],
+    "20-23": [
+      28,
+      27,
+      18,
+      31
+    ],
+    "20-26": [
+      3,
+      35,
+      31
+    ],
+    "20-27": [
+      10,
+      36,
+      23
+    ],
+    "20-30": [
+      10,
+      2,
+      22,
+      37
+    ],
+    "20-31": [
+      19,
+      22,
+      18
+    ],
+    "20-32": [
+      1,
+      4
+    ],
+    "20-37": [
+      19,
+      35,
+      16,
+      25
+    ],
+    "20-39": [
+      1,
+      6
+    ],
+    "21-1": [
+      8,
+      36,
+      38,
+      31
+    ],
+    "21-2": [
+      19,
+      26,
+      17,
+      27
+    ],
+    "21-3": [
+      1,
+      10,
+      35,
+      37
+    ],
+    "21-5": [
+      19,
+      38
+    ],
+    "21-6": [
+      17,
+      32,
+      13,
+      38
+    ],
+    "21-7": [
+      35,
+      6,
+      38
+    ],
+    "21-8": [
+      30,
+      6,
+      25
+    ],
+    "21-9": [
+      15,
+      35,
+      2
+    ],
+    "21-10": [
+      26,
+      2,
+      36,
+      35
+    ],
+    "21-11": [
+      22,
+      10,
+      35
+    ],
+    "21-12": [
+      29,
+      14,
+      2,
+      40
+    ],
+    "21-13": [
+      35,
+      32,
+      15,
+      31
+    ],
+    "21-14": [
+      26,
+      10,
+      28
+    ],
+    "21-15": [
+      19,
+      35,
+      10,
+      38
+    ],
+    "21-16": [
+      16
+    ],
+    "21-17": [
+      2,
+      14,
+      17,
+      25
+    ],
+    "21-18": [
+      16,
+      6,
+      19
+    ],
+    "21-19": [
+      16,
+      6,
+      19,
+      37
+    ],
+    "21-22": [
+      10,
+      35,
+      38
+    ],
+    "21-23": [
+      28,
+      27,
+      18,
+      38
+    ],
+    "21-24": [
+      10,
+      19
+    ],
+    "21-25": [
+      35,
+      20,
+      10,
+      6
+    ],
+    "21-26": [
+      4,
+      34,
+      19
+    ],
+    "21-27": [
+      19,
+      24,
+      26,
+      31
+    ],
+    "21-28": [
+      32,
+      15,
+      2
+    ],
+    "21-29": [
+      32,
+      2
+    ],
+    "21-30": [
+      19,
+      22,
+      31,
+      2
+    ],
+    "21-31": [
+      2,
+      35,
+      18
+    ],
+    "21-32": [
+      26,
+      10,
+      34
+    ],
+    "21-33": [
+      26,
+      35,
+      10
+    ],
+    "21-34": [
+      35,
+      2,
+      10,
+      34
+    ],
+    "21-35": [
+      19,
+      17,
+      34
+    ],
+    "21-36": [
+      20,
+      19,
+      30,
+      34
+    ],
+    "21-37": [
+      19,
+      35,
+      16
+    ],
+    "21-38": [
+      28,
+      2,
+      17
+    ],
+    "21-39": [
+      28,
+      35,
+      34
+    ],
+    "22-1": [
+      15,
+      6,
+      19,
+      28
+    ],
+    "22-2": [
+      19,
+      6,
+      18,
+      9
+    ],
+    "22-3": [
+      7,
+      2,
+      6,
+      13
+    ],
+    "22-4": [
+      6,
+      38,
+      7
+    ],
+    "22-5": [
+      15,
+      26,
+      17,
+      30
+    ],
+    "22-6": [
+      17,
+      7,
+      30,
+      18
+    ],
+    "22-7": [
+      7,
+      18,
+      23
+    ],
+    "22-8": [
+      7
+    ],
+    "22-9": [
+      16,
+      35,
+      38
+    ],
+    "22-10": [
+      36,
+      38
+    ],
+    "22-13": [
+      14,
+      2,
+      39,
+      6
+    ],
+    "22-14": [
+      26
+    ],
+    "22-17": [
+      19,
+      38,
+      7
+    ],
+    "22-18": [
+      1,
+      13,
+      32,
+      15
+    ],
+    "22-21": [
+      3,
+      38
+    ],
+    "22-23": [
+      35,
+      27,
+      2,
+      37
+    ],
+    "22-24": [
+      19,
+      10
+    ],
+    "22-25": [
+      10,
+      18,
+      32,
+      7
+    ],
+    "22-26": [
+      7,
+      18,
+      25
+    ],
+    "22-27": [
+      11,
+      10,
+      35
+    ],
+    "22-28": [
+      32
+    ],
+    "22-30": [
+      21,
+      22,
+      35,
+      2
+    ],
+    "22-31": [
+      21,
+      35,
+      2,
+      22
+    ],
+    "22-33": [
+      35,
+      32,
+      1
+    ],
+    "22-34": [
+      2,
+      19
+    ],
+    "22-36": [
+      7,
+      23
+    ],
+    "22-37": [
+      35,
+      3,
+      15,
+      23
+    ],
+    "22-38": [
+      2
+    ],
+    "22-39": [
+      28,
+      10,
+      29,
+      35
+    ],
+    "23-1": [
+      35,
+      6,
+      23,
+      40
+    ],
+    "23-2": [
+      35,
+      6,
+      22,
+      32
+    ],
+    "23-3": [
+      14,
+      29,
+      10,
+      39
+    ],
+    "23-4": [
+      10,
+      28,
+      24
+    ],
+    "23-5": [
+      35,
+      2,
+      10,
+      31
+    ],
+    "23-6": [
+      10,
+      18,
+      39,
+      31
+    ],
+    "23-7": [
+      1,
+      29,
+      30,
+      36
+    ],
+    "23-8": [
+      3,
+      39,
+      18,
+      31
+    ],
+    "23-9": [
+      10,
+      13,
+      28,
+      38
+    ],
+    "23-10": [
+      14,
+      15,
+      18,
+      40
+    ],
+    "23-11": [
+      3,
+      36,
+      37,
+      10
+    ],
+    "23-12": [
+      29,
+      35,
+      3,
+      5
+    ],
+    "23-13": [
+      2,
+      14,
+      30,
+      40
+    ],
+    "23-14": [
+      35,
+      28,
+      31,
+      40
+    ],
+    "23-15": [
+      28,
+      27,
+      3,
+      18
+    ],
+    "23-16": [
+      27,
+      16,
+      18,
+      38
+    ],
+    "23-17": [
+      21,
+      36,
+      39,
+      31
+    ],
+    "23-18": [
+      1,
+      6,
+      13
+    ],
+    "23-19": [
+      35,
+      18,
+      24,
+      5
+    ],
+    "23-20": [
+      28,
+      27,
+      12,
+      31
+    ],
+    "23-21": [
+      28,
+      27,
+      18,
+      38
+    ],
+    "23-22": [
+      35,
+      27,
+      2,
+      31
+    ],
+    "23-25": [
+      15,
+      18,
+      35,
+      10
+    ],
+    "23-26": [
+      6,
+      3,
+      10,
+      24
+    ],
+    "23-27": [
+      10,
+      29,
+      39,
+      35
+    ],
+    "23-28": [
+      16,
+      34,
+      31,
+      28
+    ],
+    "23-29": [
+      35,
+      10,
+      24,
+      31
+    ],
+    "23-30": [
+      33,
+      22,
+      30,
+      40
+    ],
+    "23-31": [
+      10,
+      1,
+      34,
+      29
+    ],
+    "23-32": [
+      15,
+      34,
+      33
+    ],
+    "23-33": [
+      32,
+      28,
+      2,
+      24
+    ],
+    "23-34": [
+      2,
+      35,
+      34,
+      27
+    ],
+    "23-35": [
+      15,
+      10,
+      2
+    ],
+    "23-36": [
+      35,
+      10,
+      28,
+      24
+    ],
+    "23-37": [
+      35,
+      18,
+      10,
+      13
+    ],
+    "23-38": [
+      35,
+      10,
+      18
+    ],
+    "23-39": [
+      28,
+      35,
+      10,
+      23
+    ],
+    "24-1": [
+      10,
+      24,
+      35
+    ],
+    "24-2": [
+      10,
+      35,
+      5
+    ],
+    "24-3": [
+      1,
+      26
+    ],
+    "24-4": [
+      26
+    ],
+    "24-5": [
+      30,
+      26
+    ],
+    "24-6": [
+      30,
+      16
+    ],
+    "24-8": [
+      2,
+      22
+    ],
+    "24-9": [
+      26,
+      32
+    ],
+    "24-15": [
+      10
+    ],
+    "24-16": [
+      10
+    ],
+    "24-18": [
+      19
+    ],
+    "24-21": [
+      10,
+      19
+    ],
+    "24-22": [
+      19,
+      10
+    ],
+    "24-25": [
+      24,
+      26,
+      28,
+      32
+    ],
+    "24-26": [
+      24,
+      28,
+      35
+    ],
+    "24-27": [
+      10,
+      28,
+      23
+    ],
+    "24-30": [
+      22,
+      10,
+      1
+    ],
+    "24-31": [
+      10,
+      21,
+      22
+    ],
+    "24-32": [
+      32
+    ],
+    "24-33": [
+      27,
+      22
+    ],
+    "24-37": [
+      35,
+      33
+    ],
+    "24-38": [
+      35
+    ],
+    "24-39": [
+      13,
+      23,
+      15
+    ],
+    "25-1": [
+      10,
+      20,
+      37,
+      35
+    ],
+    "25-2": [
+      10,
+      20,
+      26,
+      5
+    ],
+    "25-3": [
+      15,
+      2,
+      29
+    ],
+    "25-4": [
+      30,
+      24,
+      14,
+      5
+    ],
+    "25-5": [
+      26,
+      4,
+      5,
+      16
+    ],
+    "25-6": [
+      10,
+      35,
+      17,
+      4
+    ],
+    "25-7": [
+      2,
+      5,
+      34,
+      10
+    ],
+    "25-8": [
+      35,
+      16,
+      32,
+      18
+    ],
+    "25-10": [
+      10,
+      37,
+      36,
+      5
+    ],
+    "25-11": [
+      37,
+      36,
+      4
+    ],
+    "25-12": [
+      4,
+      10,
+      34,
+      17
+    ],
+    "25-13": [
+      35,
+      3,
+      22,
+      5
+    ],
+    "25-14": [
+      29,
+      3,
+      28,
+      18
+    ],
+    "25-15": [
+      20,
+      10,
+      28,
+      18
+    ],
+    "25-16": [
+      28,
+      20,
+      10,
+      16
+    ],
+    "25-17": [
+      35,
+      29,
+      21,
+      18
+    ],
+    "25-18": [
+      1,
+      19,
+      26,
+      17
+    ],
+    "25-19": [
+      35,
+      38,
+      19,
+      18
+    ],
+    "25-20": [
+      1
+    ],
+    "25-21": [
+      35,
+      20,
+      10,
+      6
+    ],
+    "25-22": [
+      10,
+      5,
+      18,
+      32
+    ],
+    "25-23": [
+      35,
+      18,
+      10,
+      39
+    ],
+    "25-24": [
+      24,
+      26,
+      28,
+      32
+    ],
+    "25-26": [
+      35,
+      38,
+      18,
+      16
+    ],
+    "25-27": [
+      10,
+      30,
+      4
+    ],
+    "25-28": [
+      24,
+      34,
+      28,
+      32
+    ],
+    "25-29": [
+      24,
+      26,
+      28,
+      18
+    ],
+    "25-30": [
+      35,
+      18,
+      34
+    ],
+    "25-31": [
+      35,
+      22,
+      18,
+      39
+    ],
+    "25-32": [
+      35,
+      28,
+      34,
+      4
+    ],
+    "25-33": [
+      4,
+      28,
+      10,
+      34
+    ],
+    "25-34": [
+      32,
+      1,
+      10
+    ],
+    "25-35": [
+      35,
+      28
+    ],
+    "25-36": [
+      6,
+      29
+    ],
+    "25-37": [
+      18,
+      28,
+      32,
+      10
+    ],
+    "25-38": [
+      24,
+      28,
+      35,
+      30
+    ],
+    "26-1": [
+      35,
+      6,
+      18,
+      31
+    ],
+    "26-2": [
+      27,
+      26,
+      18,
+      35
+    ],
+    "26-3": [
+      29,
+      14,
+      35,
+      18
+    ],
+    "26-5": [
+      15,
+      14,
+      29
+    ],
+    "26-6": [
+      2,
+      18,
+      40,
+      4
+    ],
+    "26-7": [
+      15,
+      20,
+      29
+    ],
+    "26-9": [
+      35,
+      29,
+      34,
+      28
+    ],
+    "26-10": [
+      35,
+      14,
+      3
+    ],
+    "26-11": [
+      10,
+      36,
+      14,
+      3
+    ],
+    "26-12": [
+      35,
+      14
+    ],
+    "26-13": [
+      15,
+      2,
+      17,
+      40
+    ],
+    "26-14": [
+      14,
+      35,
+      34,
+      10
+    ],
+    "26-15": [
+      3,
+      35,
+      10,
+      40
+    ],
+    "26-16": [
+      3,
+      35,
+      31
+    ],
+    "26-17": [
+      3,
+      17,
+      39
+    ],
+    "26-19": [
+      34,
+      29,
+      16,
+      18
+    ],
+    "26-20": [
+      3,
+      35,
+      31
+    ],
+    "26-21": [
+      35
+    ],
+    "26-22": [
+      7,
+      18,
+      25
+    ],
+    "26-23": [
+      6,
+      3,
+      10,
+      24
+    ],
+    "26-24": [
+      24,
+      28,
+      35
+    ],
+    "26-25": [
+      35,
+      38,
+      18,
+      16
+    ],
+    "26-27": [
+      18,
+      3,
+      28,
+      40
+    ],
+    "26-28": [
+      13,
+      2,
+      28
+    ],
+    "26-29": [
+      33,
+      30
+    ],
+    "26-30": [
+      35,
+      33,
+      29,
+      31
+    ],
+    "26-31": [
+      3,
+      35,
+      40,
+      39
+    ],
+    "26-32": [
+      29,
+      1,
+      35,
+      27
+    ],
+    "26-33": [
+      35,
+      29,
+      25,
+      10
+    ],
+    "26-34": [
+      2,
+      32,
+      10,
+      25
+    ],
+    "26-35": [
+      15,
+      3,
+      29
+    ],
+    "26-36": [
+      3,
+      13,
+      27,
+      10
+    ],
+    "26-37": [
+      3,
+      27,
+      29,
+      18
+    ],
+    "26-38": [
+      8,
+      35
+    ],
+    "26-39": [
+      13,
+      29,
+      3,
+      27
+    ],
+    "27-1": [
+      3,
+      8,
+      10,
+      40
+    ],
+    "27-2": [
+      3,
+      10,
+      8,
+      28
+    ],
+    "27-3": [
+      15,
+      9,
+      14,
+      4
+    ],
+    "27-4": [
+      15,
+      29,
+      28,
+      11
+    ],
+    "27-5": [
+      17,
+      10,
+      14,
+      16
+    ],
+    "27-6": [
+      32,
+      35,
+      40,
+      4
+    ],
+    "27-7": [
+      3,
+      10,
+      14,
+      24
+    ],
+    "27-8": [
+      2,
+      35,
+      24
+    ],
+    "27-9": [
+      21,
+      35,
+      11,
+      28
+    ],
+    "27-10": [
+      8,
+      28,
+      10,
+      3
+    ],
+    "27-11": [
+      10,
+      24,
+      35,
+      19
+    ],
+    "27-12": [
+      35,
+      1,
+      16,
+      11
+    ],
+    "27-14": [
+      11,
+      28
+    ],
+    "27-15": [
+      2,
+      35,
+      3,
+      25
+    ],
+    "27-16": [
+      34,
+      27,
+      6,
+      40
+    ],
+    "27-17": [
+      3,
+      35,
+      10
+    ],
+    "27-18": [
+      11,
+      32,
+      13
+    ],
+    "27-19": [
+      21,
+      11,
+      27,
+      19
+    ],
+    "27-20": [
+      36,
+      23
+    ],
+    "27-21": [
+      21,
+      11,
+      26,
+      31
+    ],
+    "27-22": [
+      10,
+      11,
+      35
+    ],
+    "27-23": [
+      10,
+      35,
+      29,
+      39
+    ],
+    "27-24": [
+      10,
+      28
+    ],
+    "27-25": [
+      10,
+      30,
+      4
+    ],
+    "27-26": [
+      21,
+      28,
+      40,
+      3
+    ],
+    "27-28": [
+      32,
+      3,
+      11,
+      23
+    ],
+    "27-29": [
+      11,
+      32,
+      1
+    ],
+    "27-30": [
+      27,
+      35,
+      2,
+      40
+    ],
+    "27-31": [
+      35,
+      2,
+      40,
+      26
+    ],
+    "27-33": [
+      27,
+      17,
+      40
+    ],
+    "27-34": [
+      1,
+      11
+    ],
+    "27-35": [
+      13,
+      35,
+      8,
+      24
+    ],
+    "27-36": [
+      13,
+      35,
+      1
+    ],
+    "27-37": [
+      27,
+      40,
+      28
+    ],
+    "27-38": [
+      11,
+      13,
+      27
+    ],
+    "27-39": [
+      1,
+      35,
+      29,
+      38
+    ],
+    "28-1": [
+      32,
+      35,
+      26,
+      28
+    ],
+    "28-2": [
+      28,
+      35,
+      25,
+      26
+    ],
+    "28-3": [
+      28,
+      26,
+      5,
+      16
+    ],
+    "28-4": [
+      32,
+      28,
+      3,
+      16
+    ],
+    "28-5": [
+      26,
+      28,
+      32,
+      3
+    ],
+    "28-6": [
+      26,
+      28,
+      32,
+      3
+    ],
+    "28-7": [
+      32,
+      13,
+      6
+    ],
+    "28-9": [
+      28,
+      13,
+      32,
+      24
+    ],
+    "28-10": [
+      32,
+      2
+    ],
+    "28-11": [
+      6,
+      28,
+      32
+    ],
+    "28-12": [
+      6,
+      28,
+      32
+    ],
+    "28-13": [
+      32,
+      35,
+      13
+    ],
+    "28-14": [
+      28,
+      6,
+      32
+    ],
+    "28-15": [
+      28,
+      6,
+      32
+    ],
+    "28-16": [
+      10,
+      26,
+      24
+    ],
+    "28-17": [
+      6,
+      19,
+      28,
+      24
+    ],
+    "28-18": [
+      6,
+      1,
+      32
+    ],
+    "28-19": [
+      3,
+      6,
+      32
+    ],
+    "28-21": [
+      3,
+      6,
+      32
+    ],
+    "28-22": [
+      26,
+      32,
+      27
+    ],
+    "28-23": [
+      10,
+      16,
+      31,
+      28
+    ],
+    "28-25": [
+      24,
+      34,
+      28,
+      32
+    ],
+    "28-26": [
+      2,
+      6,
+      32
+    ],
+    "28-27": [
+      5,
+      11,
+      1,
+      23
+    ],
+    "28-30": [
+      28,
+      24,
+      22,
+      26
+    ],
+    "28-31": [
+      3,
+      33,
+      39,
+      10
+    ],
+    "28-32": [
+      6,
+      35,
+      25,
+      18
+    ],
+    "28-33": [
+      1,
+      13,
+      17,
+      34
+    ],
+    "28-34": [
+      1,
+      32,
+      13,
+      11
+    ],
+    "28-35": [
+      13,
+      35,
+      2
+    ],
+    "28-36": [
+      27,
+      35,
+      10,
+      34
+    ],
+    "28-37": [
+      26,
+      24,
+      32,
+      28
+    ],
+    "28-38": [
+      28,
+      2,
+      10,
+      34
+    ],
+    "28-39": [
+      10,
+      34,
+      28,
+      32
+    ],
+    "29-1": [
+      28,
+      32,
+      13,
+      18
+    ],
+    "29-2": [
+      28,
+      35,
+      27,
+      9
+    ],
+    "29-3": [
+      10,
+      28,
+      29,
+      37
+    ],
+    "29-4": [
+      2,
+      32,
+      10
+    ],
+    "29-5": [
+      28,
+      33,
+      29,
+      32
+    ],
+    "29-6": [
+      2,
+      29,
+      18,
+      36
+    ],
+    "29-7": [
+      32,
+      23,
+      2
+    ],
+    "29-8": [
+      25,
+      10,
+      35
+    ],
+    "29-9": [
+      10,
+      28,
+      32
+    ],
+    "29-10": [
+      28,
+      19,
+      34,
+      36
+    ],
+    "29-11": [
+      3,
+      35
+    ],
+    "29-12": [
+      32,
+      30,
+      40
+    ],
+    "29-13": [
+      30,
+      18
+    ],
+    "29-14": [
+      3,
+      27
+    ],
+    "29-15": [
+      3,
+      27,
+      40
+    ],
+    "29-17": [
+      19,
+      26
+    ],
+    "29-18": [
+      3,
+      32
+    ],
+    "29-19": [
+      32,
+      2
+    ],
+    "29-21": [
+      32,
+      2
+    ],
+    "29-22": [
+      13,
+      32,
+      2
+    ],
+    "29-23": [
+      35,
+      31,
+      10,
+      24
+    ],
+    "29-25": [
+      32,
+      26,
+      28,
+      18
+    ],
+    "29-26": [
+      32,
+      30
+    ],
+    "29-27": [
+      11,
+      32,
+      1
+    ],
+    "29-30": [
+      26,
+      28,
+      10,
+      36
+    ],
+    "29-31": [
+      4,
+      17,
+      34,
+      26
+    ],
+    "29-33": [
+      1,
+      32,
+      35,
+      23
+    ],
+    "29-34": [
+      25,
+      10
+    ],
+    "29-36": [
+      26,
+      2,
+      18
+    ],
+    "29-38": [
+      26,
+      28,
+      18,
+      23
+    ],
+    "29-39": [
+      10,
+      18,
+      32,
+      39
+    ],
+    "30-1": [
+      22,
+      21,
+      27,
+      39
+    ],
+    "30-2": [
+      2,
+      22,
+      13,
+      24
+    ],
+    "30-3": [
+      17,
+      1,
+      39,
+      4
+    ],
+    "30-4": [
+      1,
+      18
+    ],
+    "30-5": [
+      22,
+      1,
+      33,
+      28
+    ],
+    "30-6": [
+      27,
+      2,
+      39,
+      35
+    ],
+    "30-7": [
+      22,
+      23,
+      37,
+      35
+    ],
+    "30-8": [
+      34,
+      39,
+      19,
+      27
+    ],
+    "30-9": [
+      21,
+      22,
+      35,
+      28
+    ],
+    "30-10": [
+      13,
+      35,
+      39,
+      18
+    ],
+    "30-11": [
+      22,
+      2,
+      37
+    ],
+    "30-12": [
+      22,
+      1,
+      3,
+      35
+    ],
+    "30-13": [
+      35,
+      24,
+      30,
+      18
+    ],
+    "30-14": [
+      18,
+      35,
+      37,
+      1
+    ],
+    "30-15": [
+      22,
+      15,
+      33,
+      28
+    ],
+    "30-16": [
+      17,
+      1,
+      40,
+      33
+    ],
+    "30-17": [
+      22,
+      33,
+      35,
+      2
+    ],
+    "30-18": [
+      1,
+      19,
+      32,
+      13
+    ],
+    "30-19": [
+      1,
+      24,
+      6,
+      27
+    ],
+    "30-20": [
+      10,
+      2,
+      22,
+      37
+    ],
+    "30-21": [
+      19,
+      22,
+      31,
+      2
+    ],
+    "30-22": [
+      21,
+      22,
+      35,
+      2
+    ],
+    "30-23": [
+      33,
+      22,
+      19,
+      40
+    ],
+    "30-24": [
+      22,
+      10,
+      2
+    ],
+    "30-25": [
+      35,
+      18,
+      34
+    ],
+    "30-26": [
+      35,
+      33,
+      29,
+      31
+    ],
+    "30-27": [
+      27,
+      24,
+      2,
+      40
+    ],
+    "30-28": [
+      28,
+      33,
+      23,
+      26
+    ],
+    "30-29": [
+      26,
+      28,
+      10,
+      18
+    ],
+    "30-32": [
+      24,
+      35,
+      2
+    ],
+    "30-33": [
+      2,
+      25,
+      28,
+      39
+    ],
+    "30-34": [
+      35,
+      10,
+      2
+    ],
+    "30-35": [
+      35,
+      11,
+      22,
+      31
+    ],
+    "30-36": [
+      22,
+      19,
+      29,
+      40
+    ],
+    "30-37": [
+      22,
+      19,
+      29,
+      40
+    ],
+    "30-38": [
+      33,
+      3,
+      34
+    ],
+    "30-39": [
+      22,
+      35,
+      13,
+      24
+    ],
+    "31-1": [
+      19,
+      22,
+      15,
+      39
+    ],
+    "31-2": [
+      35,
+      22,
+      1,
+      39
+    ],
+    "31-3": [
+      17,
+      15,
+      16,
+      22
+    ],
+    "31-5": [
+      17,
+      2,
+      18,
+      39
+    ],
+    "31-6": [
+      22,
+      1,
+      40
+    ],
+    "31-7": [
+      17,
+      2,
+      40
+    ],
+    "31-8": [
+      30,
+      18,
+      35,
+      4
+    ],
+    "31-9": [
+      35,
+      28,
+      3,
+      23
+    ],
+    "31-10": [
+      35,
+      28,
+      1,
+      40
+    ],
+    "31-11": [
+      2,
+      33,
+      27,
+      18
+    ],
+    "31-12": [
+      35,
+      1
+    ],
+    "31-13": [
+      35,
+      40,
+      27,
+      39
+    ],
+    "31-14": [
+      15,
+      35,
+      22,
+      2
+    ],
+    "31-15": [
+      15,
+      22,
+      33,
+      31
+    ],
+    "31-16": [
+      21,
+      39,
+      16,
+      22
+    ],
+    "31-17": [
+      22,
+      35,
+      2,
+      24
+    ],
+    "31-18": [
+      19,
+      24,
+      39,
+      32
+    ],
+    "31-19": [
+      2,
+      35,
+      6
+    ],
+    "31-20": [
+      19,
+      22,
+      18
+    ],
+    "31-21": [
+      2,
+      35,
+      18
+    ],
+    "31-22": [
+      21,
+      35,
+      2,
+      22
+    ],
+    "31-23": [
+      10,
+      1,
+      34
+    ],
+    "31-24": [
+      10,
+      21,
+      29
+    ],
+    "31-25": [
+      1,
+      22
+    ],
+    "31-26": [
+      3,
+      24,
+      39,
+      1
+    ],
+    "31-27": [
+      24,
+      2,
+      40,
+      39
+    ],
+    "31-28": [
+      3,
+      33,
+      26
+    ],
+    "31-29": [
+      4,
+      17,
+      34,
+      26
+    ],
+    "31-36": [
+      19,
+      1,
+      31
+    ],
+    "31-37": [
+      2,
+      21,
+      27,
+      1
+    ],
+    "31-38": [
+      2
+    ],
+    "31-39": [
+      22,
+      35,
+      18,
+      39
+    ],
+    "32-1": [
+      28,
+      29,
+      15,
+      16
+    ],
+    "32-2": [
+      1,
+      27,
+      36,
+      13
+    ],
+    "32-3": [
+      1,
+      29,
+      13,
+      17
+    ],
+    "32-4": [
+      15,
+      17,
+      27
+    ],
+    "32-5": [
+      13,
+      1,
+      26,
+      12
+    ],
+    "32-6": [
+      16,
+      40
+    ],
+    "32-7": [
+      13,
+      29,
+      1,
+      40
+    ],
+    "32-8": [
+      35
+    ],
+    "32-9": [
+      35,
+      13,
+      8,
+      1
+    ],
+    "32-10": [
+      35,
+      12
+    ],
+    "32-11": [
+      35,
+      19,
+      1,
+      37
+    ],
+    "32-12": [
+      1,
+      28,
+      13,
+      27
+    ],
+    "32-13": [
+      11,
+      13,
+      1
+    ],
+    "32-14": [
+      1,
+      3,
+      10,
+      32
+    ],
+    "32-15": [
+      27,
+      1,
+      4
+    ],
+    "32-16": [
+      35,
+      16
+    ],
+    "32-17": [
+      27,
+      26,
+      18
+    ],
+    "32-18": [
+      28,
+      24,
+      27,
+      1
+    ],
+    "32-19": [
+      28,
+      26,
+      27,
+      1
+    ],
+    "32-20": [
+      1,
+      4
+    ],
+    "32-21": [
+      27,
+      1,
+      12,
+      24
+    ],
+    "32-22": [
+      19,
+      35
+    ],
+    "32-23": [
+      15,
+      34,
+      33
+    ],
+    "32-24": [
+      32,
+      24,
+      18,
+      16
+    ],
+    "32-25": [
+      35,
+      28,
+      34,
+      4
+    ],
+    "32-26": [
+      35,
+      23,
+      1,
+      24
+    ],
+    "32-28": [
+      1,
+      35,
+      12,
+      18
+    ],
+    "32-30": [
+      24,
+      2
+    ],
+    "32-33": [
+      2,
+      5,
+      13,
+      16
+    ],
+    "32-34": [
+      35,
+      1,
+      11,
+      9
+    ],
+    "32-35": [
+      2,
+      13,
+      15
+    ],
+    "32-36": [
+      27,
+      26,
+      1
+    ],
+    "32-37": [
+      6,
+      28,
+      11,
+      1
+    ],
+    "32-38": [
+      8,
+      28,
+      1
+    ],
+    "32-39": [
+      35,
+      1,
+      10,
+      28
+    ],
+    "33-1": [
+      25,
+      2,
+      13,
+      15
+    ],
+    "33-2": [
+      6,
+      13,
+      1,
+      25
+    ],
+    "33-3": [
+      1,
+      17,
+      13,
+      12
+    ],
+    "33-5": [
+      1,
+      17,
+      13,
+      16
+    ],
+    "33-6": [
+      18,
+      16,
+      15,
+      39
+    ],
+    "33-7": [
+      1,
+      16,
+      35,
+      15
+    ],
+    "33-8": [
+      4,
+      18,
+      39,
+      31
+    ],
+    "33-9": [
+      18,
+      13,
+      34
+    ],
+    "33-10": [
+      28,
+      13,
+      35
+    ],
+    "33-11": [
+      2,
+      32,
+      12
+    ],
+    "33-12": [
+      15,
+      34,
+      29,
+      28
+    ],
+    "33-13": [
+      32,
+      35,
+      30
+    ],
+    "33-14": [
+      32,
+      40,
+      3,
+      28
+    ],
+    "33-15": [
+      29,
+      3,
+      8,
+      25
+    ],
+    "33-16": [
+      1,
+      16,
+      25
+    ],
+    "33-17": [
+      26,
+      27,
+      13
+    ],
+    "33-18": [
+      13,
+      17,
+      1,
+      24
+    ],
+    "33-19": [
+      1,
+      13,
+      24
+    ],
+    "33-21": [
+      35,
+      34,
+      2,
+      10
+    ],
+    "33-22": [
+      2,
+      19,
+      13
+    ],
+    "33-23": [
+      28,
+      32,
+      2,
+      24
+    ],
+    "33-24": [
+      4,
+      10,
+      27,
+      22
+    ],
+    "33-25": [
+      4,
+      28,
+      10,
+      34
+    ],
+    "33-26": [
+      12,
+      35
+    ],
+    "33-27": [
+      17,
+      27,
+      8,
+      40
+    ],
+    "33-28": [
+      25,
+      13,
+      2,
+      34
+    ],
+    "33-29": [
+      1,
+      32,
+      35,
+      23
+    ],
+    "33-30": [
+      2,
+      25,
+      28,
+      39
+    ],
+    "33-32": [
+      2,
+      5,
+      12
+    ],
+    "33-34": [
+      12,
+      26,
+      1,
+      32
+    ],
+    "33-35": [
+      15,
+      34,
+      1,
+      16
+    ],
+    "33-36": [
+      32,
+      26,
+      12,
+      17
+    ],
+    "33-38": [
+      1,
+      34,
+      12,
+      3
+    ],
+    "33-39": [
+      15,
+      1,
+      28
+    ],
+    "34-1": [
+      2,
+      27,
+      35,
+      11
+    ],
+    "34-2": [
+      2,
+      27,
+      35,
+      11
+    ],
+    "34-3": [
+      1,
+      28,
+      10,
+      25
+    ],
+    "34-4": [
+      3,
+      18,
+      31
+    ],
+    "34-5": [
+      15,
+      13,
+      32
+    ],
+    "34-6": [
+      16,
+      25
+    ],
+    "34-7": [
+      25,
+      2,
+      35,
+      11
+    ],
+    "34-8": [
+      1
+    ],
+    "34-9": [
+      34,
+      9
+    ],
+    "34-10": [
+      1,
+      11,
+      10
+    ],
+    "34-11": [
+      13
+    ],
+    "34-12": [
+      1,
+      13,
+      2,
+      4
+    ],
+    "34-13": [
+      2,
+      35
+    ],
+    "34-14": [
+      11,
+      1,
+      2,
+      9
+    ],
+    "34-15": [
+      11,
+      29,
+      28,
+      27
+    ],
+    "34-16": [
+      1
+    ],
+    "34-17": [
+      4,
+      10
+    ],
+    "34-18": [
+      15,
+      1,
+      13
+    ],
+    "34-19": [
+      15,
+      1,
+      28,
+      16
+    ],
+    "34-21": [
+      15,
+      10,
+      32,
+      2
+    ],
+    "34-22": [
+      15,
+      1,
+      32,
+      19
+    ],
+    "34-23": [
+      2,
+      35,
+      34,
+      27
+    ],
+    "34-25": [
+      32,
+      1,
+      10,
+      25
+    ],
+    "34-26": [
+      2,
+      28,
+      10,
+      25
+    ],
+    "34-27": [
+      11,
+      10,
+      1,
+      16
+    ],
+    "34-28": [
+      10,
+      2,
+      13
+    ],
+    "34-29": [
+      25,
+      10
+    ],
+    "34-30": [
+      35,
+      10,
+      2,
+      16
+    ],
+    "34-32": [
+      1,
+      35,
+      11,
+      10
+    ],
+    "34-33": [
+      1,
+      12,
+      26,
+      15
+    ],
+    "34-35": [
+      7,
+      1,
+      4,
+      16
+    ],
+    "34-36": [
+      35,
+      1,
+      13,
+      11
+    ],
+    "34-38": [
+      34,
+      35,
+      7,
+      13
+    ],
+    "34-39": [
+      1,
+      32,
+      10
+    ],
+    "35-1": [
+      1,
+      6,
+      15,
+      8
+    ],
+    "35-2": [
+      19,
+      15,
+      29,
+      16
+    ],
+    "35-3": [
+      35,
+      1,
+      29,
+      2
+    ],
+    "35-4": [
+      1,
+      35,
+      16
+    ],
+    "35-5": [
+      35,
+      30,
+      29,
+      7
+    ],
+    "35-6": [
+      15,
+      16
+    ],
+    "35-7": [
+      15,
+      35,
+      29
+    ],
+    "35-9": [
+      35,
+      10,
+      14
+    ],
+    "35-10": [
+      15,
+      17,
+      20
+    ],
+    "35-11": [
+      35,
+      16
+    ],
+    "35-12": [
+      15,
+      37,
+      1,
+      8
+    ],
+    "35-13": [
+      35,
+      30,
+      14
+    ],
+    "35-14": [
+      35,
+      3,
+      32,
+      6
+    ],
+    "35-15": [
+      13,
+      1,
+      35
+    ],
+    "35-16": [
+      2,
+      16
+    ],
+    "35-17": [
+      27,
+      2,
+      3,
+      35
+    ],
+    "35-18": [
+      6,
+      22,
+      26,
+      1
+    ],
+    "35-19": [
+      19,
+      35,
+      29,
+      13
+    ],
+    "35-21": [
+      19,
+      1,
+      29
+    ],
+    "35-22": [
+      18,
+      15,
+      1
+    ],
+    "35-23": [
+      15,
+      10,
+      2,
+      13
+    ],
+    "35-25": [
+      35,
+      28
+    ],
+    "35-26": [
+      3,
+      35,
+      15
+    ],
+    "35-27": [
+      35,
+      13,
+      8,
+      24
+    ],
+    "35-28": [
+      35,
+      5,
+      1,
+      10
+    ],
+    "35-30": [
+      35,
+      11,
+      32,
+      31
+    ],
+    "35-32": [
+      1,
+      13,
+      31
+    ],
+    "35-33": [
+      15,
+      34,
+      1,
+      16
+    ],
+    "35-34": [
+      1,
+      16,
+      7,
+      4
+    ],
+    "35-36": [
+      15,
+      29,
+      37,
+      28
+    ],
+    "35-37": [
+      1
+    ],
+    "35-38": [
+      27,
+      34,
+      35
+    ],
+    "35-39": [
+      35,
+      28,
+      6,
+      37
+    ],
+    "36-1": [
+      26,
+      30,
+      34,
+      36
+    ],
+    "36-2": [
+      2,
+      26,
+      35,
+      39
+    ],
+    "36-3": [
+      1,
+      19,
+      26,
+      24
+    ],
+    "36-4": [
+      26
+    ],
+    "36-5": [
+      14,
+      1,
+      13,
+      16
+    ],
+    "36-6": [
+      6,
+      36
+    ],
+    "36-7": [
+      34,
+      26,
+      6
+    ],
+    "36-8": [
+      1,
+      16
+    ],
+    "36-9": [
+      34,
+      10,
+      28
+    ],
+    "36-10": [
+      26,
+      16
+    ],
+    "36-11": [
+      19,
+      1,
+      35
+    ],
+    "36-12": [
+      29,
+      13,
+      28,
+      15
+    ],
+    "36-13": [
+      2,
+      22,
+      17,
+      19
+    ],
+    "36-14": [
+      2,
+      13,
+      28
+    ],
+    "36-15": [
+      10,
+      4,
+      28,
+      15
+    ],
+    "36-17": [
+      2,
+      17,
+      13
+    ],
+    "36-18": [
+      24,
+      17,
+      13
+    ],
+    "36-19": [
+      27,
+      2,
+      29,
+      28
+    ],
+    "36-21": [
+      20,
+      19,
+      30,
+      34
+    ],
+    "36-22": [
+      10,
+      35,
+      13,
+      2
+    ],
+    "36-23": [
+      35,
+      10,
+      28,
+      29
+    ],
+    "36-25": [
+      6,
+      29
+    ],
+    "36-26": [
+      13,
+      3,
+      27,
+      10
+    ],
+    "36-27": [
+      13,
+      35,
+      1
+    ],
+    "36-28": [
+      2,
+      26,
+      10,
+      34
+    ],
+    "36-29": [
+      26,
+      24,
+      32
+    ],
+    "36-30": [
+      22,
+      19,
+      29,
+      40
+    ],
+    "36-31": [
+      19,
+      1
+    ],
+    "36-32": [
+      27,
+      26,
+      1,
+      13
+    ],
+    "36-33": [
+      27,
+      9,
+      26,
+      24
+    ],
+    "36-34": [
+      1,
+      13
+    ],
+    "36-35": [
+      29,
+      15,
+      28,
+      37
+    ],
+    "36-37": [
+      15,
+      10,
+      37,
+      28
+    ],
+    "36-38": [
+      15,
+      1,
+      24
+    ],
+    "36-39": [
+      12,
+      17,
+      28
+    ],
+    "37-1": [
+      27,
+      26,
+      28,
+      13
+    ],
+    "37-2": [
+      6,
+      13,
+      28,
+      1
+    ],
+    "37-3": [
+      16,
+      17,
+      26,
+      24
+    ],
+    "37-4": [
+      26
+    ],
+    "37-5": [
+      2,
+      13,
+      18,
+      17
+    ],
+    "37-6": [
+      2,
+      39,
+      30,
+      16
+    ],
+    "37-7": [
+      29,
+      1,
+      4,
+      16
+    ],
+    "37-8": [
+      2,
+      18,
+      26,
+      31
+    ],
+    "37-9": [
+      3,
+      4,
+      16,
+      35
+    ],
+    "37-10": [
+      30,
+      28,
+      40,
+      19
+    ],
+    "37-11": [
+      35,
+      36,
+      37,
+      32
+    ],
+    "37-12": [
+      27,
+      13,
+      1,
+      39
+    ],
+    "37-13": [
+      11,
+      22,
+      39,
+      30
+    ],
+    "37-14": [
+      27,
+      3,
+      15,
+      28
+    ],
+    "37-15": [
+      19,
+      29,
+      39,
+      25
+    ],
+    "37-16": [
+      25,
+      34,
+      6,
+      35
+    ],
+    "37-17": [
+      3,
+      27,
+      35,
+      16
+    ],
+    "37-18": [
+      2,
+      24,
+      26
+    ],
+    "37-19": [
+      35,
+      38
+    ],
+    "37-20": [
+      19,
+      35,
+      16
+    ],
+    "37-21": [
+      18,
+      1,
+      16,
+      10
+    ],
+    "37-22": [
+      35,
+      3,
+      15,
+      19
+    ],
+    "37-23": [
+      1,
+      18,
+      10,
+      24
+    ],
+    "37-24": [
+      35,
+      33,
+      27,
+      22
+    ],
+    "37-25": [
+      18,
+      28,
+      32,
+      9
+    ],
+    "37-26": [
+      3,
+      27,
+      29,
+      18
+    ],
+    "37-27": [
+      27,
+      40,
+      28,
+      8
+    ],
+    "37-28": [
+      26,
+      24,
+      32,
+      28
+    ],
+    "37-30": [
+      22,
+      19,
+      29,
+      28
+    ],
+    "37-31": [
+      2,
+      21
+    ],
+    "37-32": [
+      5,
+      28,
+      11,
+      29
+    ],
+    "37-33": [
+      2,
+      5
+    ],
+    "37-34": [
+      12,
+      26
+    ],
+    "37-35": [
+      1,
+      15
+    ],
+    "37-36": [
+      15,
+      10,
+      37,
+      28
+    ],
+    "37-38": [
+      34,
+      21
+    ],
+    "37-39": [
+      35,
+      18
+    ],
+    "38-1": [
+      28,
+      26,
+      18,
+      35
+    ],
+    "38-2": [
+      28,
+      26,
+      35,
+      10
+    ],
+    "38-3": [
+      14,
+      13,
+      17,
+      28
+    ],
+    "38-4": [
+      23
+    ],
+    "38-5": [
+      17,
+      14,
+      13
+    ],
+    "38-7": [
+      35,
+      13,
+      16
+    ],
+    "38-9": [
+      28,
+      10
+    ],
+    "38-10": [
+      2,
+      35
+    ],
+    "38-11": [
+      13,
+      35
+    ],
+    "38-12": [
+      15,
+      32,
+      1,
+      13
+    ],
+    "38-13": [
+      18,
+      1
+    ],
+    "38-14": [
+      25,
+      13
+    ],
+    "38-15": [
+      6,
+      9
+    ],
+    "38-17": [
+      26,
+      2,
+      19
+    ],
+    "38-18": [
+      8,
+      32,
+      19
+    ],
+    "38-19": [
+      2,
+      32,
+      13
+    ],
+    "38-21": [
+      28,
+      2,
+      27
+    ],
+    "38-22": [
+      23,
+      28
+    ],
+    "38-23": [
+      35,
+      10,
+      18,
+      5
+    ],
+    "38-24": [
+      35,
+      33
+    ],
+    "38-25": [
+      24,
+      28,
+      35,
+      30
+    ],
+    "38-26": [
+      35,
+      13
+    ],
+    "38-27": [
+      11,
+      27,
+      32
+    ],
+    "38-28": [
+      28,
+      26,
+      10,
+      34
+    ],
+    "38-29": [
+      28,
+      26,
+      18,
+      23
+    ],
+    "38-30": [
+      2,
+      33
+    ],
+    "38-31": [
+      2
+    ],
+    "38-32": [
+      1,
+      26,
+      13
+    ],
+    "38-33": [
+      1,
+      12,
+      34,
+      3
+    ],
+    "38-34": [
+      1,
+      35,
+      13
+    ],
+    "38-35": [
+      27,
+      4,
+      1,
+      35
+    ],
+    "38-36": [
+      15,
+      24,
+      10
+    ],
+    "38-37": [
+      34,
+      27,
+      25
+    ],
+    "38-39": [
+      5,
+      12,
+      35,
+      26
+    ],
+    "39-1": [
+      35,
+      26,
+      24,
+      37
+    ],
+    "39-2": [
+      28,
+      27,
+      15,
+      3
+    ],
+    "39-3": [
+      18,
+      4,
+      28,
+      38
+    ],
+    "39-4": [
+      30,
+      7,
+      14,
+      26
+    ],
+    "39-5": [
+      10,
+      26,
+      34,
+      31
+    ],
+    "39-6": [
+      10,
+      35,
+      17,
+      7
+    ],
+    "39-7": [
+      2,
+      6,
+      34,
+      10
+    ],
+    "39-8": [
+      35,
+      37,
+      10,
+      2
+    ],
+    "39-10": [
+      28,
+      15,
+      10,
+      36
+    ],
+    "39-11": [
+      10,
+      37,
+      14
+    ],
+    "39-12": [
+      14,
+      10,
+      34,
+      40
+    ],
+    "39-13": [
+      35,
+      3,
+      22,
+      39
+    ],
+    "39-14": [
+      29,
+      28,
+      10,
+      18
+    ],
+    "39-15": [
+      35,
+      10,
+      2,
+      18
+    ],
+    "39-16": [
+      20,
+      10,
+      16,
+      38
+    ],
+    "39-17": [
+      35,
+      21,
+      28,
+      10
+    ],
+    "39-18": [
+      26,
+      17,
+      19,
+      1
+    ],
+    "39-19": [
+      35,
+      10,
+      38,
+      19
+    ],
+    "39-20": [
+      1
+    ],
+    "39-21": [
+      35,
+      20,
+      10
+    ],
+    "39-22": [
+      28,
+      10,
+      29,
+      35
+    ],
+    "39-23": [
+      28,
+      10,
+      35,
+      23
+    ],
+    "39-24": [
+      13,
+      15,
+      23
+    ],
+    "39-26": [
+      35,
+      38
+    ],
+    "39-27": [
+      1,
+      35,
+      10,
+      38
+    ],
+    "39-28": [
+      1,
+      10,
+      34,
+      28
+    ],
+    "39-29": [
+      18,
+      10,
+      32,
+      1
+    ],
+    "39-30": [
+      22,
+      35,
+      13,
+      24
+    ],
+    "39-31": [
+      35,
+      22,
+      18,
+      39
+    ],
+    "39-32": [
+      35,
+      28,
+      2,
+      24
+    ],
+    "39-33": [
+      1,
+      28,
+      7,
+      10
+    ],
+    "39-34": [
+      1,
+      32,
+      10,
+      25
+    ],
+    "39-35": [
+      1,
+      35,
+      28,
+      37
+    ],
+    "39-36": [
+      12,
+      17,
+      28,
+      24
+    ],
+    "39-37": [
+      35,
+      18,
+      27,
+      2
+    ],
+    "39-38": [
+      5,
+      12,
+      35,
+      26
+    ]
+  },
+  "quizPool": [
+    {
+      "pn": 1,
+      "ex": "갤럭시 폴드/플립",
+      "detail": "하나의 큰 화면을 둘로 나누어 휴대성과 화면 크기를 모두 확보한 스마트폰"
+    },
+    {
+      "pn": 1,
+      "ex": "마이크로서비스 아키텍처",
+      "detail": "거대한 단일 시스템을 독립적인 작은 서비스 단위로 나누어 배포·확장하는 소프트웨어 설계"
+    },
+    {
+      "pn": 2,
+      "ex": "AirPods Pro 노이즈 캔슬링",
+      "detail": "주변 소음만 인식해 역위상 음파로 제거하고, 듣고 싶은 음악은 그대로 전달"
+    },
+    {
+      "pn": 2,
+      "ex": "Zoom·Teams 배경 제거",
+      "detail": "AI가 화면 속 사람과 배경을 실시간으로 분리하여 배경만 가상으로 교체"
+    },
+    {
+      "pn": 3,
+      "ex": "미니LED 존 디밍 TV",
+      "detail": "화면을 수백 개 영역으로 나누고 각각의 백라이트를 따로 제어해 명암비 극대화"
+    },
+    {
+      "pn": 3,
+      "ex": "인텔 P-core/E-core",
+      "detail": "한 CPU 안에서 고성능 코어와 효율 코어가 작업 종류에 따라 역할 분담"
+    },
+    {
+      "pn": 4,
+      "ex": "AirPods Pro 비대칭 디자인",
+      "detail": "귓속 구조에 맞추어 한쪽으로 기울어진 형태로 설계"
+    },
+    {
+      "pn": 5,
+      "ex": "Apple Vision Pro",
+      "detail": "AR(증강현실)과 VR(가상현실)을 하나의 디바이스에 결합한 공간 컴퓨팅 기기"
+    },
+    {
+      "pn": 5,
+      "ex": "USB-C",
+      "detail": "전원·데이터·영상·오디오 전송 기능을 하나의 케이블로 모두 처리"
+    },
+    {
+      "pn": 6,
+      "ex": "스마트폰",
+      "detail": "전화·카메라·컴퓨터·지갑·열쇠·교통카드 등 수십 가지 기능을 한 기기가 모두 수행"
+    },
+    {
+      "pn": 6,
+      "ex": "Tesla OTA 업데이트",
+      "detail": "같은 하드웨어가 펌웨어 업데이트로 새 기능을 계속 획득"
+    },
+    {
+      "pn": 7,
+      "ex": "James Webb 우주망원경",
+      "detail": "발사체에 실리도록 접혔다가 우주에서 6.5m 거울을 펼치는 구조"
+    },
+    {
+      "pn": 7,
+      "ex": "폴더블 스마트폰",
+      "detail": "주머니 크기로 접었다가 펴서 태블릿처럼 사용"
+    },
+    {
+      "pn": 8,
+      "ex": "드론의 짐벌",
+      "detail": "카메라의 흔들림을 반대 방향 회전으로 상쇄하여 안정된 영상을 촬영"
+    },
+    {
+      "pn": 8,
+      "ex": "능동소음제어 ANC",
+      "detail": "외부 소음과 정반대 위상의 음파를 더해 소음을 상쇄"
+    },
+    {
+      "pn": 9,
+      "ex": "mRNA 백신",
+      "detail": "바이러스 단백질 설계도를 미리 학습시켜 진짜 바이러스가 오기 전 면역 준비"
+    },
+    {
+      "pn": 9,
+      "ex": "자동차 크럼플존",
+      "detail": "충돌이 일어날 영역을 미리 의도적으로 찌그러지도록 설계하여 충격 흡수"
+    },
+    {
+      "pn": 10,
+      "ex": "밀키트 (HelloFresh, 마켓컬리)",
+      "detail": "재료 손질과 계량을 미리 완료해두고 집에선 조리만 하면 되도록"
+    },
+    {
+      "pn": 10,
+      "ex": "사전 학습된 AI 모델",
+      "detail": "대규모 데이터로 미리 학습한 뒤 사용자 환경에서는 맞춤 조정만 추가"
+    },
+    {
+      "pn": 11,
+      "ex": "Apple Find My",
+      "detail": "기기 분실에 미리 대비하여 항상 위치 추적이 가능한 상태로 유지"
+    },
+    {
+      "pn": 11,
+      "ex": "iCloud·구글 자동 백업",
+      "detail": "데이터 손실 가능성에 대비하여 평소에 자동으로 백업 유지"
+    },
+    {
+      "pn": 12,
+      "ex": "아마존 Kiva 물류 로봇",
+      "detail": "선반 자체를 사람 앞으로 가져와 작업자가 움직일 필요 없게 만든 시스템"
+    },
+    {
+      "pn": 13,
+      "ex": "Tesla 회생제동",
+      "detail": "브레이크를 밟을 때 바퀴가 모터를 거꾸로 돌려 에너지를 회수 — 가속의 반대"
+    },
+    {
+      "pn": 13,
+      "ex": "히트펌프",
+      "detail": "열을 직접 만들지 않고 차가운 곳에서 따뜻한 곳으로 옮기는 방식"
+    },
+    {
+      "pn": 14,
+      "ex": "전기차 에어로다이내믹 디자인",
+      "detail": "주행거리를 늘리기 위해 차체를 매끄러운 곡선 형태로 설계"
+    },
+    {
+      "pn": 14,
+      "ex": "다이슨의 곡선 공기 흐름",
+      "detail": "팬·청소기·헤어드라이어의 내부를 곡선 채널로 만들어 효율 극대화"
+    },
+    {
+      "pn": 15,
+      "ex": "어댑티브 크루즈 컨트롤",
+      "detail": "앞차의 속도에 맞춰 자동으로 속도를 조절하는 적응형 시스템"
+    },
+    {
+      "pn": 16,
+      "ex": "3D 프린팅 후 CNC 가공",
+      "detail": "적층 방식으로 대략 만든 후 정밀 가공으로 표면과 치수를 보정"
+    },
+    {
+      "pn": 16,
+      "ex": "신경망 과학습 후 가지치기",
+      "detail": "AI 모델을 의도적으로 크게 학습시킨 뒤 불필요한 연결을 제거"
+    },
+    {
+      "pn": 17,
+      "ex": "수직농장 Vertical Farm",
+      "detail": "단층 농지를 다층으로 적층하여 도심 한가운데서 작물 생산"
+    },
+    {
+      "pn": 17,
+      "ex": "3D NAND 플래시 메모리",
+      "detail": "평면에 셀을 늘리는 한계에 도달하여 셀을 수직으로 적층"
+    },
+    {
+      "pn": 18,
+      "ex": "iPhone Taptic Engine",
+      "detail": "정밀한 햅틱 진동으로 실제 버튼을 누르는 것 같은 클릭감을 시뮬레이션"
+    },
+    {
+      "pn": 18,
+      "ex": "초음파 가습기·치료기",
+      "detail": "고주파 진동으로 물을 미립자로 분무하거나 결석을 분쇄"
+    },
+    {
+      "pn": 19,
+      "ex": "펄스 급속충전",
+      "detail": "전류를 연속이 아닌 펄스 형태로 흘려 배터리 손상 없이 빠르게 충전"
+    },
+    {
+      "pn": 19,
+      "ex": "Wi-Fi·블루투스 절전 모드",
+      "detail": "필요할 때만 짧게 깨어 작동하여 전력 소모 최소화"
+    },
+    {
+      "pn": 20,
+      "ex": "클라우드 오토스케일링",
+      "detail": "유휴 컴퓨팅 자원을 자동으로 감지해 다른 작업에 즉시 할당"
+    },
+    {
+      "pn": 20,
+      "ex": "데이터센터 폐열 활용 난방",
+      "detail": "서버가 발생시키는 열을 인근 주거지나 온실 난방에 활용"
+    },
+    {
+      "pn": 21,
+      "ex": "EV 350kW급 급속충전",
+      "detail": "배터리 셀에 손상이 누적되기 전에 매우 짧은 시간에 충전 완료"
+    },
+    {
+      "pn": 21,
+      "ex": "고속 PCR 코로나 진단",
+      "detail": "사이클을 빠르게 돌려 평소보다 짧은 시간 안에 진단 결과 도출"
+    },
+    {
+      "pn": 22,
+      "ex": "비트코인 채굴 폐열로 농업 난방",
+      "detail": "채굴에서 발생하는 전기→열의 손실분을 농업·양식 에너지로 전환"
+    },
+    {
+      "pn": 22,
+      "ex": "레드팀·버그바운티",
+      "detail": "해커의 공격 능력을 보안 강화의 자원으로 활용 — 해를 이로 전환"
+    },
+    {
+      "pn": 23,
+      "ex": "자율주행",
+      "detail": "센서로 측정 → 판단 → 조작 → 다시 측정의 순환 루프를 초당 수십 번 반복"
+    },
+    {
+      "pn": 23,
+      "ex": "AI 학습 (Gradient Descent)",
+      "detail": "모델의 예측 오차를 다시 입력에 반영해 점점 정확해지는 학습 시스템"
+    },
+    {
+      "pn": 24,
+      "ex": "API (Application Programming Interface)",
+      "detail": "서비스와 서비스를 직접 연결하지 않고 표준화된 중간 규약으로 연결"
+    },
+    {
+      "pn": 24,
+      "ex": "블록체인",
+      "detail": "중앙기관 없이 합의 메커니즘 자체를 매개로 두어 신뢰를 구현"
+    },
+    {
+      "pn": 25,
+      "ex": "CI/CD 자동화 파이프라인",
+      "detail": "개발자가 코드 변경만 하면 빌드·테스트·배포까지 시스템이 스스로 처리"
+    },
+    {
+      "pn": 25,
+      "ex": "로봇청소기·잔디깎이",
+      "detail": "사용자 개입 없이 스스로 충전하고 경로를 찾아 작업을 마침"
+    },
+    {
+      "pn": 26,
+      "ex": "디지털 트윈",
+      "detail": "실제 공장·건물·도시를 가상 공간에 그대로 복제하여 시뮬레이션"
+    },
+    {
+      "pn": 26,
+      "ex": "AR 가상 피팅·메이크업",
+      "detail": "실제 옷이나 화장품 없이 미리 화면에서 적용해보고 확인"
+    },
+    {
+      "pn": 27,
+      "ex": "클라우드 컨테이너 (Docker)",
+      "detail": "쓰고 폐기하는 일회용 실행환경 — 매번 새로 만들고 작업 끝나면 버림"
+    },
+    {
+      "pn": 27,
+      "ex": "스냅챗 자동삭제 메시지",
+      "detail": "정보 자체가 일회용 — 일정 시간 후 자동으로 삭제되어 프라이버시 보호"
+    },
+    {
+      "pn": 28,
+      "ex": "정전식 터치스크린",
+      "detail": "물리적인 키패드를 손가락의 전기 신호 감지로 대체"
+    },
+    {
+      "pn": 28,
+      "ex": "무선충전",
+      "detail": "금속 접점이 필요한 기계적 연결을 자기장 유도 방식으로 대체"
+    },
+    {
+      "pn": 29,
+      "ex": "Tesla 에어 서스펜션",
+      "detail": "노면 상태에 따라 공기 압력으로 차고를 자동 조절"
+    },
+    {
+      "pn": 29,
+      "ex": "소프트 로보틱스",
+      "detail": "공기 압력으로 움직이는 유연한 로봇 그리퍼 — 부드럽게 잡기 가능"
+    },
+    {
+      "pn": 30,
+      "ex": "폴더블 OLED 디스플레이",
+      "detail": "딱딱한 유리 대신 유연한 폴리이미드 필름으로 만들어 접힘이 가능"
+    },
+    {
+      "pn": 30,
+      "ex": "그래핀 멤브레인",
+      "detail": "한 원자 두께의 막으로 정수·기체 분리 기능을 수행"
+    },
+    {
+      "pn": 31,
+      "ex": "KF94 다층 필터",
+      "detail": "다공질 부직포 구조가 미세입자만 선별적으로 걸러냄"
+    },
+    {
+      "pn": 31,
+      "ex": "MOF (금속-유기 골격체)",
+      "detail": "극도로 다공질한 신소재로 CO2 포집과 수소 저장에 활용"
+    },
+    {
+      "pn": 32,
+      "ex": "True Tone·자동 다크모드",
+      "detail": "주변 조명에 맞춰 디스플레이의 색조를 자동으로 조정"
+    },
+    {
+      "pn": 32,
+      "ex": "스마트 윈도우 SageGlass",
+      "detail": "전압 신호로 유리의 투명도를 실시간으로 변경"
+    },
+    {
+      "pn": 33,
+      "ex": "Apple Silicon M시리즈 칩",
+      "detail": "CPU·GPU·메모리를 한 칩에 통합하여 ARM 아키텍처로 통일"
+    },
+    {
+      "pn": 34,
+      "ex": "SpaceX 재사용 로켓",
+      "detail": "다 쓴 부분은 분리하고 사용 가능한 부분은 회수하여 재사용"
+    },
+    {
+      "pn": 34,
+      "ex": "생분해 플라스틱 캡슐",
+      "detail": "커피·약 캡슐이 사용 후 자연 분해되어 환경에 부담을 주지 않음"
+    },
+    {
+      "pn": 35,
+      "ex": "액침 냉각 데이터센터",
+      "detail": "서버를 절연 액체에 직접 담가 냉각 효율을 극대화"
+    },
+    {
+      "pn": 35,
+      "ex": "젤·하이드로겔 의료 소재",
+      "detail": "고체와 액체의 중간 상태로 만들어 다양한 의료 응용에 활용"
+    },
+    {
+      "pn": 36,
+      "ex": "PCM (상변화 축열재) 건물 외벽",
+      "detail": "낮의 열을 저장하고 밤에 방출하는 상변화로 냉난방 부하 감소"
+    },
+    {
+      "pn": 36,
+      "ex": "히트파이프 노트북 냉각",
+      "detail": "증발과 응결의 상변화로 CPU 열을 매우 효율적으로 이동"
+    },
+    {
+      "pn": 37,
+      "ex": "형상기억합금 스텐트",
+      "detail": "체온에 도달하면 자동으로 펴져 좁아진 혈관을 확장"
+    },
+    {
+      "pn": 38,
+      "ex": "코로나19 시대 오존·UV-C 살균기",
+      "detail": "산화제와 자외선으로 마스크·실내 공기를 일상적으로 살균"
+    },
+    {
+      "pn": 39,
+      "ex": "반도체 클린룸 질소 분위기",
+      "detail": "미세한 산화도 결함이 되므로 산소를 완전히 차단한 환경에서 작업"
+    },
+    {
+      "pn": 39,
+      "ex": "OLED 디스플레이 봉지",
+      "detail": "유기물 손상을 막기 위해 내부를 완전히 밀폐하고 불활성 가스로 채움"
+    },
+    {
+      "pn": 40,
+      "ex": "탄소섬유강화플라스틱 CFRP",
+      "detail": "자전거·항공기·F1·전기차에서 가벼우면서 강한 복합 재료로 활용"
+    },
+    {
+      "pn": 40,
+      "ex": "전기차 배터리 케이스",
+      "detail": "복합 알루미늄 재료로 화재 저항·경량·강성을 동시에 만족"
+    }
+  ],
+  "validation": {
+    "matrixReference": "Classical Altshuller contradiction matrix (39x39)",
+    "updatedAt": "2026-05-14",
+    "notes": "matrix data replaced with the parsed classical Altshuller 39x39 matrix reference; principles/parameters structurally checked."
+  }
+}

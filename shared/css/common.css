@@ -1,0 +1,24 @@
+:root{--bg:#F2EDDF;--card:#FBF8EF;--ink:#14110D;--text:#57514A;--line:#D9CFB7;--accent:#C24A2B}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans KR',sans-serif;background:var(--bg);color:var(--ink);background-image:radial-gradient(circle at 1px 1px,rgba(20,17,13,.05) 1px,transparent 0);background-size:28px 28px}
+.home{max-width:1120px;margin:0 auto;padding:80px 32px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.hero{border-bottom:1.5px solid var(--ink);padding-bottom:48px;margin-bottom:36px}
+.hero h1{font-family:'Fraunces','IBM Plex Sans KR',serif;font-size:clamp(48px,8vw,92px);font-weight:300;line-height:.98;letter-spacing:-.04em;margin-bottom:24px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:17px;line-height:1.7;color:var(--text);max-width:720px}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.tool-card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);padding:28px;min-height:250px;transition:.2s;position:relative;overflow:hidden}
+.tool-card::after{content:"";position:absolute;right:-48px;bottom:-48px;width:130px;height:130px;border-radius:50%;background:rgba(194,74,43,.08);transition:.25s}
+.tool-card:hover::after{transform:scale(1.2);background:rgba(194,74,43,.12)}
+.tool-card:hover{background:#fff;border-color:var(--ink);transform:translateY(-3px);box-shadow:0 14px 36px rgba(20,17,13,.07)}
+.tool-card.scanner{background:linear-gradient(135deg,#FBF8EF 0%,#F4F9F6 100%)}
+.tool-card.scanner .num,.tool-card.scanner .go{color:#2F5D52}
+.tool-card.scanner::after{background:rgba(47,93,82,.10)}
+.week{display:inline-block;margin-top:8px;padding:5px 10px;border:1px solid var(--line);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text);background:rgba(255,255,255,.45)}
+.tool-card.disabled{opacity:.55}
+.tool-card.disabled:hover{background:var(--card);border-color:var(--line);transform:none;box-shadow:none}
+.num{font-family:'Fraunces',serif;font-size:48px;color:var(--accent);line-height:1}
+.tool-card h2{font-family:'Fraunces','IBM Plex Sans KR',serif;font-size:26px;margin:18px 0 10px}
+.tool-card p{color:var(--text);line-height:1.65;margin-bottom:24px}
+.go{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
