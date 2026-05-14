@@ -34,4 +34,12 @@ body{font-family:'IBM Plex Sans KR',sans-serif;background:var(--bg);color:var(--
 .tool-card.physical{background:linear-gradient(135deg,#FBF8EF 0%,#F5F0FF 100%)}
 .tool-card.physical .num,.tool-card.physical .go{color:#5A4A78}
 .tool-card.physical::after{background:rgba(90,74,120,.11)}
+
+.tool-card.brainstorming{background:linear-gradient(135deg,#FBF8EF 0%,#F2FFF9 100%)}
+.tool-card.brainstorming .num,.tool-card.brainstorming .go{color:#2d7a78}
+.tool-card.brainstorming::after{background:rgba(45,122,120,.11)}
+.tool-card.mindmap{background:linear-gradient(135deg,#FBF8EF 0%,#F3F0FF 100%)}
+.tool-card.mindmap .num,.tool-card.mindmap .go{color:#4f46e5}
+.tool-card.mindmap::after{background:rgba(79,70,229,.10)}
+
 @media(max-width:640px){.home{padding:52px 20px}.tool-card{min-height:auto}.hero{padding-bottom:36px}}

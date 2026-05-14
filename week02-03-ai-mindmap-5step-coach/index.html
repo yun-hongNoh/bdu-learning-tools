@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 마인드맵 5단계 코치</title>
+  <style>
+    :root{
+      --ink:#1f2937;--muted:#6b7280;--line:#e5e7eb;--primary:#4f46e5;--primary-soft:#eef2ff;
+      --blue:#0ea5e9;--blue-soft:#f0f9ff;--green:#10b981;--green-soft:#ecfdf5;--orange:#f59e0b;--orange-soft:#fffbeb;
+      --pink:#ec4899;--red:#ef4444;--red-soft:#fef2f2;--shadow:0 16px 40px rgba(31,41,55,.08);--radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--ink);font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.5;background:radial-gradient(circle at top left,rgba(79,70,229,.10),transparent 32%),radial-gradient(circle at top right,rgba(236,72,153,.10),transparent 30%),linear-gradient(135deg,#f7f7fb 0%,#fff 45%,#f8fafc 100%)}
+    .app{max-width:1280px;margin:0 auto;padding:28px 18px 48px}
+    .hero{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-bottom:18px}
+    .hero-main,.hero-side,.card{background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border:1px solid rgba(229,231,235,.9);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero-main{padding:28px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;right:-80px;top:-90px;width:240px;height:240px;border-radius:999px;background:conic-gradient(from 45deg,#4f46e5,#0ea5e9,#10b981,#f59e0b,#ec4899,#4f46e5);opacity:.14}
+    h1{margin:0 0 8px;font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;line-height:1.08;position:relative;z-index:1}
+    .hero p{margin:0;color:var(--muted);font-size:16px;position:relative;z-index:1}.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:relative;z-index:1}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;font-size:13px;font-weight:800;background:var(--primary-soft);color:var(--primary);border:1px solid rgba(79,70,229,.15)}
+    .hero-side{padding:20px;display:flex;flex-direction:column;gap:14px}.growth-title{display:flex;justify-content:space-between;gap:10px;font-weight:900;font-size:14px}
+    .meter{background:#f3f4f6;border-radius:999px;height:14px;overflow:hidden;border:1px solid #e5e7eb}.meter-fill{height:100%;width:0;transition:width .35s ease;background:linear-gradient(90deg,#4f46e5,#0ea5e9,#10b981,#f59e0b)}
+    .growth-message{color:var(--muted);font-size:14px;margin-top:-4px}.pill-list{display:flex;flex-wrap:wrap;gap:8px}.pill{padding:6px 10px;border-radius:999px;background:#f3f4f6;color:#374151;font-weight:900;font-size:12px;border:1px solid #e5e7eb}
+    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:18px}.step-tab{border:1px solid var(--line);background:rgba(255,255,255,.88);border-radius:16px;padding:12px 10px;cursor:pointer;color:var(--muted);font-weight:900;text-align:center;transition:.2s;min-height:58px}.step-tab span{display:block;font-size:12px;color:inherit;opacity:.82}.step-tab.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 12px 24px rgba(79,70,229,.22);transform:translateY(-1px)}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}.card{padding:22px;margin-bottom:18px}.section{display:none}.section.active{display:block}
+    h2{margin:0 0 8px;font-size:25px;letter-spacing:-.03em}h3{margin:20px 0 10px;font-size:18px;letter-spacing:-.02em}.desc{margin:0 0 18px;color:var(--muted)}
+    label{display:block;font-weight:900;margin:12px 0 7px;font-size:14px}input,textarea,select{width:100%;border:1px solid #d1d5db;border-radius:14px;padding:12px 13px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);outline:none;transition:.2s}input:focus,textarea:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(79,70,229,.11)}textarea{min-height:90px;resize:vertical}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .icon-options{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:8px}.icon-card{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px 8px;text-align:center;cursor:pointer;transition:.18s;font-weight:900;color:var(--muted);min-height:82px}.icon-card .emoji{display:block;font-size:28px;margin-bottom:4px}.icon-card.selected{border-color:var(--primary);background:var(--primary-soft);color:var(--primary);box-shadow:0 8px 20px rgba(79,70,229,.12)}
+    .branch{border:1px solid var(--line);background:#fff;border-radius:18px;padding:16px;margin-bottom:14px}.branch-header{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:start}.branch-dot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:1000;color:#fff}
+    .sub-list{margin-top:12px;display:grid;gap:10px}.sub-item{border-left:4px solid #e5e7eb;padding-left:12px;display:grid;gap:8px;background:#fafafa;padding-top:10px;padding-bottom:10px;border-radius:12px}.detail-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}.small-help{margin-top:5px;color:var(--muted);font-size:12.5px}
+    .btn,.small-btn{border:0;border-radius:13px;padding:11px 14px;font-family:inherit;font-weight:1000;cursor:pointer;transition:.16s;white-space:nowrap}.small-btn{padding:8px 10px;font-size:13px;background:#f3f4f6;color:#374151}.btn:hover,.small-btn:hover{transform:translateY(-1px)}
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.btn{background:var(--primary);color:#fff;box-shadow:0 12px 24px rgba(79,70,229,.20)}.btn.secondary{background:#f3f4f6;color:#374151;box-shadow:none}.btn.green{background:var(--green);box-shadow:0 12px 24px rgba(16,185,129,.18)}.btn.orange{background:var(--orange);box-shadow:0 12px 24px rgba(245,158,11,.18)}.btn.pink{background:var(--pink);box-shadow:0 12px 24px rgba(236,72,153,.18)}
+    .coach{border-radius:18px;padding:16px;background:var(--blue-soft);border:1px solid rgba(14,165,233,.18);color:#075985;font-size:14px}.coach strong{display:block;margin-bottom:6px;font-size:15px}
+    .side-panel{position:sticky;top:18px}.mini-tree{font-family:"SFMono-Regular",Consolas,monospace;white-space:pre-wrap;background:#111827;color:#e5e7eb;border-radius:18px;padding:16px;max-height:440px;overflow:auto;font-size:12.5px;line-height:1.55}
+    .hint{padding:12px 14px;border-radius:14px;background:var(--orange-soft);border:1px solid rgba(245,158,11,.18);color:#92400e;margin:12px 0;font-size:14px}.success{padding:12px 14px;border-radius:14px;background:var(--green-soft);border:1px solid rgba(16,185,129,.18);color:#065f46;margin:12px 0;font-size:14px}.danger{padding:12px 14px;border-radius:14px;background:var(--red-soft);border:1px solid rgba(239,68,68,.18);color:#991b1b;margin:12px 0;font-size:14px}
+    .quick-examples,.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 14px}.example-chip,.chip{border:1px solid #dbeafe;background:var(--blue-soft);color:#075985;border-radius:999px;padding:8px 10px;font-weight:900;cursor:pointer;font-size:12.5px}.chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+    details.ai-help{border:2px dashed rgba(79,70,229,.35);background:linear-gradient(135deg,#f5f3ff,#eef2ff);border-radius:20px;padding:0;margin:22px 0;box-shadow:0 10px 24px rgba(79,70,229,.08)}
+    details.ai-help summary{list-style:none;cursor:pointer;padding:16px 18px;font-weight:1000;color:#3730a3;display:flex;align-items:center;justify-content:space-between}
+    details.ai-help summary:before{content:"🤖 AI 코치 도구함 · ";font-weight:1000;color:#4f46e5}
+    details.ai-help summary::-webkit-details-marker{display:none}
+    details.ai-help summary:after{content:"열기";font-size:12px;color:#fff;background:#4f46e5;padding:5px 10px;border-radius:999px}
+    details.ai-help[open] summary:after{content:"접기";background:#64748b}
+    .ai-help-body{padding:0 18px 18px;border-top:1px solid rgba(79,70,229,.16)}
+    .ai-help textarea{min-height:150px}
+    .sentence-preview{border:1px solid #dbeafe;background:#f8fbff;border-radius:16px;padding:14px;min-height:58px;color:#1e3a8a;font-weight:800;line-height:1.55}
+    .connection-card{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px;margin-bottom:12px}.connection-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mission-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.mission-step{padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff;font-size:13px;font-weight:900;color:#475569}.mission-step strong{display:block;color:var(--primary);font-size:12px}
+    .relation-card{border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;cursor:pointer}.relation-card.active{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+    .check-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.check-card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:14px}.check-card .title{font-weight:1000}.check-card.ok{border-color:rgba(16,185,129,.3);background:var(--green-soft)}.check-card.warn{border-color:rgba(245,158,11,.3);background:var(--orange-soft)}
+    .output{min-height:180px;font-family:"SFMono-Regular",Consolas,monospace;white-space:pre-wrap;background:#f9fafb}.result-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.result-tab{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:8px 12px;font-weight:1000;cursor:pointer}.result-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .mindmap-preview-wrap{border:1px solid #e5e7eb;border-radius:22px;background:radial-gradient(circle at 50% 50%,rgba(79,70,229,.07),transparent 35%),linear-gradient(135deg,#fff,#f8fafc);overflow:auto;padding:22px;min-height:560px}.mindmap-board{min-width:980px;position:relative;display:grid;grid-template-columns:1fr 250px 1fr;gap:26px;align-items:center;background-image:linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px);background-size:28px 28px;border-radius:20px;padding:28px}
+    .mind-col{display:flex;flex-direction:column;gap:16px;align-self:stretch;justify-content:center}.mind-center-wrap{display:flex;align-items:center;justify-content:center;min-height:420px;position:sticky;top:20px}.mind-center{width:230px;min-height:126px;border-radius:34px;background:linear-gradient(135deg,#4f46e5,#0ea5e9);color:#fff;box-shadow:0 24px 46px rgba(79,70,229,.28);display:grid;place-items:center;text-align:center;padding:18px;z-index:3}.mind-center .icon{font-size:30px;margin-bottom:6px}.mind-center .title{font-size:21px;font-weight:1000;line-height:1.18;word-break:keep-all}
+    .mind-branch-card{border-radius:22px;background:#fff;border:2px solid;box-shadow:0 18px 32px rgba(15,23,42,.10);padding:14px;position:relative}.mind-branch-card:after{content:"";position:absolute;top:50%;height:3px;background:currentColor;opacity:.55}.mind-col.left .mind-branch-card:after{right:-28px;width:28px}.mind-col.right .mind-branch-card:after{left:-28px;width:28px}
+    .mind-branch-title{font-weight:1000;font-size:16px;display:flex;align-items:center;gap:8px;margin-bottom:8px;word-break:keep-all}.mind-branch-title .num{width:25px;height:25px;border-radius:999px;color:#fff;display:grid;place-items:center;font-size:12px;flex:0 0 auto}.mind-sub{margin:8px 0;padding:9px;border-radius:14px;background:#f8fafc;border:1px solid #eef2f7}.mind-sub-title{font-weight:900;font-size:13.5px;margin-bottom:6px;color:#334155}.mind-detail-list{display:flex;gap:5px;flex-wrap:wrap}.mind-detail{background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:3px 7px;font-size:11.5px;color:#475569;font-weight:800}.more-tag{background:#f1f5f9;border:1px dashed #cbd5e1;color:#64748b}
+    .connection-summary{display:grid;gap:8px;margin-top:14px}.connection-summary-item{border:1px dashed #cbd5e1;border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.82);color:#475569;font-size:13px}
+    .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;pointer-events:none;background:#111827;color:#fff;padding:12px 16px;border-radius:999px;font-weight:900;box-shadow:var(--shadow);transition:.24s;z-index:100}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:980px){.hero,.layout{grid-template-columns:1fr}.side-panel{position:static}.steps{grid-template-columns:1fr}.grid-2,.grid-3,.grid-4,.connection-grid,.check-grid,.mission-flow{grid-template-columns:1fr}.icon-options{grid-template-columns:repeat(2,1fr)}}
+    @media print{body{background:#fff}.hero,.steps,.side-panel,.btn-row,.coach,.result-tabs,.hint,.success,.danger,details.ai-help{display:none!important}.layout{display:block}.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}.section{display:block!important}.mindmap-preview-wrap{overflow:visible;padding:0;border:0}.mindmap-board{transform:scale(.72);transform-origin:top left}}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-main">
+        <h1>AI 마인드맵 5단계 코치</h1>
+        <p>먼저 직접 생각지도를 만들고, 막히는 순간에만 AI 도움을 열어 활용하는 수업용 마인드맵 도구입니다.</p>
+        <div class="badge-row">
+          <span class="badge">🌱 중심에서 확장</span><span class="badge">🧠 위계적 사고</span><span class="badge">🔗 숨은 연결고리</span><span class="badge">🤖 접힘형 AI 도움</span><span class="badge">📋 Text2MindMap 호환</span>
+        </div>
+      </div>
+      <div class="hero-side">
+        <div class="growth-title"><span id="growthStage">씨앗 단계</span><span id="growthScore">0%</span></div>
+        <div class="meter"><div class="meter-fill" id="growthFill"></div></div>
+        <div class="growth-message" id="growthMessage">중심 주제를 입력하면 생각의 씨앗이 심어집니다.</div>
+        <div class="pill-list" id="statsPills"></div>
+        <div class="btn-row" style="margin-top:auto">
+          <button class="btn secondary" onclick="loadExample()">예시 불러오기</button>
+          <button class="btn secondary" onclick="resetAll()">초기화</button>
+          <button class="btn secondary" onclick="saveJSON()">JSON 저장</button>
+          <button class="btn secondary" onclick="document.getElementById('jsonFile').click()">JSON 불러오기</button>
+          <input id="jsonFile" type="file" accept="application/json" hidden onchange="loadJSON(event)">
+        </div>
+      </div>
+    </header>
+    <nav class="steps" id="steps"></nav>
+    <main class="layout">
+      <div>
+        <section class="section active" id="section-0">
+          <div class="card">
+            <h2>1. 중심 주제 정하기</h2>
+            <p class="desc">마인드맵의 몸통을 만드는 단계입니다. 주제, 목적, 중심 이미지, 핵심 단어를 먼저 정리합니다.</p>
+            <div class="grid-2">
+              <div><label>중심 주제</label><input id="topic" placeholder="예: 나의 대학생활 목표" oninput="updateAll()"><div class="small-help">마인드맵 중앙에 들어갈 제목입니다.</div></div>
+              <div><label>핵심 단어</label><input id="keyword" placeholder="예: 성장, 진로, 역량" oninput="updateAll()"><div class="small-help">주제를 한두 단어로 압축합니다.</div></div>
+            </div>
+            <label>작성 목적</label><textarea id="purpose" placeholder="예: 대학생활 동안 이루고 싶은 목표를 한눈에 정리하기" oninput="updateAll()"></textarea>
+            <label>중심 이미지 아이디어</label><input id="centerImage" placeholder="예: 졸업모를 쓴 학생, 나침반, 성장하는 나무" oninput="updateAll()">
+            <h3>상징 아이콘 선택</h3><div class="icon-options" id="iconOptions"></div>
+            <div class="coach"><strong>학습 코치</strong>마인드맵은 중심에서 시작합니다. 중심 주제는 너무 길게 쓰지 말고, 한눈에 들어오는 핵심어로 표현해보세요.</div>
+            <details class="ai-help">
+              <summary>막힐 때 AI 도움 열기</summary>
+              <div class="ai-help-body">
+                <p class="desc">중심 주제가 너무 길거나 애매할 때만 사용하세요.</p>
+                <button class="btn secondary" onclick="makeHelpPrompt('center','centerHelpPrompt')">중심 주제 다듬기</button>
+                <label>AI 도움 요청문</label>
+                <textarea id="centerHelpPrompt" class="output" placeholder="버튼을 누르면 요청문이 생성됩니다."></textarea>
+                <button class="small-btn" onclick="copyText('centerHelpPrompt')">요청문 복사</button>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="section" id="section-1">
+          <div class="card">
+            <h2>2. 가지 확장하기</h2>
+            <p class="desc">주 가지는 큰 분류, 부 가지는 세부 항목, 세부 가지는 구체적 행동·사례·방법입니다.</p>
+            <div class="hint">권장 구조: 주 가지 4~6개, 각 주 가지별 부 가지 2~4개, 필요한 항목에는 세부 가지 1~3개.</div>
+            <div class="quick-examples">
+              <button class="example-chip" onclick="applyBranchPreset('study')">학습 계획 예시</button>
+              <button class="example-chip" onclick="applyBranchPreset('project')">프로젝트 기획 예시</button>
+              <button class="example-chip" onclick="applyBranchPreset('problem')">문제 해결 예시</button>
+            </div>
+            <div id="branches"></div>
+            <div class="btn-row"><button class="btn green" onclick="addBranch()">주 가지 추가</button></div>
+            <div id="balanceFeedback"></div>
+            <div class="coach"><strong>학습 코치</strong>먼저 직접 가지를 뻗어보세요. 생각이 막히면 맨 아래의 AI 도움을 열어 필요한 요청문만 복사하면 됩니다.</div>
+            <details class="ai-help">
+              <summary>막힐 때 AI 도움 열기</summary>
+              <div class="ai-help-body">
+                <p class="desc">가지가 떠오르지 않을 때 필요한 버튼만 사용하세요.</p>
+                <div class="grid-2">
+                  <div><label>도움받을 주 가지</label><select id="branchSelect" onchange="refreshSubSelect()"></select></div>
+                  <div><label>도움받을 부 가지</label><select id="subSelect"></select></div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn secondary" onclick="makeHelpPrompt('mainBranches','branchHelpPrompt')">주 가지 추천</button>
+                  <button class="btn secondary" onclick="makeHelpPrompt('subBranches','branchHelpPrompt')">부 가지 추천</button>
+                  <button class="btn secondary" onclick="makeHelpPrompt('detailBranches','branchHelpPrompt')">세부 가지 추천</button>
+                  <button class="btn secondary" onclick="makeHelpPrompt('keywordCompress','branchHelpPrompt')">핵심어로 줄이기</button>
+                </div>
+                <label>AI 도움 요청문</label>
+                <textarea id="branchHelpPrompt" class="output" placeholder="AI 도움 버튼을 누르면 요청문이 생성됩니다."></textarea>
+                <button class="small-btn" onclick="copyText('branchHelpPrompt')">요청문 복사</button>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="section" id="section-2">
+          <div class="card">
+            <h2>3. 숨은 연결고리 찾기</h2>
+            <p class="desc">서로 관련 있는 가지를 직접 골라 연결합니다. 정답을 맞히는 활동이 아니라, “이 둘은 왜 관계가 있을까?”를 생각해보는 훈련입니다.</p>
+            <div class="mission-flow">
+              <div class="mission-step"><strong>① 가지 선택</strong>A와 B 고르기</div>
+              <div class="mission-step"><strong>② 관계 선택</strong>유형 고르기</div>
+              <div class="mission-step"><strong>③ 이유 작성</strong>한 문장으로 설명</div>
+              <div class="mission-step"><strong>④ 저장</strong>연결 저장하기</div>
+            </div>
+            <h3>① 연결할 가지 고르기</h3>
+            <div class="hint">
+              먼저 서로 관련 있어 보이는 가지 두 개를 직접 고르세요. 정답을 맞히는 활동이 아니라, 내가 만든 생각 사이의 숨은 길을 찾는 활동입니다.
+            </div>
+            <div class="grid-2">
+              <div><label>연결할 가지 A</label><select id="connA" onchange="updateTemplate()"></select></div>
+              <div><label>연결할 가지 B</label><select id="connB" onchange="updateTemplate()"></select></div>
+            </div>
+
+            <h3>② 관계 유형 고르기</h3>
+            <div class="grid-4" id="relationTypes"></div>
+
+            <details class="example-help" style="margin-top:14px">
+              <summary>연결 예시 보기</summary>
+              <div class="ai-help-body">
+                <p class="desc">아래 예시는 참고용입니다. 예시를 그대로 고르기보다, 내가 만든 가지 중에서 직접 연결 관계를 찾아보세요.</p>
+                <div class="success">
+                  <strong>AI 활용 ↔ 프로젝트</strong><br>
+                  AI 도구가 아이디어 정리와 결과물 제작을 도와줄 수 있습니다.
+                </div>
+                <div class="success">
+                  <strong>건강 관리 ↔ 학점 관리</strong><br>
+                  체력이 좋아야 꾸준히 공부하고 출석을 관리할 수 있습니다.
+                </div>
+                <div class="success">
+                  <strong>외국어 ↔ 대외 경험</strong><br>
+                  외국어 역량은 발표, 해외 활동, 대외 경험과 연결될 수 있습니다.
+                </div>
+              </div>
+            </details>
+
+            <label>③ 이유 또는 새 아이디어</label>
+            <textarea id="connReason" placeholder="예: 아이디어 정리와 코드 작성 시간을 줄일 수 있기 때문" oninput="updateTemplate()"></textarea>
+            <label>자동 문장 미리보기</label>
+            <div id="connSentence" class="sentence-preview">연결할 가지와 관계 유형을 선택하면 자동 문장이 표시됩니다.</div>
+            <div class="btn-row"><button class="btn green" onclick="saveConnectionFromMission()">④ 연결 관계 저장</button></div>
+            <h3>저장된 연결 관계</h3>
+            <div id="connections"></div>
+            <div class="coach"><strong>학습 코치</strong>처음에는 하나만 찾아도 충분합니다. 좋은 마인드맵은 가지가 많은 지도가 아니라, 가지 사이의 관계가 보이는 지도입니다.</div>
+            <details class="ai-help">
+              <summary>막힐 때 AI 도움 열기</summary>
+              <div class="ai-help-body">
+                <p class="desc">연결할 가지가 잘 보이지 않을 때 사용하세요.</p>
+                <button class="btn secondary" onclick="makeHelpPrompt('connections','connectionHelpPrompt')">연결 아이디어 추천</button>
+                <label>AI 도움 요청문</label>
+                <textarea id="connectionHelpPrompt" class="output" placeholder="버튼을 누르면 요청문이 생성됩니다."></textarea>
+                <button class="small-btn" onclick="copyText('connectionHelpPrompt')">요청문 복사</button>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="section" id="section-3">
+          <div class="card">
+            <h2>4. 구조 점검 및 다듬기</h2>
+            <p class="desc">최종 결과를 만들기 전에 가지 균형, 핵심어 사용, 연결 관계를 점검합니다.</p>
+            <div class="check-grid" id="checkReport"></div>
+            <div id="revisionGuide" class="hint"></div>
+            <details class="ai-help">
+              <summary>막힐 때 AI 도움 열기</summary>
+              <div class="ai-help-body">
+                <p class="desc">자동 점검을 보고도 어떻게 고칠지 모르겠다면 AI 점검 요청문을 활용하세요.</p>
+                <div class="btn-row">
+                  <button class="btn secondary" onclick="makeHelpPrompt('structureReview','reviewPrompt')">구조 점검</button>
+                  <button class="btn secondary" onclick="makeHelpPrompt('keywordReview','reviewPrompt')">핵심어 점검</button>
+                  <button class="btn secondary" onclick="makeHelpPrompt('connectionReview','reviewPrompt')">연결 보완</button>
+                </div>
+                <label>AI 점검 요청문</label>
+                <textarea id="reviewPrompt" class="output" placeholder="버튼을 누르면 요청문이 생성됩니다."></textarea>
+                <button class="small-btn" onclick="copyText('reviewPrompt')">요청문 복사</button>
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <section class="section" id="section-4">
+          <div class="card">
+            <h2>5. 결과 출력하기</h2>
+            <p class="desc">시각적 마인드맵 미리보기, Text2MindMap용 탭 구조, Markdown/XMind용 목록, LMS 제출용 요약, 발표용 요약 카드를 생성합니다.</p>
+            <div class="result-tabs">
+              <button class="result-tab active" onclick="showResult('visual')">미리보기</button>
+              <button class="result-tab" onclick="showResult('text2')">Text2MindMap 붙여넣기</button>
+              <button class="result-tab" onclick="showResult('markdown')">Markdown·XMind</button>
+              <button class="result-tab" onclick="showResult('lms')">과제 제출용</button>
+              <button class="result-tab" onclick="showResult('presentation')">발표 요약</button>
+            </div>
+            <div id="visualResult">
+              <div class="mindmap-preview-wrap"><div class="mindmap-board" id="mindmapBoard"></div></div>
+              <div class="btn-row"><button class="btn" onclick="saveMindmapPNG()">PNG 이미지 저장</button><button class="btn secondary" onclick="window.print()">인쇄 / PDF 저장</button></div>
+              <div class="hint">미리보기는 겹침을 막기 위해 좌우 컬럼형으로 자동 배치됩니다. 세부 편집은 XMind, Miro, Text2MindMap 등 외부 도구에서 이어갈 수 있습니다.</div>
+            </div>
+            <div id="textResult" style="display:none">
+              <label id="resultLabel">Text2MindMap용 탭 구조</label>
+              <textarea id="resultOutput" class="output"></textarea>
+              <div id="formatHelp" class="hint">이 출력은 Text2MindMap에 붙여넣기 위한 실제 탭 문자 기반 구조입니다. 아래 복사 버튼을 사용하세요.</div>
+              <div class="btn-row"><button class="btn" onclick="copyCurrentResult()">결과 복사</button><button class="btn secondary" onclick="window.print()">인쇄 / PDF 저장</button></div>
+            </div>
+            <h3>오늘의 마인드맵 결과</h3><div id="finalStats" class="success"></div>
+          </div>
+        </section>
+        <div class="btn-row"><button class="btn secondary" onclick="prevStep()">이전 단계</button><button id="nextStepBtn" class="btn" onclick="nextStep()">다음 단계</button></div>
+      </div>
+      <aside class="side-panel">
+        <div class="card"><h3 style="margin-top:0">실시간 구조 미리보기</h3><div class="mini-tree" id="previewTree">중심 주제를 입력해보세요.</div></div>
+        <div class="card"><h3 style="margin-top:0">핵심어 압축 코치</h3><div id="keywordCoach" class="coach">긴 문장보다 핵심어가 좋습니다. 예: “영어 공부를 열심히 한다” → “영어 회화”</div></div>
+      </aside>
+    </main>
+  </div>
+  <div class="toast" id="toast">복사되었습니다.</div>
+
+<script>
+const stepNames=[["중심 주제","몸통 만들기"],["가지 확장","주·부·세부 가지"],["연결고리","연관성 표현"],["구조 점검","다듬기"],["결과 출력","마인드맵 완성"]];
+const icons=[["🚀","로켓","도전과 성장"],["🧭","나침반","방향 설정"],["🌳","나무","성장과 확장"],["💡","전구","아이디어"],["🗺️","지도","계획과 탐색"]];
+const colors=["#4f46e5","#0ea5e9","#10b981","#f59e0b","#ec4899","#8b5cf6","#14b8a6","#f97316"];
+const relationTypes={
+  help:{name:"도움 관계",desc:"A가 B를 더 잘하게 도와줌",template:(a,b,r)=>`${a}는 ${b}를 더 잘하기 위해 도움이 된다. 왜냐하면 ${r||"[이유]"} 때문이다.`},
+  together:{name:"함께 필요한 관계",desc:"A와 B가 같이 있어야 효과가 큼",template:(a,b,r)=>`${a}와 ${b}는 함께 필요하다. 왜냐하면 ${r||"[이유]"} 때문이다.`},
+  cause:{name:"원인·결과 관계",desc:"A가 B로 이어짐",template:(a,b,r)=>`${a}가 잘 이루어지면 ${b}에 좋은 결과가 생긴다. 특히 ${r||"[이유]"} 때문이다.`},
+  combine:{name:"결합 아이디어 관계",desc:"A와 B를 합치면 새 아이디어가 됨",template:(a,b,r)=>`${a}와 ${b}를 결합하면 ${r||"[새로운 아이디어]"}를 만들 수 있다.`}
+};
+let state={step:0,icon:"",resultMode:"visual",currentResult:"",relationType:"help",branches:[
+{title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+{title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+{title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+{title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]}
+],connections:[]};
+
+function init(){renderSteps();renderIcons();renderBranches();renderRelationTypes();refreshBranchSelects();renderConnections();updateAll();}
+function renderSteps(){document.getElementById("steps").innerHTML=stepNames.map((s,i)=>`<button class="step-tab ${i===state.step?"active":""}" onclick="goStep(${i})">${i+1}. ${s[0]}<span>${s[1]}</span></button>`).join("");}
+function renderIcons(){document.getElementById("iconOptions").innerHTML=icons.map(([emoji,name,meaning])=>`<div class="icon-card ${state.icon===emoji+" "+name?"selected":""}" onclick="selectIcon('${emoji} ${name}')"><span class="emoji">${emoji}</span>${name}<br><small>${meaning}</small></div>`).join("");}
+function selectIcon(v){state.icon=v;document.getElementById("centerImage").value=v;renderIcons();updateAll();}
+function goStep(i){state.step=i;document.querySelectorAll(".section").forEach((el,idx)=>el.classList.toggle("active",idx===i));renderSteps();const nextBtn=document.getElementById("nextStepBtn");if(nextBtn)nextBtn.style.display=(i===4?"none":"inline-block");if(i===1)refreshBranchSelects();if(i===2){refreshConnectionSelectors();renderConnections();updateTemplate();}if(i===3)renderCheckReport();if(i===4)generateResults();updateAll();}
+function nextStep(){goStep(Math.min(4,state.step+1));}function prevStep(){goStep(Math.max(0,state.step-1));}
+function addBranch(title=""){state.branches.push({title,subs:[{title:"",details:[""]}]});renderBranches();updateAll();}
+function removeBranch(i){if(state.branches.length<=1)return;state.branches.splice(i,1);renderBranches();updateAll();}
+function addSub(i){state.branches[i].subs.push({title:"",details:[""]});renderBranches();updateAll();}
+function removeSub(i,j){state.branches[i].subs.splice(j,1);renderBranches();updateAll();}
+function addDetail(i,j){state.branches[i].subs[j].details.push("");renderBranches();updateAll();}
+function removeDetail(i,j,k){state.branches[i].subs[j].details.splice(k,1);renderBranches();updateAll();}
+function updateBranch(i,v){state.branches[i].title=v;updateAll();}function updateSub(i,j,v){state.branches[i].subs[j].title=v;updateAll();}function updateDetail(i,j,k,v){state.branches[i].subs[j].details[k]=v;updateAll();}
+function renderBranches(){
+ document.getElementById("branches").innerHTML=state.branches.map((b,i)=>`
+ <div class="branch"><div class="branch-header"><div class="branch-dot" style="background:${colors[i%colors.length]}">${i+1}</div><div><input value="${escapeHTML(b.title)}" placeholder="주 가지 ${i+1} 예: 학점 관리" oninput="updateBranch(${i},this.value)"><div class="small-help">큰 분류 예: 학점 관리, 전공 역량, 외국어</div></div><button class="small-btn" onclick="removeBranch(${i})">삭제</button></div>
+ <div class="sub-list">${b.subs.map((s,j)=>`<div class="sub-item"><div class="detail-row"><div><input value="${escapeHTML(s.title)}" placeholder="부 가지 예: 시험 준비" oninput="updateSub(${i},${j},this.value)"><div class="small-help">세부 항목 예: 시험 준비, 출석 관리, 과제 일정</div></div><button class="small-btn" onclick="removeSub(${i},${j})">부가지 삭제</button></div>
+ ${s.details.map((d,k)=>`<div class="detail-row"><div><input value="${escapeHTML(d)}" placeholder="세부 가지 예: 2주 전 요약" oninput="updateDetail(${i},${j},${k},this.value)"><div class="small-help">실제 행동·방법 예: 2주 전 요약, 기출문제 풀이</div></div><button class="small-btn" onclick="removeDetail(${i},${j},${k})">삭제</button></div>`).join("")}
+ <button class="small-btn" onclick="addDetail(${i},${j})">세부 가지 추가</button></div>`).join("")}</div><div class="btn-row"><button class="small-btn" onclick="addSub(${i})">부 가지 추가</button></div></div>`).join("");
+ refreshBranchSelects();
+}
+function applyBranchPreset(type){
+ if(type==="study")state.branches=[{title:"학습 목표",subs:[{title:"핵심 과목",details:["복습 계획"]},{title:"성적 관리",details:["과제 일정"]}]},{title:"역량 개발",subs:[{title:"AI 활용",details:["프롬프트 연습"]},{title:"프로젝트",details:["결과물 제작"]}]},{title:"시간 관리",subs:[{title:"주간 계획",details:["학습 루틴"]},{title:"마감 관리",details:["캘린더 등록"]}]},{title:"성찰",subs:[{title:"학습 기록",details:["주간 회고"]},{title:"개선점",details:["다음 계획"]}]}];
+ else if(type==="project")state.branches=[{title:"문제 정의",subs:[{title:"대상",details:["사용자"]},{title:"불편",details:["핵심 문제"]}]},{title:"아이디어",subs:[{title:"기능",details:["핵심 기능"]},{title:"차별점",details:["새로운 가치"]}]},{title:"실행 계획",subs:[{title:"역할",details:["팀 분담"]},{title:"일정",details:["마일스톤"]}]},{title:"성과",subs:[{title:"결과물",details:["발표 자료"]},{title:"평가",details:["피드백"]}]}];
+ else state.branches=[{title:"문제 상황",subs:[{title:"현재 상태",details:["불편 요소"]},{title:"원인",details:["핵심 원인"]}]},{title:"이해관계자",subs:[{title:"사용자",details:["요구"]},{title:"운영자",details:["제약"]}]},{title:"해결 방향",subs:[{title:"아이디어",details:["대안"]},{title:"우선순위",details:["중요도"]}]},{title:"실행 조건",subs:[{title:"비용",details:["예산"]},{title:"위험",details:["보완점"]}]}];
+ renderBranches();updateAll();showToast("예시 구조를 적용했습니다.");
+}
+function refreshBranchSelects(){const bs=state.branches.filter(b=>b.title.trim());const opts=bs.map((b,i)=>`<option value="${i}">${escapeHTML(b.title)}</option>`).join("");const branchSelect=document.getElementById("branchSelect");if(branchSelect){branchSelect.innerHTML=opts||'<option value="">주 가지 없음</option>';refreshSubSelect();}}
+function refreshSubSelect(){const branchSelect=document.getElementById("branchSelect");const subSelect=document.getElementById("subSelect");if(!branchSelect||!subSelect)return;const idx=Number(branchSelect.value||0);const bs=state.branches.filter(b=>b.title.trim());const b=bs[idx];subSelect.innerHTML=b?b.subs.filter(s=>s.title.trim()).map((s,i)=>`<option value="${i}">${escapeHTML(s.title)}</option>`).join("")||'<option value="">부 가지 없음</option>':'<option value="">부 가지 없음</option>';}
+function getSelectedBranchTitle(){const idx=Number(document.getElementById("branchSelect")?.value||0);return state.branches.filter(b=>b.title.trim())[idx]?.title||"";}
+function getSelectedSubTitle(){const bIdx=Number(document.getElementById("branchSelect")?.value||0),sIdx=Number(document.getElementById("subSelect")?.value||0);const b=state.branches.filter(b=>b.title.trim())[bIdx];return b?.subs.filter(s=>s.title.trim())[sIdx]?.title||"";}
+function getFormData(){return{topic:document.getElementById("topic").value.trim(),keyword:document.getElementById("keyword").value.trim(),purpose:document.getElementById("purpose").value.trim(),centerImage:document.getElementById("centerImage").value.trim()};}
+function buildText2(){const f=getFormData();const lines=[f.topic||"중심 주제"];state.branches.forEach(b=>{if(!b.title.trim())return;lines.push("\t"+b.title.trim());b.subs.forEach(s=>{if(!s.title.trim())return;lines.push("\t\t"+s.title.trim());s.details.forEach(d=>{if(d.trim())lines.push("\t\t\t"+d.trim())})})});return lines.join("\n");}
+function buildMarkdown(){const f=getFormData();const lines=["- "+(f.topic||"중심 주제")];state.branches.forEach(b=>{if(!b.title.trim())return;lines.push("  - "+b.title.trim());b.subs.forEach(s=>{if(!s.title.trim())return;lines.push("    - "+s.title.trim());s.details.forEach(d=>{if(d.trim())lines.push("      - "+d.trim())})})});return lines.join("\n");}
+function buildReadable(){const f=getFormData();const lines=[f.topic||"중심 주제"];state.branches.forEach(b=>{if(!b.title.trim())return;lines.push("  "+b.title.trim());b.subs.forEach(s=>{if(!s.title.trim())return;lines.push("    "+s.title.trim());s.details.forEach(d=>{if(d.trim())lines.push("      "+d.trim())})})});return lines.join("\n");}
+function makeHelpPrompt(type,targetId){
+ const f=getFormData();const structure=buildReadable();let out="";
+ if(type==="center")out=`아래 중심 주제를 마인드맵에 어울리는 짧고 선명한 표현으로 다듬어줘.
+
+조건:
+1. 중심 주제는 10자 내외 또는 한눈에 들어오는 표현으로 제안해줘.
+2. 중심 이미지로 사용할 수 있는 상징도 3개 제안해줘.
+3. 핵심 단어 3개도 함께 제안해줘.
+
+현재 중심 주제: ${f.topic||"[중심 주제]"}
+작성 목적: ${f.purpose||"[작성 목적]"}`;
+ else if(type==="mainBranches")out=`나는 "${f.topic||"[중심 주제]"}"를 주제로 마인드맵을 만들고 있어.
+주 가지가 될 큰 분류 4~6개를 추천해줘.
+
+조건:
+1. 각 주 가지는 한두 단어의 핵심어로 작성해줘.
+2. 서로 겹치지 않게 균형 있게 구성해줘.
+3. 초보 학습자가 이해하기 쉬운 표현으로 작성해줘.`;
+ else if(type==="subBranches")out=`마인드맵의 주 가지 "${getSelectedBranchTitle()||"[주 가지]"}"에 들어갈 부 가지를 추천해줘.
+
+중심 주제: ${f.topic||"[중심 주제]"}
+조건:
+1. 부 가지는 2~4개 정도로 제안해줘.
+2. 각 항목은 긴 문장이 아니라 핵심어로 써줘.
+3. 학습자가 바로 마인드맵에 옮길 수 있게 간단히 작성해줘.`;
+ else if(type==="detailBranches")out=`마인드맵의 부 가지 "${getSelectedSubTitle()||"[부 가지]"}"를 더 구체화할 세부 가지를 추천해줘.
+
+중심 주제: ${f.topic||"[중심 주제]"}
+주 가지: ${getSelectedBranchTitle()||"[주 가지]"}
+조건:
+1. 행동, 방법, 사례, 목표 중심으로 2~3개 제안해줘.
+2. 각 항목은 짧은 핵심어로 작성해줘.`;
+ else if(type==="keywordCompress")out=`아래 마인드맵 구조에서 긴 표현을 핵심어 중심으로 줄여줘.
+
+조건:
+1. 각 항목은 가능하면 한두 단어로 줄여줘.
+2. 의미가 사라지지 않도록 해줘.
+3. 수정 전 → 수정 후 형식으로 보여줘.
+
+마인드맵 구조:
+${structure}`;
+ else if(type==="connections")out=`아래 마인드맵 구조를 보고, 서로 연결하면 좋은 가지 쌍을 5개 추천해줘.
+
+조건:
+1. 도움 관계, 함께 필요한 관계, 원인·결과 관계, 결합 아이디어 관계를 다양하게 제안해줘.
+2. 각 연결마다 왜 연결되는지 한 문장으로 설명해줘.
+3. 초보 학습자가 이해하기 쉬운 표현으로 작성해줘.
+
+마인드맵 구조:
+${structure}`;
+ else if(type==="structureReview")out=`아래 마인드맵 구조를 점검하고 더 균형 있게 다듬어줘.
+
+점검 기준:
+1. 주 가지가 4~6개 정도로 적절한가?
+2. 각 주 가지에 부 가지가 2개 이상 있는가?
+3. 세부 가지가 실제 행동이나 사례로 구체화되어 있는가?
+4. 긴 문장은 핵심어로 줄일 수 있는가?
+5. 연결 관계를 더 추가할 수 있는가?
+
+마인드맵 구조:
+${structure}`;
+ else if(type==="keywordReview")out=`아래 마인드맵 구조를 핵심어 중심으로 압축해줘.
+긴 문장을 찾아서 마인드맵에 적합한 짧은 표현으로 바꿔줘.
+
+마인드맵 구조:
+${structure}`;
+ else if(type==="connectionReview")out=`아래 마인드맵 구조와 현재 연결 관계를 보고, 추가하면 좋은 연결 관계를 제안해줘.
+
+마인드맵 구조:
+${structure}
+
+현재 연결 관계:
+${state.connections.map(c=>`${c.a} ↔ ${c.b}: ${c.desc}`).join("\n")||"아직 없음"}`;
+ document.getElementById(targetId).value=out;showToast("요청문이 생성되었습니다.");
+}
+function getAllNodes(){const nodes=[];state.branches.forEach(b=>{if(b.title.trim())nodes.push(b.title.trim());b.subs.forEach(s=>{if(s.title.trim())nodes.push(s.title.trim());s.details.forEach(d=>{if(d.trim())nodes.push(d.trim())})})});return [...new Set(nodes)];}
+function refreshConnectionSelectors(){const nodes=getAllNodes();const opts=['<option value="">가지 선택</option>'].concat(nodes.map(n=>`<option value="${escapeHTML(n)}">${escapeHTML(n)}</option>`)).join("");["connA","connB"].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});}
+function fillConnectionExample(a,b,relation,reason){
+  const nodes=getAllNodes();
+  const connA=document.getElementById("connA");
+  const connB=document.getElementById("connB");
+  if(connA && !nodes.includes(a)){
+    const opt=document.createElement("option");
+    opt.value=a; opt.textContent=a; connA.appendChild(opt);
+  }
+  if(connB && !nodes.includes(b)){
+    const opt=document.createElement("option");
+    opt.value=b; opt.textContent=b; connB.appendChild(opt);
+  }
+  if(connA) connA.value=a;
+  if(connB) connB.value=b;
+  selectRelation(relation);
+  const reasonEl=document.getElementById("connReason");
+  if(reasonEl) reasonEl.value=reason;
+  updateTemplate();
+}
+function renderRelationTypes(){
+  const container=document.getElementById("relationTypes");
+  if(container){
+    container.innerHTML=Object.entries(relationTypes).map(([k,v])=>`<div class="relation-card ${state.relationType===k?"active":""}" onclick="selectRelation('${k}')"><strong>${escapeHTML(v.name)}</strong><br><small>${escapeHTML(v.desc)}</small></div>`).join("");
+  }
+  document.querySelectorAll(".relation-card").forEach(card=>{
+    const onclick=card.getAttribute("onclick")||"";
+    card.classList.toggle("active", onclick.includes(`selectRelation('${state.relationType}')`));
+  });
+}
+function selectRelation(k){state.relationType=k;renderRelationTypes();updateTemplate();}
+function updateTemplate(){
+  const a=document.getElementById("connA")?.value||"[가지 A]";
+  const b=document.getElementById("connB")?.value||"[가지 B]";
+  const r=document.getElementById("connReason")?.value.trim()||"";
+  const sent=relationTypes[state.relationType].template(a,b,r);
+  const el=document.getElementById("connSentence");
+  if(el){
+    if("value" in el) el.value=sent;
+    else el.textContent=sent;
+  }
+}
+function saveConnectionFromMission(){
+  const a=document.getElementById("connA").value;
+  const b=document.getElementById("connB").value;
+  const sentenceEl=document.getElementById("connSentence");
+  const desc=(("value" in sentenceEl) ? sentenceEl.value : sentenceEl.textContent).trim();
+  if(!a||!b||!desc){showToast("가지와 설명을 먼저 작성하세요.");return;}
+  state.connections.push({a,b,type:relationTypes[state.relationType].name,desc});
+  document.getElementById("connReason").value="";
+  renderConnections();
+  updateTemplate();
+  updateAll();
+  showToast("연결 관계를 저장했습니다.");
+}
+function renderConnections(){document.getElementById("connections").innerHTML=state.connections.length?state.connections.map((c,i)=>`<div class="connection-card"><strong>${escapeHTML(c.a)} ↔ ${escapeHTML(c.b)}</strong> <span class="pill">${escapeHTML(c.type)}</span><br>${escapeHTML(c.desc)}<div class="btn-row"><button class="small-btn" onclick="removeConnection(${i})">삭제</button></div></div>`).join(""):`<div class="hint">아직 저장된 연결 관계가 없습니다. 하나만 찾아도 충분합니다.</div>`;}
+function removeConnection(i){state.connections.splice(i,1);renderConnections();updateAll();}
+function renderCheckReport(){const st=countStats();const filled=state.branches.filter(b=>b.title.trim());const weak=filled.filter(b=>b.subs.filter(s=>s.title.trim()).length<2).length;const checks=[
+ {title:"주 가지 수",ok:st.branches>=4&&st.branches<=6,msg:st.branches>=4&&st.branches<=6?`주 가지 ${st.branches}개로 적절합니다.`:`주 가지는 4~6개가 적절합니다. 현재 ${st.branches}개입니다.`},
+ {title:"부 가지 균형",ok:weak===0&&st.branches>0,msg:weak===0&&st.branches>0?"각 주 가지에 부 가지가 비교적 균형 있게 있습니다.":`${weak}개 주 가지에 부 가지가 부족합니다.`},
+ {title:"핵심어 사용",ok:st.longItems===0,msg:st.longItems===0?"긴 표현이 적고 핵심어 중심입니다.":`긴 표현이 ${st.longItems}개 있습니다. 핵심어로 줄여보세요.`},
+ {title:"연결 관계",ok:st.connections>=1,msg:st.connections>=1?`연결 관계 ${st.connections}개를 찾았습니다.`:"연결 관계를 1개 이상 찾아보세요."}
+];document.getElementById("checkReport").innerHTML=checks.map(c=>`<div class="check-card ${c.ok?"ok":"warn"}"><div class="title">${c.ok?"✅":"⚠️"} ${c.title}</div><div>${c.msg}</div></div>`).join("");
+ const guides=[]; if(!(st.branches>=4&&st.branches<=6)) guides.push("주 가지는 4~6개 정도로 조정해보세요."); if(weak>0) guides.push("부 가지가 부족한 주 가지에 세부 항목을 추가해보세요."); if(st.longItems>0) guides.push("긴 문장은 핵심어로 줄여보세요."); if(st.connections<1) guides.push("3단계에서 연결 관계를 1개 이상 저장해보세요.");
+ document.getElementById("revisionGuide").textContent=guides.length?guides.join(" "):"전체 구조가 안정적입니다. 결과 출력 단계로 이동해도 좋습니다.";
+}
+function buildLMS(){const f=getFormData();const branches=state.branches.filter(b=>b.title.trim()).map(b=>"- "+b.title.trim()).join("\n")||"- ";const conns=state.connections.map((c,i)=>`${i+1}. ${c.a} ↔ ${c.b} (${c.type}): ${c.desc}`).join("\n")||"1. ";return `[AI 마인드맵 5단계 실습 결과]
+
+1. 중심 주제
+- 주제: ${f.topic}
+- 작성 목적: ${f.purpose}
+- 중심 이미지 아이디어: ${f.centerImage}
+- 핵심 단어: ${f.keyword}
+
+2. 주 가지
+${branches}
+
+3. 부 가지와 세부 가지
+${buildReadable()}
+
+4. 연결 관계
+${conns}
+
+5. 최종 성찰
+- 이 마인드맵을 작성하면서 새롭게 발견한 연결 관계:
+- 앞으로 보완하고 싶은 부분:`;}
+function buildPresentation(){const f=getFormData();const branches=state.branches.filter(b=>b.title.trim()).map(b=>b.title.trim()).join(", ");const first=state.connections[0];return `제 마인드맵의 중심 주제는 "${f.topic||"중심 주제"}"입니다.
+주 가지는 ${branches||"아직 작성되지 않았습니다"}로 구성했습니다.
+가장 중요한 연결 관계는 ${first?`"${first.a}"와 "${first.b}"의 관계입니다. ${first.desc}`:"아직 작성되지 않았습니다."}
+이 마인드맵을 통해 흩어진 생각을 중심 주제에서 가지 구조로 정리하고, 서로 다른 항목 사이의 연결 관계를 확인할 수 있었습니다.`;}
+function showResult(mode){state.resultMode=mode;document.querySelectorAll(".result-tab").forEach(b=>b.classList.remove("active"));const idx={visual:0,text2:1,markdown:2,lms:3,presentation:4}[mode];document.querySelectorAll(".result-tab")[idx].classList.add("active");generateResults();}
+function generateResults(){const visual=document.getElementById("visualResult"),text=document.getElementById("textResult"),out=document.getElementById("resultOutput"),label=document.getElementById("resultLabel"),help=document.getElementById("formatHelp");if(state.resultMode==="visual"){visual.style.display="block";text.style.display="none";renderMindmap();}else{visual.style.display="none";text.style.display="block";if(state.resultMode==="text2"){state.currentResult=buildText2();label.textContent="Text2MindMap 붙여넣기용";help.textContent="이 출력은 Text2MindMap에 붙여넣기 위한 실제 탭 문자 기반 구조입니다. 아래 복사 버튼을 사용하면 계층 정보가 유지됩니다.";}else if(state.resultMode==="markdown"){state.currentResult=buildMarkdown();label.textContent="Markdown·XMind 정리용";help.textContent="이 출력은 Markdown 문서, 일부 XMind 가져오기, 일반 문서 정리에 적합한 하이픈 목록 구조입니다.";}else if(state.resultMode==="lms"){state.currentResult=buildLMS();label.textContent="과제 제출용 요약";help.textContent="수업 과제 게시판에 붙여넣기 좋은 제출용 요약 형식입니다.";}else{state.currentResult=buildPresentation();label.textContent="발표 요약";help.textContent="수업 중 짧게 발표할 수 있는 요약문입니다.";}out.value=state.currentResult;}updateFinalStats();}
+function renderMindmap(){const board=document.getElementById("mindmapBoard");if(!board)return;const f=getFormData();const branches=state.branches.filter(b=>b.title.trim()).slice(0,8);const left=branches.filter((_,i)=>i%2===0),right=branches.filter((_,i)=>i%2===1);const icon=extractEmoji(f.centerImage||state.icon)||"🧠";const card=(b)=>{const idx=branches.indexOf(b),color=colors[idx%colors.length];const subs=b.subs.filter(s=>s.title.trim()).slice(0,4).map(s=>{const ds=s.details.filter(d=>d.trim());return `<div class="mind-sub"><div class="mind-sub-title">${escapeHTML(s.title)}</div><div class="mind-detail-list">${ds.slice(0,3).map(d=>`<span class="mind-detail">${escapeHTML(d)}</span>`).join("")}${ds.length>3?`<span class="mind-detail more-tag">+${ds.length-3}개</span>`:""}</div></div>`}).join("");return `<div class="mind-branch-card" style="border-color:${color};color:${color}"><div class="mind-branch-title"><span class="num" style="background:${color}">${idx+1}</span>${escapeHTML(b.title)}</div>${subs||'<div class="mind-sub"><div class="mind-sub-title">부 가지를 추가해보세요</div></div>'}</div>`};const conn=state.connections.slice(0,4).map(c=>`<div class="connection-summary-item">↔ <strong>${escapeHTML(c.a)}</strong> · <strong>${escapeHTML(c.b)}</strong> (${escapeHTML(c.type)})<br>${escapeHTML(c.desc)}</div>`).join("");board.innerHTML=`<div class="mind-col left">${left.map(card).join("")}</div><div><div class="mind-center-wrap"><div class="mind-center"><div class="icon">${icon}</div><div class="title">${escapeHTML(f.topic||"중심 주제")}</div><div style="font-size:12px;opacity:.86;margin-top:6px">${escapeHTML(f.keyword||"핵심어")}</div></div></div>${conn?`<div class="connection-summary">${conn}</div>`:""}</div><div class="mind-col right">${right.map(card).join("")}</div>`;}
+async function saveMindmapPNG(){
+  const board=document.getElementById("mindmapBoard");
+  if(!board){showToast("저장할 미리보기가 없습니다.");return;}
+  if(typeof html2canvas==="undefined"){
+    showToast("이미지 저장 모듈을 불러오지 못했습니다.");
+    return;
+  }
+  try{
+    const canvas=await html2canvas(board,{backgroundColor:"#ffffff",scale:2,useCORS:true});
+    const link=document.createElement("a");
+    const topic=(document.getElementById("topic").value||"mindmap").replace(/[\\/:*?"<>|]/g,"_").trim();
+    link.download=`${topic || "mindmap"}.png`;
+    link.href=canvas.toDataURL("image/png");
+    link.click();
+    showToast("PNG 이미지로 저장했습니다.");
+  }catch(e){
+    showToast("이미지 저장 중 오류가 발생했습니다.");
+  }
+}
+
+function updateFinalStats(){const st=countStats();const grade=st.score>=85?"매우 우수":st.score>=65?"우수":st.score>=45?"보통":"작성 중";const el=document.getElementById("finalStats");if(el)el.innerHTML=`- 중심 주제: ${getFormData().topic?"1개":"0개"}<br>- 주 가지: ${st.branches}개<br>- 부 가지: ${st.subs}개<br>- 세부 가지: ${st.details}개<br>- 연결 관계: ${st.connections}개<br>- 생각지도 완성도: <strong>${grade}</strong>`;}
+function countStats(){const f=getFormData();let branches=0,subs=0,details=0,longItems=0;state.branches.forEach(b=>{if(b.title.trim())branches++;if(b.title.trim().length>18)longItems++;b.subs.forEach(s=>{if(s.title.trim())subs++;if(s.title.trim().length>18)longItems++;s.details.forEach(d=>{if(d.trim())details++;if(d.trim().length>18)longItems++;});});});const connections=state.connections.length;let score=0;if(f.topic)score+=15;if(branches>=3)score+=20;else score+=branches*5;if(subs>=8)score+=25;else score+=subs*2;if(details>=15)score+=20;else score+=details;if(connections>=2)score+=20;else score+=connections*10;return{branches,subs,details,connections,longItems,score:Math.min(100,score)};}
+function updateGrowth(){const st=countStats();document.getElementById("growthFill").style.width=st.score+"%";document.getElementById("growthScore").textContent=st.score+"%";let stage="씨앗 단계",msg="중심 주제를 입력하면 생각의 씨앗이 심어집니다.";if(st.score>=85){stage="연결망 단계";msg="숨은 연결고리가 보이기 시작했습니다."}else if(st.score>=65){stage="숲 단계";msg="아이디어 숲이 완성되고 있습니다."}else if(st.score>=45){stage="나무 단계";msg="생각의 나무가 자라고 있습니다."}else if(st.score>=20){stage="새싹 단계";msg="가지가 뻗기 시작했습니다."}document.getElementById("growthStage").textContent=stage;document.getElementById("growthMessage").textContent=msg;document.getElementById("statsPills").innerHTML=[`주 가지 ${st.branches}`,`부 가지 ${st.subs}`,`세부 가지 ${st.details}`,`연결 ${st.connections}`].map(x=>`<span class="pill">${x}</span>`).join("");}
+function updatePreview(){document.getElementById("previewTree").textContent=buildReadable();}
+function updateBalanceFeedback(){const box=document.getElementById("balanceFeedback");if(!box)return;const st=countStats();const filled=state.branches.filter(b=>b.title.trim());const weak=filled.filter(b=>b.subs.filter(s=>s.title.trim()).length<2);if(st.branches<3)box.innerHTML=`<div class="hint">주 가지가 아직 적습니다. 중심 주제에서 큰 분류를 4~6개 정도 뻗어보세요.</div>`;else if(weak.length>0)box.innerHTML=`<div class="hint">일부 가지에 부 가지가 부족합니다. 비어 있는 가지에도 세부 항목을 추가해 생각의 균형을 맞춰보세요.</div>`;else box.innerHTML=`<div class="success">좋습니다. 중심 주제에서 가지가 균형 있게 뻗고 있습니다.</div>`;}
+function updateKeywordCoach(){const st=countStats();const box=document.getElementById("keywordCoach");box.innerHTML=st.longItems>0?`<strong>핵심어 압축 미션</strong>긴 표현이 ${st.longItems}개 보입니다. 마인드맵은 긴 문장보다 핵심어가 중요합니다. 한두 단어로 줄일 수 있는지 확인해보세요.`:`<strong>핵심어 압축 코치</strong>좋습니다. 현재 항목들은 비교적 핵심어 중심으로 작성되고 있습니다.`;}
+function updateAll(){updateGrowth();updatePreview();updateBalanceFeedback();updateKeywordCoach();refreshBranchSelects();if(state.step===2){refreshConnectionSelectors();updateTemplate();}if(state.step===3)renderCheckReport();if(state.step===4)generateResults();}
+function copyText(id){const el=document.getElementById(id);const val=el.value;navigator.clipboard.writeText(val).then(()=>showToast()).catch(()=>{el.select();document.execCommand("copy");showToast();});}
+function copyCurrentResult(){navigator.clipboard.writeText(state.currentResult||document.getElementById("resultOutput").value).then(()=>showToast()).catch(()=>copyText("resultOutput"));}
+function showToast(msg="복사되었습니다."){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1600);}
+function saveJSON(){const data={form:getFormData(),icon:state.icon,branches:state.branches,connections:state.connections};const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="mindmap_coach_result.json";a.click();URL.revokeObjectURL(a.href);}
+function loadJSON(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{const data=JSON.parse(ev.target.result);document.getElementById("topic").value=data.form?.topic||"";document.getElementById("keyword").value=data.form?.keyword||"";document.getElementById("purpose").value=data.form?.purpose||"";document.getElementById("centerImage").value=data.form?.centerImage||"";state.icon=data.icon||"";state.branches=data.branches||state.branches;state.connections=data.connections||[];renderIcons();renderBranches();renderConnections();updateAll();showToast("불러왔습니다.");};r.readAsText(file);}
+function loadExample(){document.getElementById("topic").value="나의 대학생활 목표";document.getElementById("keyword").value="성장, 진로, 역량";document.getElementById("purpose").value="대학생활 동안 이루고 싶은 목표를 체계적으로 정리하기";document.getElementById("centerImage").value="🎓 졸업모";state.icon="🧭 나침반";state.branches=[{title:"학점 관리",subs:[{title:"출석 관리",details:["주간 출석 체크","결석 방지"]},{title:"시험 준비",details:["2주 전 요약","기출문제 풀이"]},{title:"과제 일정",details:["마감일 캘린더","제출 전 검토"]}]},{title:"전공 역량",subs:[{title:"프로그래밍",details:["HTML/CSS","JavaScript","프로젝트"]},{title:"AI 활용",details:["ChatGPT 실습","프롬프트 작성"]}]},{title:"외국어",subs:[{title:"영어 회화",details:["매일 10분 말하기","표현 암기"]},{title:"영어 발표",details:["발표문 작성","녹음 연습"]}]},{title:"대외 경험",subs:[{title:"공모전",details:["팀 구성","아이디어 기획"]},{title:"봉사활동",details:["활동 탐색","참여 기록"]}]},{title:"건강 관리",subs:[{title:"수면",details:["취침 시간 관리","스마트폰 줄이기"]},{title:"운동",details:["주 3회 걷기","스트레칭"]}]}];state.connections=[{a:"AI 활용",b:"프로젝트",type:"도움 관계",desc:"AI 활용은 프로젝트를 더 잘하기 위해 도움이 된다. 왜냐하면 아이디어 정리와 코드 작성 시간을 줄일 수 있기 때문이다."},{a:"외국어",b:"대외 경험",type:"결합 아이디어 관계",desc:"외국어와 대외 경험을 결합하면 해외 발표 활동이라는 새로운 목표를 만들 수 있다."},{a:"건강 관리",b:"학점 관리",type:"함께 필요한 관계",desc:"건강 관리와 학점 관리는 함께 필요하다. 왜냐하면 체력이 좋아야 꾸준히 공부할 수 있기 때문이다."}];renderIcons();renderBranches();renderConnections();updateAll();showToast("예시를 불러왔습니다.");}
+function resetAll(){
+  if(!confirm("작성한 내용이 모두 삭제됩니다. 초기화할까요?")) return;
+  document.getElementById("topic").value="";
+  document.getElementById("keyword").value="";
+  document.getElementById("purpose").value="";
+  document.getElementById("centerImage").value="";
+  ["centerHelpPrompt","branchHelpPrompt","connectionHelpPrompt","reviewPrompt","connReason"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.value="";
+  });
+  const sent=document.getElementById("connSentence");
+  if(sent){
+    if("value" in sent) sent.value="";
+    else sent.textContent="연결할 가지와 관계 유형을 선택하면 자동 문장이 표시됩니다.";
+  }
+  state.icon="";
+  state.resultMode="visual";
+  state.relationType="help";
+  state.branches=[
+    {title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+    {title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+    {title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]},
+    {title:"",subs:[{title:"",details:[""]},{title:"",details:[""]}]}
+  ];
+  state.connections=[];
+  renderIcons();
+  renderBranches();
+  renderRelationTypes();
+  renderConnections();
+  goStep(0);
+  updateAll();
+  setTimeout(()=>{updateGrowth();},0);
+  showToast("초기화되었습니다.");
+}
+
+function extractEmoji(text){const m=String(text||"").match(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);return m?m[0]:"";}
+function escapeHTML(str){return String(str||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
+function escapeJS(str){return String(str||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g," ");}
+init();
+</script>
+</body>
+</html>
