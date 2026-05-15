@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300;9..144,500&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/css/common.css">
+</head>
+<body>
+<main class="page subpage">
+  <nav class="page-nav">
+    <a href="../">← 학습도구 허브</a>
+    <a href="../contribute/">개선 참여 가이드 →</a>
+  </nav>
+
+  <section class="page-hero compact">
+    <div class="eyebrow">Student Lab</div>
+    <h1 class="page-title">학생이 함께 개선한<br>학습도구 사례</h1>
+    <p>이곳은 학생들이 발견한 오류, 제안한 개선 아이디어, 직접 수정하거나 새롭게 기획한 학습도구 사례를 모아두는 공간입니다.</p>
+  </section>
+
+  <section class="intro-panel compact-panel lab-intro">
+    <div>
+      <span class="label">What We Display</span>
+      <h2>완성된 작품만이 아니라,<br>개선의 흔적을 전시합니다.</h2>
+    </div>
+    <p>오류를 찾아낸 기록, 더 쉬운 설명을 제안한 아이디어, 직접 수정한 프로토타입까지 학습도구를 더 나은 방향으로 바꾼 사례를 보여줍니다.</p>
+  </section>
+
+  <section class="lab-filter" aria-label="Student Lab 분류">
+    <button type="button" class="filter-btn active" data-filter="all">전체</button>
+    <button type="button" class="filter-btn error" data-filter="error">오류 발견</button>
+    <button type="button" class="filter-btn idea" data-filter="idea">개선 아이디어</button>
+    <button type="button" class="filter-btn build" data-filter="build">직접 고도화</button>
+  </section>
+
+  <section class="lab-grid refined-lab-grid">
+    <article class="lab-card" data-type="error">
+      <span class="tag tag-error">오류 발견</span>
+      <span class="student">2학년 김*성</span>
+      <span class="num">01</span>
+      <h2>TRIZ 발명원리 용어 표기 차이 수정</h2>
+      <strong>학생 제보 내용</strong>
+      <p>‘복합 재료’와 ‘복합재료’처럼 발명원리 용어 표기가 섞여 있어 학습 중 혼란이 있었습니다.</p>
+      <strong>반영 내용</strong>
+      <p>발명원리 용어를 기준표에 맞춰 통일하여 같은 원리가 같은 이름으로 표시되도록 수정했습니다.</p>
+      <div class="related">관련 도구 · TRIZ 40가지 발명원리</div>
+    </article>
+
+    <article class="lab-card" data-type="error">
+      <span class="tag tag-error">오류 발견</span>
+      <span class="student">3학년 박*훈</span>
+      <span class="num">02</span>
+      <h2>기술적 모순 추천 원리 오류 발견</h2>
+      <strong>학생 제보 내용</strong>
+      <p>TC2 추천 발명원리가 선택한 공학 변수 조합과 맞지 않는 부분이 있었습니다.</p>
+      <strong>반영 내용</strong>
+      <p>추천 원리와 대표 원리, 일반 해결안 설명을 변수 조합에 맞게 수정했습니다.</p>
+      <div class="related">관련 도구 · 기술적 모순 해결 절차 시뮬레이터</div>
+    </article>
+
+    <article class="lab-card" data-type="idea">
+      <span class="tag tag-idea">개선 아이디어</span>
+      <span class="student">1학년 이*민</span>
+      <span class="num">03</span>
+      <h2>기술적 모순 사례 추가 제안</h2>
+      <strong>학생 제안 내용</strong>
+      <p>말뚝 사례 외에도 스마트폰 화면 크기처럼 일상적인 사례가 있으면 기술적 모순을 더 쉽게 이해할 수 있다는 의견이 있었습니다.</p>
+      <strong>반영 내용</strong>
+      <p>일상 제품 사례를 추가하여 개선 변수와 악화 변수를 비교하며 학습할 수 있도록 확장했습니다.</p>
+      <div class="related">관련 도구 · 기술적 모순 해결 절차 시뮬레이터</div>
+    </article>
+
+    <article class="lab-card" data-type="idea">
+      <span class="tag tag-idea">개선 아이디어</span>
+      <span class="student">2학년 최*영</span>
+      <span class="num">04</span>
+      <h2>단계 설명을 더 쉽게 바꾸는 제안</h2>
+      <strong>학생 제안 내용</strong>
+      <p>마인드맵 작성 단계의 용어가 어렵게 느껴져, 각 단계마다 짧은 도움 질문이 있으면 좋겠다는 의견이 있었습니다.</p>
+      <strong>반영 내용</strong>
+      <p>학생이 바로 따라할 수 있도록 쉬운 설명 문구와 보조 질문을 추가하는 방향으로 개선했습니다.</p>
+      <div class="related">관련 도구 · AI 마인드맵 5단계 코치</div>
+    </article>
+
+    <article class="lab-card" data-type="build">
+      <span class="tag tag-build">직접 고도화</span>
+      <span class="student">3학년 정*호</span>
+      <span class="num">05</span>
+      <h2>버튼 색상과 안내 문구 개선</h2>
+      <strong>학생 제작 내용</strong>
+      <p>학습 흐름에 맞게 버튼 강조색과 안내 문구를 조정하여 다음 행동이 더 잘 보이도록 개선했습니다.</p>
+      <strong>반영 내용</strong>
+      <p>시인성과 사용 흐름을 높이는 UI 개선 방향으로 반영했습니다.</p>
+      <div class="related">관련 도구 · 모순 구조 스캐너</div>
+    </article>
+
+    <article class="lab-card" data-type="build">
+      <span class="tag tag-build">직접 고도화</span>
+      <span class="student">4학년 김*진</span>
+      <span class="num">06</span>
+      <h2>새로운 학습도구 프로토타입 제안</h2>
+      <strong>학생 제작 내용</strong>
+      <p>아이디어 평가 후 개선 질문을 자동으로 던지는 간단한 웹 도구 또는 기능 확장안을 제안했습니다.</p>
+      <strong>반영 내용</strong>
+      <p>향후 아이디어 평가 도구의 확장 기능 후보로 검토하고, 수업 흐름과 맞는 방식으로 반영할 수 있습니다.</p>
+      <div class="related">관련 도구 · 가중순위·아이디어 평가 통합 시뮬레이터</div>
+    </article>
+  </section>
+</main>
+
+<script>
+const filterButtons = document.querySelectorAll('.filter-btn');
+const labCards = document.querySelectorAll('.lab-card');
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+    filterButtons.forEach((btn) => btn.classList.remove('active'));
+    button.classList.add('active');
+    labCards.forEach((card) => {
+      const shouldShow = filter === 'all' || card.dataset.type === filter;
+      card.hidden = !shouldShow;
+    });
+  });
+});
+</script>
+</body>
+</html>

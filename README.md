@@ -5,6 +5,8 @@ GitHub Pages에 올려 정적 웹사이트로 운영할 수 있는 강의용 웹
 ## 메인 경로
 
 - `index.html`: 전체 학습도구 허브
+- `contribute/`: 학습도구 개선 참여 가이드
+- `student-lab/`: 학생 개선안 및 신규 도구 전시 공간
 
 ## 현재 포함된 학습도구
 
@@ -31,6 +33,6 @@ GitHub Pages에 올려 정적 웹사이트로 운영할 수 있는 강의용 웹
 
 ## 업로드 방법
 
-GitHub 저장소 최상위에 `index.html`, `shared/`, `triz/`, 각 `week.../` 폴더를 그대로 업로드합니다.
+GitHub 저장소 최상위에 `index.html`, `README.md`, `shared/`, `contribute/`, `student-lab/`, `triz/`, 각 `week.../` 폴더를 그대로 업로드합니다.
 
 GitHub Pages 설정은 `Settings → Pages → Deploy from a branch → main / root`를 사용합니다.

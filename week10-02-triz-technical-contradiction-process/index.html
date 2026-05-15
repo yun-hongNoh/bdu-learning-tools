@@ -3,2134 +3,2718 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BDU-X | 10주차 2강 TRIZ 기술적 모순 6단계 시뮬레이터 드론 사례 수정본</title>
+<title>TRIZ 기술적 모순 해결 절차 | 10주차 2강</title>
 <style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
 :root{
-  --bg1:#071321;
-  --bg2:#0b2137;
-  --panel:#0e2338;
-  --line:rgba(255,255,255,.12);
-  --text:#f4fbff;
-  --muted:#b7c9db;
-  --mint:#4be7ca;
-  --cyan:#7bc9ff;
-  --yellow:#ffd166;
-  --red:#ff6f8a;
-  --soft:#cffff6;
-  --shadow:rgba(0,0,0,.35);
+  --bg-deep:#040b18;
+  --bg-mid:#08182c;
+  --bg-panel:rgba(13,34,57,.78);
+  --bg-card:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.13);
+  --line-strong:rgba(255,255,255,.22);
+
+  --text:#eef6ff;
+  --text-muted:#9fb3cc;
+  --text-dim:#6a8099;
+
+  --scan-cyan:#4be7ca;
+  --scan-glow:rgba(75,231,202,.55);
+  --good-blue:#5ec3ff;
+  --good-glow:rgba(94,195,255,.55);
+  --bad-red:#ff6b8e;
+  --bad-glow:rgba(255,107,142,.55);
+  --warn-yellow:#ffd166;
+  --warn-glow:rgba(255,209,102,.65);
+  --gold:#ffb946;
+  --principle:#ffd166;
+  --principle-glow:rgba(255,209,102,.55);
+  --split-purple:#b794f6;
+  --split-glow:rgba(183,148,246,.55);
+  --solve-green:#7ee787;
+  --solve-glow:rgba(126,231,135,.55);
+
+  --grad-tech:linear-gradient(135deg,#5ec3ff,#2c6fb4);
+  --grad-action:linear-gradient(135deg,#4be7ca,#2c9ee0);
+  --grad-principle:linear-gradient(135deg,#ffd166,#ffb946);
+  --grad-solve:linear-gradient(135deg,#7ee787,#4be7ca);
+
+  --shadow-soft:0 18px 44px rgba(0,0,0,.45);
+  --shadow-hard:0 28px 68px rgba(0,0,0,.55);
+
+  --radius-s:14px;
+  --radius-m:20px;
+  --radius-l:28px;
+  --radius-pill:999px;
 }
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
 body{
-  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 10% 3%, rgba(75,231,202,.12), transparent 24%),
-    radial-gradient(circle at 90% 0%, rgba(123,201,255,.10), transparent 24%),
-    linear-gradient(135deg,var(--bg1),var(--bg2) 56%, #081624);
-  padding:14px;
+    radial-gradient(circle at 12% 8%, rgba(75,231,202,.18), transparent 28%),
+    radial-gradient(circle at 88% 4%, rgba(94,195,255,.15), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(183,148,246,.12), transparent 40%),
+    linear-gradient(135deg,#040b18,#0a1c31 55%,#061323);
+  min-height:100vh;
+  font-weight:500;
+  letter-spacing:-.01em;
+}
+
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(75,231,202,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,231,202,.04) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  z-index:0;
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+button{font-family:inherit;color:inherit}
+
+/* ============================================================
+   SCREEN MANAGEMENT - critical: prevent ID display override
+   ============================================================ */
+.screen{width:100%}
+.screen:not(.active){display:none !important}
+.screen.active{animation:screenIn .5s cubic-bezier(.2,.7,.3,1.2)}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(12px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* ============================================================
+   INTRO SCREEN
+   ============================================================ */
+#intro{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  position:relative;
+  z-index:1;
+}
+.intro-wrap{
+  max-width:1080px;
+  width:100%;
+  text-align:center;
+}
+.intro-eyebrow{
+  display:inline-block;
+  padding:8px 16px;
+  border-radius:var(--radius-pill);
+  background:rgba(75,231,202,.10);
+  border:1px solid rgba(75,231,202,.34);
+  color:var(--scan-cyan);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.18em;
+  margin-bottom:24px;
+  animation:pulseBadge 2.4s ease-in-out infinite;
+}
+@keyframes pulseBadge{
+  0%,100%{box-shadow:0 0 0 0 rgba(75,231,202,.4)}
+  50%{box-shadow:0 0 0 14px rgba(75,231,202,0)}
+}
+.intro-title{
+  margin:0 0 16px;
+  font-size:clamp(36px,6vw,72px);
+  font-weight:1000;
+  line-height:1.05;
+  letter-spacing:-.05em;
+  background:linear-gradient(135deg,#fff 0%,#a8e6ff 45%,#4be7ca 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 4px 24px rgba(75,231,202,.18));
+}
+.intro-sub{
+  margin:0 0 36px;
+  font-size:clamp(15px,1.7vw,19px);
+  color:var(--text-muted);
+  font-weight:600;
+  line-height:1.55;
+  max-width:680px;
+  margin-left:auto;margin-right:auto;
+}
+.intro-sub b{color:var(--warn-yellow);font-weight:900}
+
+/* 6-step preview pipeline */
+.pipe-preview{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+  max-width:880px;
+  margin:0 auto 40px;
+}
+.pipe-node{
+  padding:14px 8px;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  text-align:center;
+  position:relative;
+}
+.pipe-node .pn-num{
+  display:inline-block;
+  width:26px;height:26px;
+  border-radius:50%;
+  background:rgba(75,231,202,.18);
+  border:1px solid rgba(75,231,202,.42);
+  color:var(--scan-cyan);
+  font-size:12px;
+  font-weight:1000;
+  line-height:24px;
+  margin-bottom:6px;
+}
+.pipe-node .pn-name{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:-.02em;
+  line-height:1.2;
+  color:var(--text);
+}
+.pipe-node::after{
+  content:"→";
+  position:absolute;
+  right:-9px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--scan-cyan);
+  font-weight:1000;
+  z-index:2;
+  font-size:14px;
+}
+.pipe-node:last-child::after{display:none}
+
+/* Case selection cards */
+.case-select-title{
+  margin:0 0 16px;
+  font-size:15px;
+  font-weight:900;
+  color:var(--text-muted);
+  letter-spacing:.06em;
+}
+.case-cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  max-width:1040px;
+  margin:0 auto;
+}
+.case-card{
+  padding:22px 18px;
+  border-radius:var(--radius-l);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  cursor:pointer;
+  text-align:left;
+  transition:all .25s cubic-bezier(.2,.7,.3,1.2);
+  position:relative;
+  overflow:hidden;
+  color:inherit;
+}
+.case-card::before{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 50%,rgba(75,231,202,.10));
+  opacity:0;
+  transition:.3s;
+}
+.case-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--scan-cyan);
+  box-shadow:0 22px 44px rgba(75,231,202,.18);
+}
+.case-card:hover::before{opacity:1}
+.case-card .cc-num{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:1000;
+  background:rgba(255,209,102,.14);
+  color:var(--warn-yellow);
+  letter-spacing:.06em;
+  margin-bottom:10px;
+}
+.case-card .cc-icon{
+  font-size:32px;
+  margin-bottom:8px;
+  filter:drop-shadow(0 0 12px rgba(75,231,202,.4));
+}
+.case-card .cc-title{
+  font-size:18px;
+  font-weight:1000;
+  letter-spacing:-.03em;
+  margin-bottom:6px;
+}
+.case-card .cc-sub{
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.4;
+}
+.intro-footer{
+  margin-top:36px;
+  color:var(--text-dim);
+  font-size:13px;
+}
+
+/* ============================================================
+   MAIN SIM SCREEN
+   ============================================================ */
+#sim{
+  padding:18px;
+  min-height:100vh;
+  position:relative;
+  z-index:1;
 }
 .app{
-  width:min(1320px,100%);
-  min-height:calc(100vh - 28px);
+  max-width:1320px;
   margin:0 auto;
   display:grid;
   grid-template-rows:auto auto 1fr auto;
-  gap:12px;
+  gap:14px;
+  min-height:calc(100vh - 36px);
 }
-.card{
-  background:rgba(14,35,56,.92);
-  border:1px solid var(--line);
-  border-radius:30px;
-  box-shadow:0 24px 60px var(--shadow);
-  backdrop-filter:blur(14px);
-}
-.header{
-  padding:18px 22px;
+
+/* Top bar: brand + progress + case picker */
+.top-bar{
   display:grid;
   grid-template-columns:auto 1fr auto;
   gap:18px;
   align-items:center;
+  padding:14px 20px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-soft);
+  position:relative;
+  z-index:50;
 }
-.badge{
-  padding:10px 14px;
-  border-radius:999px;
-  background:rgba(75,231,202,.12);
-  border:1px solid rgba(75,231,202,.34);
-  color:#cbfff6;
+.brand{
+  display:flex;align-items:center;gap:10px;
   font-weight:1000;
-  font-size:15px;
+  font-size:18px;
+  letter-spacing:-.03em;
+}
+.brand-dot{
+  width:11px;height:11px;border-radius:50%;
+  background:var(--scan-cyan);
+  box-shadow:0 0 14px var(--scan-cyan);
+  animation:dotPulse 1.6s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 14px var(--scan-cyan)}
+  50%{transform:scale(1.3);box-shadow:0 0 24px var(--scan-cyan)}
+}
+.brand-text{background:linear-gradient(135deg,#fff,#a8e6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Step progress (6-step pipeline as main progress) */
+.step-pipe{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex:1;
+  justify-content:center;
+}
+.sp-node{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:900;
+  color:var(--text-muted);
+  cursor:pointer;
+  transition:.2s;
   white-space:nowrap;
 }
-.headerTitle{text-align:center}
-.headerTitle h1{
-  margin:0;
-  font-size:clamp(28px,3.4vw,44px);
-  letter-spacing:-.05em;
-  line-height:1.05;
-}
-.headerTitle p{
-  margin:8px 0 0;
-  color:var(--muted);
-  font-size:clamp(15px,1.7vw,18px);
-  font-weight:800;
-}
-.caseBadge{
-  min-width:170px;
-  text-align:center;
-  padding:10px 14px;
-  border-radius:18px;
-  background:rgba(255,209,102,.12);
-  border:1px solid rgba(255,209,102,.36);
-  color:#ffe6ad;
+.sp-node:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.sp-node .sp-num{
+  width:20px;height:20px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  display:grid;place-items:center;
+  font-size:11px;
   font-weight:1000;
+  color:var(--text-muted);
+  transition:.2s;
 }
-.stepBar{
-  padding:12px;
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:10px;
+.sp-node .sp-name{display:inline-block}
+.sp-node.done{
+  background:rgba(126,231,135,.10);
+  border-color:rgba(126,231,135,.36);
+  color:var(--solve-green);
 }
-.caseTabs{
-  padding:12px;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
+.sp-node.done .sp-num{background:var(--solve-green);color:#04222d}
+.sp-node.active{
+  background:linear-gradient(135deg,rgba(75,231,202,.22),rgba(94,195,255,.18));
+  border-color:var(--scan-cyan);
+  color:var(--text);
+  box-shadow:0 6px 18px rgba(75,231,202,.22);
 }
-.caseTab{
-  min-height:64px;
-  border:none;
-  border-radius:20px;
-  cursor:pointer;
-  text-align:left;
-  color:#fff;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  padding:12px 16px;
-  transition:.18s ease;
-}
-.caseTab:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.07);
-}
-.caseTab.active{
-  color:#062035;
-  background:linear-gradient(135deg,var(--mint),#2e9de0);
-  border-color:transparent;
-}
-.caseTab b{
-  display:block;
-  font-size:20px;
-  font-weight:1000;
-  letter-spacing:-.035em;
-}
-.caseTab small{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
-  font-weight:850;
-}
-.caseTab.active small{
-  color:rgba(6,32,53,.76);
+.sp-node.active .sp-num{
+  background:var(--scan-cyan);
+  color:#04222d;
+  animation:dotPulse 1.4s ease-in-out infinite;
 }
 
-.stepItem{
-  min-height:74px;
-  border-radius:20px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  display:grid;
-  align-content:center;
-  justify-items:center;
-  gap:4px;
-  padding:8px;
-  cursor:pointer;
-  transition:.18s ease;
-  text-align:center;
-}
-.stepItem:hover,.navBtn:hover,.miniBtn:hover,.principleChip:hover,.tcCard:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.07);
-}
-.stepItem.active{
-  background:linear-gradient(135deg,var(--mint),#2e9de0);
-  color:#062035;
-  border-color:transparent;
-}
-.stepItem.active .stepNo,
-.stepItem.active .stepName{
-  color:#062035;
-}
-.pathBadge{
-  margin-bottom:4px;
-}
-.tcCard.selected::after{
-  content:"현재 선택 경로";
-  position:absolute;
-  right:16px;
-  top:14px;
-  padding:6px 9px;
-  border-radius:999px;
-  background:rgba(75,231,202,.18);
-  border:1px solid rgba(75,231,202,.38);
-  color:#cbfff6;
-  font-size:12px;
-  font-weight:1000;
-}
-.tcCard{
+.case-picker{
   position:relative;
+  z-index:60;
 }
-.droneNote{
-  border-radius:18px;
-  background:rgba(255,209,102,.08);
-  border:1px solid rgba(255,209,102,.24);
-  padding:12px 14px;
-  color:#ffe6ad;
-  font-size:14px;
-  line-height:1.45;
-  font-weight:900;
-}
-
-.stepItem.done{border-color:rgba(255,209,102,.34)}
-.stepNo{font-size:13px;font-weight:1000;opacity:.9}
-.stepName{font-size:15px;font-weight:1000;line-height:1.2}
-
-.main{
-  padding:14px;
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-  min-height:790px;
-}
-.topBar{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:12px;
-  align-items:center;
-  padding:14px 16px;
-  border-radius:22px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.11);
-}
-.topBar .big{
-  font-size:clamp(22px,2.6vw,32px);
+.case-pick-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.10);
+  border:1px solid rgba(255,209,102,.36);
+  color:var(--warn-yellow);
   font-weight:1000;
-  letter-spacing:-.045em;
-}
-.topBar .small{
-  color:var(--muted);
   font-size:13px;
-  font-weight:850;
-  margin-bottom:4px;
-}
-.miniFormula{
-  border-radius:18px;
-  padding:10px 12px;
-  background:rgba(5,16,29,.72);
-  border:1px solid rgba(255,255,255,.12);
-  text-align:center;
-  font-size:15px;
-  font-weight:1000;
-}
-.miniFormula .good{color:#d7efff}
-.miniFormula .bad{color:#ffd2db}
-
-.stage{
-  border-radius:30px;
-  border:1px solid rgba(255,255,255,.12);
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02)),
-    #0b1d31;
-  overflow:hidden;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-}
-.stageHead{
-  padding:18px 22px 10px;
-  text-align:center;
-}
-.stageHead h2{
-  margin:0;
-  font-size:clamp(28px,3vw,40px);
-  letter-spacing:-.05em;
-}
-.stageHead p{
-  margin:8px 0 0;
-  color:var(--muted);
-  font-size:16px;
-  font-weight:800;
-}
-.stageBody{
-  padding:10px 18px 14px;
-  min-height:560px;
-  display:grid;
-}
-.scene{
-  display:none;
-  height:100%;
-}
-.scene.active{display:grid}
-.scene.oneCol{grid-template-columns:1fr}
-.scene.twoCol{grid-template-columns:1.02fr .98fr; gap:18px}
-.visualPanel,.contentPanel{
-  min-height:470px;
-  border-radius:28px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);
-  padding:16px;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-}
-.contentPanel{align-content:start; place-items:stretch}
-.visualPanel svg{
-  width:100%;
-  height:100%;
-  max-height:470px;
-  display:block;
-}
-.infoBlock{
-  border-radius:22px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.11);
-  padding:16px;
-}
-.infoBlock h3{
-  margin:0 0 10px;
-  font-size:clamp(22px,2.1vw,30px);
-  letter-spacing:-.04em;
-}
-.infoBlock p{
-  margin:0;
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.52;
-  font-weight:800;
-}
-
-.tcRow{
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-.tcCard{
-  border-radius:26px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.11);
-  padding:18px;
-  display:grid;
-  gap:12px;
-  transition:.28s ease;
   cursor:pointer;
+  transition:.2s;
 }
-.tcCard .label{
-  width:max-content;
-  padding:8px 11px;
-  border-radius:999px;
-  background:rgba(255,209,102,.12);
-  border:1px solid rgba(255,209,102,.30);
-  color:#ffe6ad;
+.case-pick-btn:hover{background:rgba(255,209,102,.16)}
+.case-pick-btn::after{content:"▾";font-size:10px;margin-left:2px}
+.case-menu{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  min-width:240px;
+  padding:8px;
+  border-radius:var(--radius-m);
+  background:#0b1f33;
+  border:1px solid var(--line-strong);
+  box-shadow:var(--shadow-hard);
+  z-index:200;
+  display:none;
+}
+.case-menu.show{display:block;animation:menuIn .2s ease}
+@keyframes menuIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.case-menu .cm-item{
+  display:block;
+  width:100%;
+  padding:10px 12px;
+  border:none;
+  border-radius:12px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
   font-size:13px;
-  font-weight:1000;
+  font-weight:800;
+  transition:.15s;
 }
-.tcCard .title{
-  font-size:26px;
-  line-height:1.32;
+.case-menu .cm-item:hover{background:rgba(255,255,255,.06)}
+.case-menu .cm-item.active{
+  background:rgba(75,231,202,.12);
+  color:var(--scan-cyan);
+}
+.case-menu .cm-item small{display:block;color:var(--text-dim);font-size:11px;font-weight:700;margin-top:2px}
+
+/* Question banner */
+.q-banner{
+  padding:14px 22px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+.q-tag{
+  padding:6px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(75,231,202,.14);
+  border:1px solid rgba(75,231,202,.42);
+  color:var(--scan-cyan);
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.1em;
+  white-space:nowrap;
+}
+.q-text{
+  flex:1;
+  margin:0;
+  font-size:clamp(18px,2.2vw,24px);
   font-weight:1000;
   letter-spacing:-.03em;
 }
-.tcCard .desc{
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.45;
-  font-weight:800;
-}
-.tcCard.selected{
-  transform:scale(1.02);
-  background:linear-gradient(135deg,rgba(75,231,202,.16),rgba(123,201,255,.16));
-  border-color:rgba(75,231,202,.38);
-  box-shadow:0 0 0 3px rgba(75,231,202,.12);
-}
-.tcCard.dim{
-  opacity:.42;
-  transform:scale(.96);
-}
-.badgeSelected{
-  width:max-content;
-  padding:8px 11px;
-  border-radius:999px;
-  background:rgba(75,231,202,.15);
-  border:1px solid rgba(75,231,202,.38);
-  color:#cbfff6;
-  font-size:13px;
-  font-weight:1000;
-}
-.actionRow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:14px;
-}
-.miniBtn{
-  min-height:48px;
-  border:none;
-  border-radius:16px;
-  cursor:pointer;
-  background:linear-gradient(135deg,var(--mint),#2e9de0);
-  color:#062035;
-  font-size:16px;
-  font-weight:1000;
-  padding:0 18px;
-}
-.miniBtn.secondary{
-  color:#fff;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.12);
-}
-
-.translateGrid{
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 120px 1fr;
-  gap:18px;
-  align-items:center;
-}
-.translateCol{
-  display:grid;
-  gap:14px;
-}
-.termCard{
-  border-radius:24px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.11);
-  padding:18px;
-  display:grid;
-  gap:10px;
-}
-.termCard .small{
-  color:var(--muted);
-  font-size:13px;
-  font-weight:850;
-}
-.termCard .big{
-  font-size:clamp(25px,2.2vw,34px);
-  font-weight:1000;
-  letter-spacing:-.04em;
-}
-.termCard.good .big{color:#d7efff}
-.termCard.bad .big{color:#ffd2db}
-.arrowCol{
-  display:grid;
-  justify-items:center;
-  gap:12px;
-}
-.arrowCol .midText{
-  color:#ffe6ad;
-  font-size:18px;
-  font-weight:1000;
-  text-align:center;
-  line-height:1.35;
-}
-.arrowCol .arrow{
-  font-size:56px;
-  font-weight:1000;
-  color:#ffe6ad;
-}
-
-.intersectionWrap{
-  width:100%;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  gap:18px;
-  height:100%;
-}
-.intersectionArena{
-  position:relative;
-  min-height:330px;
-  border-radius:26px;
+.q-formula{
+  padding:7px 13px;
+  border-radius:var(--radius-pill);
   background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);
+  border:1px solid var(--line);
+  font-size:13px;
+  font-weight:900;
+  color:var(--text-muted);
+  white-space:nowrap;
+}
+.q-formula .good{color:var(--good-blue)}
+.q-formula .bad{color:var(--bad-red)}
+
+/* Main body: scene + side panel */
+.main-body{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(360px,1fr);
+  gap:14px;
+}
+.scene{
+  position:relative;
+  border-radius:var(--radius-l);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),
+    #061425;
+  border:1px solid var(--line);
   overflow:hidden;
+  min-height:520px;
+  box-shadow:var(--shadow-soft);
 }
-.varCard{
+/* scan corners (workbench frame) */
+.scene::before,.scene::after{
+  content:"";
   position:absolute;
-  min-width:200px;
-  min-height:76px;
-  border-radius:20px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.12);
-  display:grid;
-  align-content:center;
-  justify-items:center;
-  gap:6px;
-  padding:10px 14px;
-  transition:all .55s ease;
+  width:34px;height:34px;
+  border:2px solid var(--scan-cyan);
+  pointer-events:none;
+  z-index:5;
 }
-.varCard .small{
-  font-size:13px;
-  font-weight:850;
-  color:var(--muted);
-}
-.varCard .big{
-  font-size:24px;
-  font-weight:1000;
-  letter-spacing:-.04em;
-}
-.varCard.good .big{color:#d7efff}
-.varCard.bad .big{color:#ffd2db}
-#improveVar.start{left:18px; top:128px}
-#improveVar.center{left:140px; top:128px}
-#worseVar.start{right:18px; top:22px}
-#worseVar.center{right:140px; top:128px}
-.intersectionBox{
+.scene::before{top:14px;left:14px;border-right:none;border-bottom:none;border-radius:8px 0 0 0}
+.scene::after{bottom:14px;right:14px;border-left:none;border-top:none;border-radius:0 0 8px 0}
+.scene-corner-tr,.scene-corner-bl{
   position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:170px;
-  height:170px;
-  border-radius:28px;
-  background:rgba(255,209,102,.10);
-  border:2px dashed rgba(255,209,102,.40);
-  display:grid;
-  place-items:center;
+  width:34px;height:34px;
+  border:2px solid var(--scan-cyan);
+  pointer-events:none;
+  z-index:5;
 }
-.intersectionBox .label{
-  color:#ffe6ad;
-  font-size:20px;
-  font-weight:1000;
-  text-align:center;
-  line-height:1.3;
-}
-.crossGlow{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:220px;
-  height:220px;
-  border-radius:999px;
-  background:radial-gradient(circle, rgba(255,209,102,.28), rgba(255,209,102,0));
-  opacity:0;
-  transition:opacity .4s ease;
-}
-.crossGlow.on{opacity:1}
-.principleGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-.principleChip{
-  min-height:80px;
-  border-radius:18px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  padding:10px;
-  display:grid;
-  align-content:center;
-  justify-items:center;
-  gap:5px;
-  transition:.18s ease;
-  text-align:center;
-  cursor:pointer;
-}
-.principleChip.active{
-  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(75,231,202,.16));
-  border-color:rgba(255,209,102,.38);
-}
-.principleChip .num{font-size:13px;color:#ffe6ad;font-weight:1000}
-.principleChip .name{font-size:15px;font-weight:1000;line-height:1.2}
+.scene-corner-tr{top:14px;right:14px;border-left:none;border-bottom:none;border-radius:0 8px 0 0}
+.scene-corner-bl{bottom:14px;left:14px;border-right:none;border-top:none;border-radius:0 0 0 8px}
 
-.generalCard{
-  border-radius:28px;
-  background:rgba(75,231,202,.08);
-  border:1px solid rgba(75,231,202,.25);
-  padding:20px;
-  display:grid;
-  gap:10px;
-}
-.generalCard .small{color:#cbfff6;font-size:14px;font-weight:850}
-.generalCard .big{
-  font-size:clamp(28px,2.5vw,38px);
-  font-weight:1000;
-  line-height:1.35;
-  letter-spacing:-.04em;
-}
-.arrowDown{
-  font-size:42px;
-  color:#ffe6ad;
-  font-weight:1000;
-  text-align:center;
-}
-
-.solutionGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-.solutionCard{
-  border-radius:26px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.11);
-  padding:18px;
-  display:grid;
-  gap:12px;
-}
-.solutionCard h3{
-  margin:0;
-  font-size:clamp(21px,2vw,30px);
-}
-.solutionHighlight{
-  border-radius:18px;
-  background:rgba(75,231,202,.08);
-  border:1px solid rgba(75,231,202,.26);
-  padding:14px;
-  color:#fff;
-  font-size:20px;
-  line-height:1.45;
-  font-weight:1000;
-}
-.solutionCard p{
-  margin:0;
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.48;
-  font-weight:800;
-}
-.variableExplain{
-  display:grid;
-  grid-template-columns:1fr 1.1fr 1fr;
-  gap:14px;
-  align-items:stretch;
-}
-.variableGroup{
-  border-radius:26px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.10);
-  padding:16px;
-  display:grid;
-  gap:12px;
-  align-content:start;
-}
-.variableGroup h3{
-  margin:0;
-  font-size:clamp(20px,2vw,28px);
-  letter-spacing:-.04em;
-}
-.variableGroup p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-  font-weight:800;
-}
-.varOption{
-  border-radius:16px;
-  padding:11px 12px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.10);
-  display:grid;
-  gap:4px;
-}
-.varOption.selected{
-  background:linear-gradient(135deg,rgba(75,231,202,.16),rgba(123,201,255,.12));
-  border-color:rgba(75,231,202,.38);
-}
-.varOption.bad.selected{
-  background:linear-gradient(135deg,rgba(255,111,138,.15),rgba(255,209,102,.10));
-  border-color:rgba(255,111,138,.34);
-}
-.varOption b{
-  font-size:16px;
-}
-.varOption span{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.35;
-  font-weight:800;
-}
-.translateArrowBox{
-  border-radius:26px;
-  background:rgba(255,209,102,.075);
-  border:1px solid rgba(255,209,102,.22);
-  display:grid;
-  place-items:center;
-  text-align:center;
-  padding:16px;
-}
-.translateArrowBox .arrow{
-  font-size:54px;
-  color:#ffe6ad;
-  font-weight:1000;
-}
-.translateArrowBox .text{
-  color:#ffe6ad;
-  font-size:18px;
-  line-height:1.35;
-  font-weight:1000;
-}
-.principleSelectGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
-.principleSelectCard{
-  border-radius:24px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.11);
-  padding:16px;
-  display:grid;
-  gap:10px;
-}
-.principleSelectCard.selected{
-  background:linear-gradient(135deg,rgba(255,209,102,.15),rgba(75,231,202,.12));
-  border-color:rgba(255,209,102,.42);
-  box-shadow:0 0 0 3px rgba(255,209,102,.08);
-}
-.principleSelectCard .num{
-  width:max-content;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(255,209,102,.12);
-  border:1px solid rgba(255,209,102,.30);
-  color:#ffe6ad;
-  font-size:13px;
-  font-weight:1000;
-}
-.principleSelectCard h3{
-  margin:0;
-  font-size:clamp(21px,2vw,30px);
-}
-.principleSelectCard p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-  font-weight:800;
-}
-.reasonBox{
-  border-radius:22px;
-  background:rgba(75,231,202,.08);
-  border:1px solid rgba(75,231,202,.25);
-  padding:14px;
-  color:#cffff6;
-  font-size:15px;
-  line-height:1.45;
+.scene-label{
+  position:absolute;
+  top:18px;left:54px;
+  font-size:11px;
   font-weight:900;
+  color:var(--scan-cyan);
+  letter-spacing:.16em;
+  z-index:6;
+  text-transform:uppercase;
 }
-.pathBadge{
-  width:max-content;
-  max-width:100%;
-  padding:8px 11px;
-  border-radius:999px;
+.scene-label::before{
+  content:"●";margin-right:8px;
+  animation:dotPulse 1.4s ease-in-out infinite;
+  display:inline-block;
+}
+.scene-step-tag{
+  position:absolute;
+  top:18px;right:54px;
+  padding:4px 10px;
+  border-radius:var(--radius-pill);
   background:rgba(75,231,202,.12);
-  border:1px solid rgba(75,231,202,.34);
-  color:#cbfff6;
-  font-size:14px;
+  border:1px solid rgba(75,231,202,.36);
+  color:var(--scan-cyan);
+  font-size:11px;
   font-weight:1000;
+  letter-spacing:.06em;
+  z-index:6;
 }
-.compactReason{
-  border-radius:20px;
-  background:rgba(75,231,202,.08);
-  border:1px solid rgba(75,231,202,.24);
-  padding:13px 15px;
-  color:#cffff6;
-  font-size:15px;
-  line-height:1.42;
-  font-weight:900;
-}
-.principleSelectCard{
-  min-height:178px;
-}
-.principleSelectCard p{
-  font-size:13.5px;
-}
-.generalCompact{
+
+.stage{
+  position:absolute;
+  inset:60px 30px 76px 30px;
   display:grid;
-  grid-template-columns:.8fr 50px 1.2fr;
-  gap:14px;
+  place-items:center;
+}
+.stage > svg{
+  width:100%;height:100%;
+  max-height:460px;
+  display:block;
+}
+.stage-html{
+  width:100%;height:100%;
+  display:flex;
   align-items:center;
-}
-.generalCompact .arrowDown{
-  transform:rotate(-90deg);
-}
-
-.solutionVisualGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-.solutionVisual{
-  border-radius:26px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.10);
-  padding:14px;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  gap:10px;
-  min-height:360px;
-}
-.solutionVisual h3{
-  margin:0;
-  font-size:clamp(20px,2vw,28px);
-  letter-spacing:-.04em;
-}
-.solutionVisual p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-  font-weight:800;
-}
-.solutionVisual svg{
-  width:100%;
-  height:100%;
-  min-height:220px;
-}
-.drillSpin{
-  transform-origin: 284px 130px;
-  animation: drillSpin 1.2s linear infinite;
-}
-.drillDown{
-  animation: drillDown 2.2s ease-in-out infinite;
-}
-@keyframes drillSpin{
-  from{transform:rotate(0deg)}
-  to{transform:rotate(360deg)}
-}
-@keyframes drillDown{
-  0%,100%{transform:translateY(-8px)}
-  50%{transform:translateY(28px)}
-}
-.holePulse{
-  animation: holePulse 2.2s ease-in-out infinite;
-}
-@keyframes holePulse{
-  0%,35%{opacity:.25; transform:scaleX(.55)}
-  60%,100%{opacity:1; transform:scaleX(1)}
-}
-.pileInsert{
-  animation:pileInsert 2.4s ease-in-out infinite;
-}
-@keyframes pileInsert{
-  0%,25%{transform:translateY(-28px)}
-  70%,100%{transform:translateY(20px)}
-}
-.expandLeft{
-  transform-origin:260px 270px;
-  animation:expandLeft 2.6s ease-in-out infinite;
-}
-.expandRight{
-  transform-origin:340px 270px;
-  animation:expandRight 2.6s ease-in-out infinite;
-}
-@keyframes expandLeft{
-  0%,45%{transform:rotate(0deg)}
-  72%,100%{transform:rotate(-28deg)}
-}
-@keyframes expandRight{
-  0%,45%{transform:rotate(0deg)}
-  72%,100%{transform:rotate(28deg)}
-}
-.supportGlow{
-  animation:supportGlow 2.6s ease-in-out infinite;
-}
-.tc2BaseStem{
-  animation: stemPulse 2.8s ease-in-out infinite;
-}
-.leftFin{
-  transform-origin:300px 228px;
-  animation:leftFin 2.8s ease-in-out infinite;
-}
-.rightFin{
-  transform-origin:300px 228px;
-  animation:rightFin 2.8s ease-in-out infinite;
-}
-.basePlate{
-  animation: basePlatePulse 2.8s ease-in-out infinite;
-}
-@keyframes leftFin{
-  0%,42%{transform:scaleX(.12)}
-  72%,100%{transform:scaleX(1)}
-}
-@keyframes rightFin{
-  0%,42%{transform:scaleX(.12)}
-  72%,100%{transform:scaleX(1)}
-}
-@keyframes basePlatePulse{
-  0%,42%{transform:scaleX(.25)}
-  72%,100%{transform:scaleX(1)}
-}
-@keyframes stemPulse{
-  0%,42%{opacity:.92}
-  72%,100%{opacity:1}
-}
-
-@keyframes supportGlow{
-  0%,50%{opacity:.15}
-  75%,100%{opacity:.9}
-}
-
-
-.bottomMsg{
-  padding:8px 18px 18px;
-  text-align:center;
-}
-.bottomMsg .bubble{
-  display:inline-flex;
   justify-content:center;
-  align-items:center;
-  min-height:60px;
-  width:min(980px,100%);
-  padding:12px 20px;
-  border-radius:999px;
-  background:rgba(5,16,29,.82);
-  border:1px solid rgba(255,255,255,.18);
-  color:#fff;
-  font-size:clamp(16px,1.8vw,22px);
-  font-weight:1000;
-  line-height:1.3;
-  text-align:center;
 }
-.bottomMsg .accent{color:#ffe6ad}
 
-.nav{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:10px;
+.scene-caption{
+  position:absolute;
+  left:50%;bottom:18px;
+  transform:translateX(-50%);
+  width:min(720px,calc(100% - 80px));
+  padding:11px 18px;
+  border-radius:var(--radius-pill);
+  background:rgba(5,16,29,.78);
+  border:1px solid var(--line-strong);
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  z-index:7;
+  color:var(--text-muted);
 }
-.navBtn{
-  min-height:54px;
-  border:none;
-  border-radius:18px;
-  cursor:pointer;
-  background:linear-gradient(135deg,var(--mint),#2d9de0);
-  color:#062035;
+.scene-caption b{color:var(--warn-yellow)}
+.scene-caption .good{color:var(--good-blue)}
+.scene-caption .bad{color:var(--bad-red)}
+.scene-caption .triz{color:var(--principle)}
+
+/* Side panel */
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-width:0;
+}
+.panel{
+  padding:18px 20px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+}
+.panel-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.panel-step{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:var(--grad-action);
+  color:#04222d;
+  display:grid;place-items:center;
+  font-size:15px;
+  font-weight:1000;
+}
+.panel-title{
+  margin:0;
   font-size:17px;
   font-weight:1000;
+  letter-spacing:-.03em;
+  line-height:1.2;
 }
-.navBtn.secondary{
-  color:#fff;
-  background:rgba(255,255,255,.09);
-  border:1px solid rgba(255,255,255,.12);
+.panel-sub{
+  margin:2px 0 0;
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+}
+.panel-body{
+  font-size:14px;
+  color:var(--text);
+  line-height:1.55;
+}
+.panel-body p{margin:0 0 10px}
+.panel-body p:last-child{margin-bottom:0}
+.panel-body .hint{
+  padding:11px 14px;
+  border-radius:var(--radius-m);
+  background:rgba(75,231,202,.08);
+  border:1px solid rgba(75,231,202,.28);
+  font-size:13px;
+  font-weight:700;
+  color:var(--text);
+}
+.panel-body .hint b{color:var(--scan-cyan);font-weight:1000}
+
+/* TC selection cards (Step 2) */
+.tc-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+}
+.tc-card{
+  display:block;
+  width:100%;
+  padding:14px 16px;
+  border:none;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--text);
+  cursor:pointer;
+  text-align:left;
+  transition:all .2s ease;
+  position:relative;
+  overflow:hidden;
+}
+.tc-card:hover{
+  background:rgba(255,255,255,.08);
+  border-color:var(--line-strong);
+  transform:translateX(3px);
+}
+.tc-card .tc-tag{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.18);
+  color:var(--warn-yellow);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.1em;
+  margin-bottom:8px;
+}
+.tc-card .tc-title{
+  font-size:15px;
+  font-weight:1000;
+  line-height:1.3;
+  letter-spacing:-.02em;
+  margin-bottom:4px;
+}
+.tc-card .tc-desc{
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.4;
+}
+.tc-card.selected{
+  background:linear-gradient(135deg,rgba(75,231,202,.18),rgba(94,195,255,.14));
+  border-color:var(--scan-cyan);
+  box-shadow:0 0 0 1px var(--scan-cyan), 0 14px 28px rgba(75,231,202,.22);
+}
+.tc-card.selected .tc-tag{
+  background:var(--grad-action);
+  color:#04222d;
 }
 
-.fadeIn{animation:fadeIn .45s ease both}
-.riseIn{animation:riseIn .45s ease both}
-@keyframes fadeIn{
-  from{opacity:0}
-  to{opacity:1}
+/* Variable choice options (Step 3) */
+.var-section{margin-bottom:14px}
+.var-section:last-child{margin-bottom:0}
+.var-section-title{
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.06em;
+  margin:0 0 8px;
+  text-transform:uppercase;
 }
-@keyframes riseIn{
-  from{opacity:0; transform:translateY(12px)}
-  to{opacity:1; transform:translateY(0)}
+.var-section.good .var-section-title{color:var(--good-blue)}
+.var-section.bad .var-section-title{color:var(--bad-red)}
+.var-section .var-intro{
+  font-size:12px;
+  color:var(--text-muted);
+  margin:0 0 8px;
+  font-weight:700;
+  line-height:1.4;
 }
-.pulse{animation:pulse 1.8s ease-in-out infinite}
-@keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.02)}
+.var-options{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
-.hammerAnim{animation:hammerDrop 1.5s ease-in-out infinite}
-@keyframes droneFloat{0%,100%{transform:translate(380px,205px)}50%{transform:translate(380px,193px)}}
-.droneLift{animation:droneFloat 2.6s ease-in-out infinite}
-.droneIconFloat{filter:drop-shadow(0 0 10px rgba(123,201,255,.25));}
-@keyframes hammerDrop{
-  0%,100%{transform:translateY(-16px)}
-  50%{transform:translateY(18px)}
+.var-opt{
+  display:block;
+  width:100%;
+  padding:11px 13px;
+  border:none;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+  font-family:inherit;
+}
+.var-opt:hover{background:rgba(255,255,255,.08);border-color:var(--line-strong)}
+.var-opt b{display:block;font-size:13px;font-weight:1000;letter-spacing:-.02em;margin-bottom:2px}
+.var-opt small{display:block;color:var(--text-muted);font-size:11px;font-weight:700;line-height:1.35}
+.var-opt.correct{
+  background:rgba(126,231,135,.12);
+  border-color:var(--solve-green);
+  box-shadow:0 0 0 1px var(--solve-green);
+  animation:correctPop .5s cubic-bezier(.2,.8,.3,1.4);
+}
+.var-opt.correct b{color:var(--solve-green)}
+.var-opt.wrong{
+  background:rgba(255,107,142,.12);
+  border-color:var(--bad-red);
+  animation:shake .42s cubic-bezier(.36,.07,.19,.97);
+}
+.var-opt.wrong b{color:var(--bad-red)}
+.var-opt.dim{opacity:.4}
+.var-opt:disabled{cursor:default}
+@keyframes correctPop{
+  0%{transform:scale(1)}
+  40%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+@keyframes shake{
+  10%,90%{transform:translateX(-2px)}
+  20%,80%{transform:translateX(3px)}
+  30%,50%,70%{transform:translateX(-5px)}
+  40%,60%{transform:translateX(5px)}
 }
 
-@media(max-width:1080px){
-  body{padding:8px}
-  .app{min-height:calc(100vh - 16px)}
-  .header{grid-template-columns:1fr}
-  .headerTitle{text-align:left}
-  .stepBar{grid-template-columns:repeat(3,1fr)}
-  .caseTabs{grid-template-columns:1fr}
-  .topBar{grid-template-columns:1fr}
-  .scene.twoCol,.tcRow,.translateGrid,.solutionGrid,.principleGrid,.variableExplain,.principleSelectGrid,.solutionVisualGrid{grid-template-columns:1fr}
-  .visualPanel,.contentPanel{min-height:380px}
-  .nav{grid-template-columns:1fr}
-  .arrowCol{padding:6px 0}
-  .arrowCol .arrow{transform:rotate(90deg)}
+/* Principle picker (Step 5) */
+.principle-pick{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
-@media(max-width:720px){
-  .stepBar{grid-template-columns:1fr 1fr}
+.pp-item{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  padding:11px 13px;
+  border:none;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--text);
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+  font-family:inherit;
+}
+.pp-item:hover{background:rgba(255,255,255,.08)}
+.pp-item .pp-num{
+  flex-shrink:0;
+  width:30px;height:30px;
+  border-radius:8px;
+  background:rgba(255,209,102,.16);
+  color:var(--principle);
+  display:grid;place-items:center;
+  font-size:12px;
+  font-weight:1000;
+}
+.pp-item b{display:block;font-size:13px;font-weight:1000;margin-bottom:2px;letter-spacing:-.02em}
+.pp-item small{display:block;color:var(--text-muted);font-size:11px;font-weight:700;line-height:1.35}
+.pp-item.selected{
+  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,185,70,.12));
+  border-color:var(--principle);
+  box-shadow:0 0 0 1px var(--principle), 0 12px 24px rgba(255,209,102,.22);
+}
+.pp-item.selected .pp-num{
+  background:var(--grad-principle);
+  color:#3b2700;
+  box-shadow:0 0 12px var(--principle-glow);
+}
+.pp-item.representative{
+  position:relative;
+}
+.pp-item.representative::after{
+  content:"대표";
+  position:absolute;
+  top:8px;right:10px;
+  padding:2px 8px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.18);
+  color:var(--principle);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.06em;
+}
+
+/* Solution cards (Step 6) */
+.solution-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.sol-card{
+  padding:13px 15px;
+  border-radius:var(--radius-m);
+  background:linear-gradient(135deg,rgba(126,231,135,.10),rgba(75,231,202,.06));
+  border:1px solid rgba(126,231,135,.36);
+}
+.sol-card .sol-num{
+  display:inline-block;
+  padding:3px 9px;
+  border-radius:var(--radius-pill);
+  background:rgba(126,231,135,.20);
+  color:var(--solve-green);
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.sol-card .sol-title{
+  font-size:14px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  margin-bottom:4px;
+  line-height:1.3;
+}
+.sol-card .sol-desc{
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.45;
+}
+
+/* Bottom nav */
+.nav-bar{
+  display:grid;
+  grid-template-columns:auto auto 1fr auto auto;
+  gap:10px;
+  align-items:center;
+  padding:14px 18px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-soft);
+}
+.nav-btn{
+  padding:13px 18px;
+  border:none;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-weight:1000;
+  font-size:14px;
+  cursor:pointer;
+  transition:all .18s ease;
+  display:flex;align-items:center;gap:8px;
+  white-space:nowrap;
+}
+.nav-btn:hover:not(:disabled){transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:var(--line-strong)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn.primary{
+  background:var(--grad-action);
+  color:#04222d;
+  border-color:transparent;
+}
+.nav-btn.primary:hover:not(:disabled){box-shadow:0 14px 28px rgba(75,231,202,.3)}
+.nav-btn.ghost{
+  background:transparent;
+  color:var(--text-muted);
+}
+.nav-status{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:700;
+}
+
+/* Confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.confetti span{position:absolute;top:-10px;width:8px;height:14px;opacity:0;border-radius:2px}
+
+/* ============================================================
+   STAGE-SPECIFIC STYLES (SVG animations live with each scene)
+   ============================================================ */
+
+/* Step 1 - problem state */
+.s1-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+  width:100%;
+  align-items:center;
+}
+.s1-side{text-align:center}
+.s1-side .label{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:var(--radius-pill);
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.05em;
+  margin-bottom:14px;
+}
+.s1-side.good .label{background:rgba(94,195,255,.16);color:var(--good-blue);border:1px solid rgba(94,195,255,.42)}
+.s1-side.bad .label{background:rgba(255,107,142,.16);color:var(--bad-red);border:1px solid rgba(255,107,142,.42)}
+.s1-divider{
+  width:2px;
+  background:linear-gradient(180deg,transparent,var(--warn-yellow),transparent);
+  height:80%;
+  align-self:center;
+  position:relative;
+}
+.s1-divider::after{
+  content:"⚡";
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:24px;
+  background:var(--bg-deep);
+  padding:6px;
+  border-radius:50%;
+  border:1px solid var(--warn-yellow);
+}
+
+/* Step 3 - variable transformation animation */
+.morph-row{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:20px;
+  align-items:center;
+  max-width:780px;
+  width:100%;
+}
+.morph-card{
+  padding:18px 16px;
+  border-radius:var(--radius-l);
+  text-align:center;
+  font-weight:1000;
+  transition:all .6s cubic-bezier(.2,.8,.3,1.2);
+}
+.morph-card.real{
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line-strong);
+}
+.morph-card.real .mc-label{font-size:11px;color:var(--text-dim);letter-spacing:.06em;margin-bottom:6px;font-weight:900}
+.morph-card.real .mc-text{font-size:18px;letter-spacing:-.02em}
+.morph-card.triz{
+  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,185,70,.12));
+  border:1px solid var(--principle);
+  box-shadow:0 0 0 1px var(--principle), 0 14px 28px rgba(255,209,102,.18);
+  opacity:0;
+  transform:translateX(-20px) scale(.9);
+}
+.morph-card.triz.show{opacity:1;transform:translateX(0) scale(1)}
+.morph-card.triz .mc-label{font-size:11px;color:var(--principle);letter-spacing:.06em;margin-bottom:6px;font-weight:900}
+.morph-card.triz .mc-text{font-size:18px;letter-spacing:-.02em;color:#fff}
+.morph-arrow{
+  font-size:28px;
+  color:var(--warn-yellow);
+  font-weight:1000;
+  position:relative;
+}
+.morph-arrow::before{
+  content:"";
+  position:absolute;
+  inset:-12px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,209,102,.4), transparent 70%);
+  animation:pulseMorph 1.4s ease-in-out infinite;
+}
+@keyframes pulseMorph{
+  0%,100%{transform:scale(.8);opacity:.4}
+  50%{transform:scale(1.2);opacity:1}
+}
+
+.morph-stack{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
+  width:100%;
+  max-width:820px;
+}
+
+/* Step 4 - matrix intersection */
+.matrix-stage{
+  position:relative;
+  width:100%;
+  max-width:760px;
+}
+.mx-row{
+  display:grid;
+  grid-template-columns:1fr 80px 1fr;
+  gap:20px;
+  align-items:center;
+  margin-bottom:24px;
+}
+.mx-var{
+  padding:16px;
+  border-radius:var(--radius-m);
+  text-align:center;
+}
+.mx-var.improve{
+  background:rgba(94,195,255,.14);
+  border:1px solid rgba(94,195,255,.45);
+}
+.mx-var.worsen{
+  background:rgba(255,107,142,.14);
+  border:1px solid rgba(255,107,142,.45);
+}
+.mx-var .mxv-tag{
+  font-size:11px;font-weight:1000;letter-spacing:.08em;margin-bottom:6px;
+}
+.mx-var.improve .mxv-tag{color:var(--good-blue)}
+.mx-var.worsen .mxv-tag{color:var(--bad-red)}
+.mx-var .mxv-name{font-size:17px;font-weight:1000;letter-spacing:-.02em}
+.mx-cross{
+  position:relative;
+  display:grid;place-items:center;
+  height:74px;
+}
+.mx-cross::before{
+  content:"";
+  position:absolute;
+  width:74px;height:74px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,209,102,.4), transparent 70%);
+  animation:crossPulse 1.6s ease-in-out infinite;
+}
+@keyframes crossPulse{
+  0%,100%{transform:scale(.85);opacity:.6}
+  50%{transform:scale(1.15);opacity:1}
+}
+.mx-cross-icon{
+  position:relative;
+  width:54px;height:54px;
+  border-radius:50%;
+  background:var(--grad-principle);
+  display:grid;place-items:center;
+  font-size:22px;
+  font-weight:1000;
+  color:#3b2700;
+  box-shadow:0 0 24px var(--principle-glow);
+  z-index:2;
+}
+
+.principles-pop{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
+}
+.prn-card{
+  padding:14px 12px;
+  border-radius:var(--radius-m);
+  background:linear-gradient(135deg,rgba(255,209,102,.15),rgba(255,185,70,.10));
+  border:1px solid rgba(255,209,102,.45);
+  text-align:center;
+  opacity:0;
+  transform:translateY(20px) scale(.85);
+}
+.prn-card.in{
+  animation:prnPop .55s cubic-bezier(.2,.8,.3,1.4) forwards;
+}
+@keyframes prnPop{
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.prn-num{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.24);
+  color:var(--principle);
+  font-size:11px;
+  font-weight:1000;
+  margin-bottom:6px;
+}
+.prn-name{
+  font-size:15px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  margin-bottom:4px;
+}
+.prn-desc{
+  font-size:11px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.35;
+}
+
+/* Step 5 - general solution */
+.general-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  width:100%;
+  max-width:680px;
+}
+.general-pill{
+  padding:10px 22px;
+  border-radius:var(--radius-pill);
+  background:var(--grad-principle);
+  color:#3b2700;
+  font-size:14px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  box-shadow:0 12px 28px var(--principle-glow);
+}
+.general-text{
+  font-size:24px;
+  font-weight:1000;
+  text-align:center;
+  letter-spacing:-.03em;
+  line-height:1.35;
+  color:var(--text);
+}
+.general-text .accent{
+  color:var(--principle);
+  background:linear-gradient(135deg,var(--principle),var(--gold));
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+}
+.general-reason{
+  padding:14px 18px;
+  border-radius:var(--radius-m);
+  background:rgba(255,209,102,.08);
+  border:1px solid rgba(255,209,102,.32);
+  font-size:14px;
+  color:var(--text);
+  font-weight:600;
+  line-height:1.55;
+  text-align:center;
+}
+
+/* Step 6 - specific solution */
+.solution-stage{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  width:100%;
+}
+.solution-svg{
+  width:min(580px,90%);
+  aspect-ratio:5/3;
+  position:relative;
+}
+.solution-svg svg{width:100%;height:100%;display:block}
+.solution-banner{
+  padding:10px 22px;
+  border-radius:var(--radius-pill);
+  background:var(--grad-solve);
+  color:#04222d;
+  font-size:14px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  box-shadow:0 12px 28px var(--solve-glow);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px){
+  .step-pipe{gap:4px}
+  .sp-node{padding:6px 8px;font-size:11px}
+  .sp-node .sp-name{display:none}
+}
+@media (max-width: 960px){
+  body{font-size:14px}
+  #sim{padding:12px}
+  .top-bar{grid-template-columns:auto 1fr;padding:12px 14px;gap:10px}
+  .step-pipe{order:3;grid-column:1/-1;overflow-x:auto;justify-content:flex-start;padding-bottom:4px}
+  .step-pipe::-webkit-scrollbar{display:none}
+  .case-picker{order:2;justify-self:end}
+  .q-banner{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 14px}
+  .q-formula{align-self:flex-start}
+  .main-body{grid-template-columns:1fr}
+  .scene{min-height:380px}
+  .stage{inset:54px 20px 64px 20px}
+  .stage > svg{max-height:300px}
+  .scene-label{font-size:10px;left:50px}
+  .scene-step-tag{right:50px;font-size:10px}
+  .nav-bar{grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
+  .nav-status{grid-column:1/-1;order:-1}
+  .case-cards{grid-template-columns:1fr 1fr}
+  .pipe-preview{grid-template-columns:repeat(3,1fr);gap:6px}
+  .pipe-node::after{content:""}
+  .general-text{font-size:18px}
+}
+@media (max-width: 500px){
+  .case-cards{grid-template-columns:1fr}
+  .pipe-preview{grid-template-columns:repeat(2,1fr)}
+  .scene-caption{font-size:11px;padding:8px 14px;width:calc(100% - 36px)}
+  .morph-row{grid-template-columns:1fr;gap:10px}
+  .morph-arrow{transform:rotate(90deg)}
+  .mx-row{grid-template-columns:1fr;gap:10px}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="card header">
-    <div class="badge">10주차 2강 · TRIZ</div>
-    <div class="headerTitle">
-      <h1>TRIZ 기술적 모순 해결 6단계</h1>
-      <p>말뚝 공사 사례를 따라가며, 모순이 해결안으로 바뀌는 과정을 확인합니다.</p>
+
+<!-- ============================================================
+     INTRO SCREEN
+     ============================================================ -->
+<section id="intro" class="screen active">
+  <div class="intro-wrap">
+    <div class="intro-eyebrow">TRIZ · 10주차 2강 · 6단계 절차 시뮬레이터</div>
+
+    <h1 class="intro-title">기술적 모순을<br>절차로 풀어가는 워크벤치</h1>
+    <p class="intro-sub">
+      현실 문제를 바로 풀지 말고, <b>좋아지는 것</b>과 <b>나빠지는 것</b>으로 번역한 뒤<br>
+      공학 변수 → 발명원리 → 일반 해결안 → 특정 해결안으로 한 단계씩 따라갑니다.
+    </p>
+
+    <div class="pipe-preview">
+      <div class="pipe-node"><span class="pn-num">1</span><div class="pn-name">기술적 모순<br>정의</div></div>
+      <div class="pipe-node"><span class="pn-num">2</span><div class="pn-name">TC1/TC2<br>선택</div></div>
+      <div class="pipe-node"><span class="pn-num">3</span><div class="pn-name">공학 변수<br>치환</div></div>
+      <div class="pipe-node"><span class="pn-num">4</span><div class="pn-name">발명원리<br>탐색</div></div>
+      <div class="pipe-node"><span class="pn-num">5</span><div class="pn-name">일반<br>해결안</div></div>
+      <div class="pipe-node"><span class="pn-num">6</span><div class="pn-name">특정<br>해결안</div></div>
     </div>
-    <div class="caseBadge" id="caseBadge">사례 1 · 말뚝 공사</div>
-  </header>
 
-  <section class="card caseTabs" id="caseTabs"></section>
+    <p class="case-select-title">▸ 풀어볼 사례를 선택하세요</p>
+    <div class="case-cards" id="caseCards"></div>
 
-  <section class="card stepBar" id="stepBar"></section>
+    <div class="intro-footer">BDU-X · 창의적 문제해결 · 10주차 2강</div>
+  </div>
+</section>
 
-  <main class="card main">
-    <section class="topBar">
-      <div>
-        <div class="small">현재 사례</div>
-        <div class="big" id="caseQuestion">말뚝 공사에서 기술적 모순을 어떻게 해결할까?</div>
+<!-- ============================================================
+     MAIN SIM SCREEN
+     ============================================================ -->
+<section id="sim" class="screen">
+  <div class="app">
+
+    <!-- Top bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">TRIZ 절차 워크벤치</span>
       </div>
-      <div class="miniFormula" id="miniFormula"><span class="good">박기 쉬움</span> ↔ <span class="bad">지탱력 약함</span></div>
-    </section>
-
-    <section class="stage">
-      <div class="stageHead">
-        <h2 id="stageTitle">1단계. 기술적 모순 정의</h2>
-        <p id="stageSubtitle">TC1과 TC2로 문제 구조를 정리합니다.</p>
+      <div class="step-pipe" id="stepPipe"></div>
+      <div class="case-picker">
+        <button class="case-pick-btn" id="casePickBtn" onclick="toggleCaseMenu()">
+          <span id="casePickLabel">사례 1 · 말뚝 공사</span>
+        </button>
+        <div class="case-menu" id="caseMenu"></div>
       </div>
+    </header>
 
-      <div class="stageBody">
-        <!-- STEP 1 -->
-        <div class="scene twoCol active" id="scene1">
-          <div class="visualPanel" id="caseVisualPanel"></div>
-          <div class="contentPanel">
-            <div class="tcRow" id="definitionTcRow"></div>
-            <div class="infoBlock">
-              <h3>핵심 포인트</h3>
-              <p>기술적 모순은 좋은 점 하나를 얻는 대신 다른 점 하나가 나빠지는 상황입니다. 먼저 <strong>TC1과 TC2</strong>라는 두 개의 반대 문장으로 문제를 정의합니다.</p>
+    <!-- Question banner -->
+    <div class="q-banner">
+      <span class="q-tag">현재 사례</span>
+      <h2 class="q-text" id="qText">말뚝 공사에서 기술적 모순을 어떻게 해결할까?</h2>
+      <span class="q-formula" id="qFormula"></span>
+    </div>
+
+    <!-- Main body -->
+    <div class="main-body">
+      <!-- Scene (left, larger) -->
+      <section class="scene" id="scene">
+        <div class="scene-corner-tr"></div>
+        <div class="scene-corner-bl"></div>
+        <div class="scene-label" id="sceneLabel">단계 진행 중</div>
+        <div class="scene-step-tag" id="sceneStepTag">STEP 1/6</div>
+        <div class="stage" id="stage"></div>
+        <div class="scene-caption" id="sceneCaption"></div>
+      </section>
+
+      <!-- Side panel (right) -->
+      <aside class="side">
+        <div class="panel" id="sidePanel">
+          <div class="panel-head">
+            <div class="panel-step" id="panelStepNum">1</div>
+            <div>
+              <h3 class="panel-title" id="panelTitle">기술적 모순 정의</h3>
+              <p class="panel-sub" id="panelSub">좋아지는 점과 나빠지는 점</p>
             </div>
           </div>
+          <div class="panel-body" id="panelBody"></div>
         </div>
+      </aside>
+    </div>
 
-        <!-- STEP 2 -->
-        <div class="scene oneCol" id="scene2">
-          <div class="contentPanel">
-            <div class="tcRow" id="selectRow"></div>
-            <div class="infoBlock fadeIn">
-              <h3>이번 단계의 의미</h3>
-              <p>여기서는 정답을 고르는 것이 아니라, 어떤 모순을 먼저 풀지 선택합니다. 선택에 따라 <strong>공학 변수, 발명원리, 해결안</strong>이 달라집니다.</p>
-              <div class="actionRow" id="tcActionButtons"></div>
-            </div>
-          </div>
-        </div>
+    <!-- Nav -->
+    <footer class="nav-bar">
+      <button class="nav-btn" id="prevBtn" onclick="prevStep()">◀ 이전</button>
+      <button class="nav-btn ghost" onclick="restart()">처음으로</button>
+      <div class="nav-status"><span id="navStatus">Step 1 / 6</span></div>
+      <button class="nav-btn ghost" id="showAnswerBtn" onclick="showAnswer()">정답 보기</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="nextStep()">다음 ▶</button>
+    </footer>
 
-        <!-- STEP 3 -->
-        <div class="scene oneCol" id="scene3">
-          <div class="contentPanel" id="variableSceneContent"></div>
-        </div>
-
-        <!-- STEP 4 -->
-        <div class="scene oneCol" id="scene4">
-          <div class="contentPanel">
-            <div class="intersectionWrap">
-              <div class="intersectionArena">
-                <div class="crossGlow on" id="crossGlow"></div>
-                <div class="varCard good start" id="improveVar">
-                  <div class="small">개선 변수</div>
-                  <div class="big" id="improveVarText">10번 힘</div>
-                </div>
-                <div class="varCard bad start" id="worseVar">
-                  <div class="small">악화 변수</div>
-                  <div class="big" id="worseVarText">13번 물체의 안정성</div>
-                </div>
-                <div class="intersectionBox">
-                  <div class="label">교차점</div>
-                </div>
-              </div>
-
-              <div class="principleGrid" id="principleGrid"></div>
-
-              <div class="infoBlock">
-                <h3 id="principleTitle">35번 속성 변화</h3>
-                <p id="principleDesc">재료·형상·상태와 같은 속성을 바꾸어 문제를 해결하는 방향입니다.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 5 -->
-        <div class="scene oneCol" id="scene5">
-          <div class="contentPanel" id="generalSceneContent"></div>
-        </div>
-
-        <!-- STEP 6 -->
-        <div class="scene oneCol" id="scene6">
-          <div class="contentPanel" id="solutionSceneContent"></div>
-        </div>
-
-      </div>
-
-      <div class="bottomMsg">
-        <div class="bubble" id="bubbleText">1단계: 먼저 <span class="accent">TC1·TC2</span>로 모순을 문장화합니다.</div>
-      </div>
-    </section>
-
-    <section class="nav">
-      <button class="navBtn secondary" onclick="prevStep()">이전</button>
-      <button class="navBtn secondary" onclick="resetCurrent()">현재 단계 초기화</button>
-      <button class="navBtn" onclick="nextStep()">다음</button>
-    </section>
-  </main>
-</div>
+  </div>
+  <div class="confetti" id="confetti"></div>
+</section>
 
 <script>
-const steps = [
-  {
-    title: "1단계. 기술적 모순 정의",
-    subtitle: "좋아지는 점과 나빠지는 점을 함께 담아 TC1과 TC2로 정리합니다.",
-    bubble: '1단계: 먼저 <span class="accent">좋아지는 점 ↔ 나빠지는 점</span>을 모순 문장으로 정리합니다.'
-  },
-  {
-    title: "2단계. 기술적 모순 선택",
-    subtitle: "TC1과 TC2 중 이번에 먼저 풀 핵심 모순을 선택합니다.",
-    bubble: '2단계: 이번에 먼저 풀 <span class="accent">핵심 모순</span>을 선택합니다.'
-  },
-  {
-    title: "3단계. 공학 변수 선택",
-    subtitle: "일상적인 표현을 TRIZ의 39가지 공학 변수 중 가장 가까운 이름표로 바꿉니다.",
-    bubble: '3단계: 문제 표현을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.'
-  },
-  {
-    title: "4단계. 발명원리 탐색",
-    subtitle: "두 공학 변수가 만나는 지점에서 발명원리 후보를 확인합니다.",
-    bubble: '4단계: 두 변수가 만나는 지점에서 <span class="accent">발명원리 후보</span>를 확인합니다.'
-  },
-  {
-    title: "5단계. 일반 해결안 도출",
-    subtitle: "발명원리 이름을 현재 문제에 맞는 일반 해결 방향으로 해석합니다.",
-    bubble: '5단계: 발명원리를 현재 문제에 맞는 <span class="accent">일반 해결안</span>으로 해석합니다.'
-  },
-  {
-    title: "6단계. 특정 해결안 도출",
-    subtitle: "일반 해결안을 현장에서 실행 가능한 구체 아이디어로 바꿉니다.",
-    bubble: '6단계: 이제 실제로 구현할 수 있는 <span class="accent">특정 해결안</span>으로 완성합니다.'
-  }
+/* ============================================================
+   STEPS DEFINITION
+   ============================================================ */
+const STEPS = [
+  { num:1, title:"기술적 모순 정의", sub:"좋아지는 점 ↔ 나빠지는 점", tag:"PROBLEM" },
+  { num:2, title:"TC1 / TC2 선택", sub:"풀고 싶은 방향을 정합니다", tag:"CHOOSE TC" },
+  { num:3, title:"공학 변수 치환", sub:"현실 언어 → TRIZ 39 변수", tag:"TRANSLATE" },
+  { num:4, title:"발명원리 탐색", sub:"두 변수의 교차점", tag:"MATRIX" },
+  { num:5, title:"일반 해결안 도출", sub:"발명원리 → 해결 방향", tag:"GENERAL" },
+  { num:6, title:"특정 해결안 도출", sub:"현장에서 쓸 수 있는 구체안", tag:"SPECIFIC" }
 ];
 
-const principleInfo = {
-  1: {
-    title: "1번 분할",
-    short: "분할",
-    desc: "대상을 여러 부분으로 나누어 각각의 역할을 다르게 만드는 원리입니다."
-  },
-  2: {
-    title: "2번 추출",
-    short: "추출",
-    desc: "필요한 부분만 따로 분리하거나, 불필요한 부분을 덜어내어 문제를 줄이는 원리입니다."
-  },
-  7: {
-    title: "7번 포개기",
-    short: "포개기",
-    desc: "하나의 물체 안에 다른 물체를 넣거나, 접고 넣는 방식으로 공간 문제를 줄이는 원리입니다."
-  },
-  10: {
-    title: "10번 사전 조치",
-    short: "사전 조치",
-    desc: "문제가 생기기 전에 미리 준비해, 본 작업이 더 쉽게 되도록 만드는 원리입니다."
-  },
-  15: {
-    title: "15번 동적 특성",
-    short: "동적 특성",
-    desc: "상황에 따라 모양, 상태, 작동 방식을 바꿀 수 있게 만드는 원리입니다."
-  },
-  16: {
-    title: "16번 부분적 또는 과잉 조치",
-    short: "부분/과잉 조치",
-    desc: "필요한 만큼만 작용하거나, 때로는 조금 넘치게 작용시켜 문제를 줄이는 원리입니다."
-  },
-  17: {
-    title: "17번 차원 변경",
-    short: "차원 변경",
-    desc: "평면적인 해결에서 벗어나 다른 방향, 다른 차원, 다른 공간을 활용하는 원리입니다."
-  },
-  19: {
-    title: "19번 주기적 작용",
-    short: "주기적 작용",
-    desc: "계속 같은 방식으로 작동시키지 않고, 필요한 순간이나 주기에 맞춰 작동하게 하는 원리입니다."
-  },
-  21: {
-    title: "21번 급속 통과",
-    short: "급속 통과",
-    desc: "문제가 생기기 쉬운 구간을 빠르게 지나가도록 설계하는 원리입니다."
-  },
-  23: {
-    title: "23번 피드백",
-    short: "피드백",
-    desc: "상태를 계속 확인하고, 그 결과에 따라 작동 방식을 조절하는 원리입니다."
-  },
-  24: {
-    title: "24번 매개체",
-    short: "매개체",
-    desc: "중간 장치나 보조 수단을 활용해 직접 충돌하는 요구를 완화하는 원리입니다."
-  },
-  25: {
-    title: "25번 셀프서비스",
-    short: "셀프서비스",
-    desc: "대상이 스스로 필요한 기능을 수행하거나, 사용자 부담을 줄이도록 만드는 원리입니다."
-  },
-  35: {
-    title: "35번 속성 변화",
-    short: "속성 변화",
-    desc: "모양, 상태, 재료의 성질을 바꾸어 같은 대상이 다른 방식으로 작동하게 만드는 원리입니다."
-  }
+const PRINCIPLE_INFO = {
+  1:{name:"분할",desc:"대상을 부분으로 나누어 각각 다른 역할을 부여"},
+  2:{name:"추출·분리",desc:"필요한 부분만 분리하거나 불필요한 부분 제거"},
+  4:{name:"비대칭",desc:"대칭을 비대칭으로 바꿔 다른 기능을 부여"},
+  5:{name:"통합·결합",desc:"비슷한 작업을 모아 동시에 처리"},
+  7:{name:"포개기",desc:"하나의 물체 안에 다른 물체를 넣음"},
+  8:{name:"평형추",desc:"무게나 힘을 다른 물체로 상쇄"},
+  10:{name:"사전 조치",desc:"문제 발생 전 미리 준비해 작업을 쉽게 만듦"},
+  12:{name:"높이 맞추기",desc:"위치를 바꿀 필요 없이 같은 높이에서 처리"},
+  13:{name:"반대로 하기",desc:"움직임·작용을 반대 방향으로 적용"},
+  14:{name:"곡선화",desc:"직선을 곡선·구면으로, 회전 운동 이용"},
+  15:{name:"역동성",desc:"상황에 따라 모양·상태·작동 방식을 바꿈"},
+  16:{name:"과부족 조치",desc:"필요한 만큼 또는 약간 넘치게 작용"},
+  17:{name:"차원 전환",desc:"다른 방향·차원·공간을 활용"},
+  18:{name:"기계적 진동",desc:"진동·공명을 이용해 작용 방식 개선"},
+  19:{name:"주기적 작용",desc:"필요한 순간이나 주기에 맞춰 작동"},
+  21:{name:"고속 처리",desc:"문제 구간을 빠르게 지나가도록 설계"},
+  23:{name:"피드백",desc:"상태를 확인하고 결과에 따라 작동 조절"},
+  24:{name:"매개체",desc:"중간 장치나 보조 수단으로 충돌 완화"},
+  25:{name:"셀프서비스",desc:"대상이 스스로 기능을 수행"},
+  27:{name:"저렴한 일회용",desc:"비싼 것 대신 짧게 쓰는 저렴한 대안 사용"},
+  28:{name:"기계 시스템 대체",desc:"기계적 작용을 전기·자기·광학 등으로 바꿈"},
+  30:{name:"유연한 막",desc:"얇고 유연한 막·층을 이용"},
+  31:{name:"다공질 재료",desc:"구멍이나 공극이 있는 재료 활용"},
+  33:{name:"동질성",desc:"접촉·작용하는 대상을 같은 재료로 통일"},
+  34:{name:"폐기·재생",desc:"기능을 다한 부분을 버리거나 다시 만듦"},
+  35:{name:"속성 변환",desc:"모양·상태·재료의 성질을 바꿈"},
+  40:{name:"복합재료",desc:"동질 재료 대신 복합 재료 사용"}
 };
 
-const caseData = {
-  pile: {
-    tab: "말뚝 공사",
-    subtitle: "박기 쉬움 ↔ 지탱력",
-    badge: "사례 1 · 말뚝 공사",
-    question: "말뚝 공사에서 기술적 모순을 어떻게 해결할까?",
-    visual: "pile",
-    tc: {
-      TC1: {
-        label: "TC1",
-        title: "끝이 뾰족하면<br>땅에 잘 들어갑니다",
-        desc: "하지만 박힌 뒤에는 버티는 힘이 약해질 수 있습니다."
-      },
-      TC2: {
-        label: "TC2",
-        title: "끝이 뭉툭하면<br>박힌 뒤 잘 버팁니다",
-        desc: "하지만 땅에 넣기가 어려워집니다."
-      }
+/* ============================================================
+   CASE DATA (4 cases × 2 TC paths)
+   Matrix values verified against triz40.com official matrix
+   ============================================================ */
+const CASES = {
+  pile:{
+    label:"말뚝 공사", icon:"🪵", num:1, formula:["박기 쉬움","버티는 힘"],
+    question:"말뚝 공사에서 기술적 모순을 어떻게 해결할까?",
+    s1:{good:"끝이 뾰족함 → 박기 쉬움", bad:"끝이 뭉툭함 → 버티는 힘 좋음", goodLabel:"잘 박힘", badLabel:"잘 버팀", visual:"pile"},
+    tc:{
+      TC1:{title:"끝이 뾰족하면<br>땅에 잘 들어갑니다", desc:"하지만 박힌 뒤 버티는 힘이 약해질 수 있습니다"},
+      TC2:{title:"끝이 뭉툭하면<br>박힌 뒤 잘 버팁니다", desc:"하지만 땅에 넣기가 어려워집니다"}
     },
-    paths: {
-      TC1: {
-        pathLabel: "TC1 경로 · 박기 쉬움 우선",
-        miniFormula: '<span class="good">박기 쉬움</span> ↔ <span class="bad">버티는 힘 약함</span>',
-        choice: { improve: "박기 쉬움", worsen: "버티는 힘 약함" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC1에서 얻고 싶은 장점은 “말뚝이 땅에 잘 들어감”입니다.",
-          improveOptions: [
-            ["10번 힘", "말뚝을 밀어 넣는 힘, 박아 넣는 작용과 직접 연결됩니다.", true],
-            ["33번 사용 용이성", "작업 편의성으로도 볼 수 있지만, 이번 사례의 핵심은 물리적 작용입니다.", false],
-            ["39번 생산성", "공정 효율 관점에서는 가능하지만, 말뚝 자체의 모순을 설명하기에는 넓습니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC1의 단점은 “박힌 뒤 버티는 힘이 약해짐”입니다.",
-          worsenOptions: [
-            ["13번 물체의 안정성", "박힌 뒤 말뚝이 흔들리지 않고 버티는 성질과 연결됩니다.", true],
-            ["14번 강도", "부러짐이나 재료 강도 문제라면 가능하지만, 여기서는 지지 안정성이 더 핵심입니다.", false],
-            ["27번 신뢰성", "장기 성능 관점에서는 가능하지만, 이번 사례의 직접 표현은 안정성입니다.", false]
-          ],
-          summary: "박기 쉬움은 말뚝을 밀어 넣는 힘과 관련되므로 10번 힘으로 봅니다. 버티는 힘 약함은 박힌 뒤 흔들리지 않고 버티는 성질과 관련되므로 13번 물체의 안정성으로 봅니다."
-        },
-        matrix: { improve: "10번 힘", worsen: "13번 물체의 안정성", candidates: [35,10,21], summary: "10번 힘 × 13번 안정성 → 35·10·21" },
-        representative: 10,
-        generalReason: "말뚝을 박기 전에 미리 들어가기 쉬운 조건을 만들면, 큰 충격을 줄이면서도 지탱력을 확보할 수 있기 때문입니다.",
-        general: "말뚝을 박기 전에 미리 들어가기 쉬운 조건을 만든다",
-        solutions: [
-          { title: "먼저 작은 구멍을 뚫기", desc: "말뚝을 박기 전에 작은 구멍을 만들어 두면, 큰 충격 없이 더 쉽게 박을 수 있습니다.", svg: "drill" },
-          { title: "박힌 뒤 끝부분이 벌어지게 하기", desc: "박을 때는 좁게 들어가고, 박힌 뒤에는 끝부분이 벌어져 더 단단히 버티게 합니다.", svg: "expand" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">박기 쉬움</span>을 우선하는 TC1 경로를 선택했습니다.',
-          2: '3단계: 문제 표현을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">10번 힘 × 13번 안정성</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC1 경로에서는 <span class="accent">10번 사전 조치</span>를 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">사전 조치 기반 특정 해결안</span>으로 완성합니다.'
-        }
+    paths:{
+      TC1:{
+        improve:{label:"박기 쉬움", options:[
+          {name:"10번 힘",correct:true,desc:"말뚝을 밀어 넣는 힘, 박아 넣는 작용과 직접 연결됩니다"},
+          {name:"33번 사용 용이성",correct:false,desc:"작업 편의성이지만, 핵심은 물리적 작용입니다"},
+          {name:"39번 생산성",correct:false,desc:"공정 효율이지만, 말뚝 자체의 모순엔 넓습니다"}
+        ]},
+        worsen:{label:"버티는 힘 약함", options:[
+          {name:"13번 물체의 안정성",correct:true,desc:"박힌 뒤 흔들리지 않고 버티는 성질과 연결됩니다"},
+          {name:"14번 강도",correct:false,desc:"부러짐과 관련되지만, 여기서는 지지 안정성이 핵심"},
+          {name:"27번 신뢰성",correct:false,desc:"장기 성능 관점이지만, 직접 표현은 안정성입니다"}
+        ]},
+        // 10번 힘 × 13번 안정성 = 35, 10, 21 (triz40 공식)
+        principles:[35,10,21],
+        rep:10,
+        general:"말뚝을 박기 전에 미리 들어가기 쉬운 조건을 만든다",
+        reason:"말뚝을 박기 전에 미리 조건을 만들면, 큰 충격을 줄이면서도 지탱력을 확보할 수 있습니다",
+        solutions:[
+          {title:"먼저 작은 구멍을 뚫기",desc:"말뚝 박기 전 작은 구멍을 만들어 두면 큰 충격 없이 박을 수 있습니다",svg:"pilePreHole"},
+          {title:"박힌 뒤 끝부분이 벌어지게 하기",desc:"박을 때는 좁게 들어가고 박힌 뒤 끝이 벌어져 단단히 버팁니다",svg:"pileExpand"}
+        ]
       },
-      TC2: {
-        pathLabel: "TC2 경로 · 지탱력 우선",
-        miniFormula: '<span class="good">지탱력 강함</span> ↔ <span class="bad">박기 어려움</span>',
-        choice: { improve: "지탱력 강함", worsen: "박기 어려움" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC2에서 얻고 싶은 장점은 “말뚝이 박힌 뒤 잘 버팀”입니다.",
-          improveOptions: [
-            ["13번 물체의 안정성", "박힌 뒤 말뚝이 안정적으로 버티는 성질과 직접 연결됩니다.", true],
-            ["14번 강도", "말뚝이 부러지지 않는 성질과 관련되지만, 여기서는 지지 안정성이 더 핵심입니다.", false],
-            ["27번 신뢰성", "장기적으로 기능을 유지하는 관점에서는 가능하지만, 직접 표현은 안정성입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC2의 단점은 “땅에 넣기가 어려움”입니다.",
-          worsenOptions: [
-            ["10번 힘", "뭉툭한 말뚝을 박기 위해 더 큰 힘이 필요하다는 점과 연결됩니다.", true],
-            ["33번 사용 용이성", "작업자가 느끼는 편의성으로도 볼 수 있지만, 여기서는 필요한 물리적 힘이 핵심입니다.", false],
-            ["39번 생산성", "작업 시간이 늘어나는 관점에서는 가능하지만, 원인 표현으로는 넓습니다.", false]
-          ],
-          summary: "지탱력 강함은 박힌 뒤 안정적으로 버티는 성질이므로 13번 물체의 안정성으로 봅니다. 박기 어려움은 더 큰 힘이 필요하다는 뜻이므로 10번 힘으로 봅니다."
-        },
-        matrix: { improve: "13번 물체의 안정성", worsen: "10번 힘", candidates: [10,35,21,16], summary: "13번 안정성 × 10번 힘 → 10·35·21·16" },
-        representative: 35,
-        generalReason: "박을 때와 박힌 뒤의 모양이나 상태를 다르게 만들면, 쉽게 들어가는 성질과 단단히 버티는 성질을 함께 살릴 수 있기 때문입니다.",
-        general: "박을 때와 박힌 뒤의 모양이 달라지게 만든다",
-        solutions: [
-          { title: "들어갈 때는 좁게, 들어간 뒤에는 펼쳐지게 하기", desc: "말뚝이 들어갈 때는 좁은 모양이라 쉽게 들어가고, 땅속에 들어간 뒤에는 펼쳐져 지탱력을 높입니다.", svg: "foldExpand" },
-          { title: "처음엔 작게, 나중엔 넓게 버티게 하기", desc: "처음에는 작은 형태로 쉽게 들어가고, 설치가 끝난 뒤에는 아래쪽 지지부가 넓어져 더 단단히 버팁니다.", svg: "sleeve" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">지탱력</span>을 우선하는 TC2 경로를 선택했습니다.',
-          2: '3단계: TC2도 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">13번 안정성 × 10번 힘</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC2 경로에서는 <span class="accent">35번 속성 변화</span>를 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">속성 변화 기반 특정 해결안</span>으로 완성합니다.'
-        }
+      TC2:{
+        improve:{label:"버티는 힘 강함", options:[
+          {name:"13번 물체의 안정성",correct:true,desc:"박힌 뒤 안정적으로 버티는 성질과 직접 연결"},
+          {name:"14번 강도",correct:false,desc:"부러짐 문제라면 가능, 여기선 지지 안정성이 핵심"},
+          {name:"27번 신뢰성",correct:false,desc:"장기 성능 관점, 직접 표현은 안정성"}
+        ]},
+        worsen:{label:"박기 어려움", options:[
+          {name:"10번 힘",correct:true,desc:"뭉툭한 말뚝을 박기 위해 더 큰 힘이 필요한 점과 연결"},
+          {name:"33번 사용 용이성",correct:false,desc:"작업자 편의성이지만, 핵심은 필요한 물리적 힘"},
+          {name:"39번 생산성",correct:false,desc:"작업 시간이지만, 원인 표현으론 넓습니다"}
+        ]},
+        // 13번 안정성 × 10번 힘 = 10, 35, 21, 16 (JSON 매트릭스 기준)
+        principles:[10,35,21,16],
+        rep:35,
+        general:"박을 때와 박힌 뒤의 성질이 달라지게 만든다",
+        reason:"박을 때는 쉽게 들어가도록 성질을 조정하고, 박힌 뒤에는 지지력이 커지도록 바꾸면 두 요구를 함께 살릴 수 있습니다",
+        solutions:[
+          {title:"박을 때 쉽게 들어가는 성질 부여",desc:"선단의 형상이나 표면 성질을 조정해 큰 힘 없이 들어가도록 만듭니다",svg:"pileExpand"},
+          {title:"박힌 뒤 지지력이 커지는 구조",desc:"땅속에 들어간 뒤 아래쪽 지지부가 넓어지거나 마찰 성질이 커져 단단히 버팁니다",svg:"pileSleeve"}
+        ]
       }
     }
   },
-  drone: {
-    tab: "드론 배터리",
-    subtitle: "비행시간 ↔ 무게·기동성",
-    badge: "사례 2 · 드론 배터리",
-    question: "드론의 비행시간과 무게 문제를 어떻게 해결할까?",
-    visual: "drone",
-    tc: {
-      TC1: {
-        label: "TC1",
-        title: "배터리를 크게 하면<br>오래 날 수 있습니다",
-        desc: "하지만 무거워져 기동성이 떨어질 수 있습니다."
-      },
-      TC2: {
-        label: "TC2",
-        title: "배터리를 작게 하면<br>가볍고 민첩합니다",
-        desc: "하지만 비행시간이 짧아질 수 있습니다."
-      }
+
+  drone:{
+    label:"드론 배터리", icon:"🚁", num:2, formula:["비행시간","무게·기동성"],
+    question:"드론의 비행시간과 무게 문제를 어떻게 해결할까?",
+    s1:{good:"배터리 키움 → 오래 비행", bad:"무거워짐 → 기동성 저하", goodLabel:"오래 비행", badLabel:"가볍고 민첩", visual:"drone"},
+    tc:{
+      TC1:{title:"배터리를 크게 하면<br>오래 날 수 있습니다", desc:"하지만 무거워져 기동성이 떨어집니다"},
+      TC2:{title:"배터리를 작게 하면<br>가볍고 민첩합니다", desc:"하지만 비행시간이 짧아집니다"}
     },
-    paths: {
-      TC1: {
-        pathLabel: "TC1 경로 · 비행시간 우선",
-        miniFormula: '<span class="good">비행시간 증가</span> ↔ <span class="bad">무게 증가</span>',
-        choice: { improve: "비행시간 증가", worsen: "무게 증가" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC1에서 얻고 싶은 장점은 “더 오래 날 수 있음”입니다.",
-          improveOptions: [
-            ["15번 작동 시간", "드론이 한 번 충전으로 작동하는 시간과 직접 연결됩니다.", true],
-            ["39번 생산성", "임무 수행량 관점에서는 가능하지만, 여기서는 비행 지속시간이 더 직접적입니다.", false],
-            ["27번 신뢰성", "안정적 임무 수행과 관련되지만, 비행시간 자체와는 거리가 있습니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC1의 단점은 “배터리가 커져 무거워짐”입니다.",
-          worsenOptions: [
-            ["1번 이동 물체의 무게", "드론은 움직이는 물체이므로 배터리 무게 증가와 직접 연결됩니다.", true],
-            ["2번 정지 물체의 무게", "정지 구조물이라면 가능하지만, 드론은 비행 중 이동하는 물체입니다.", false],
-            ["33번 사용 용이성", "다루기 어려워지는 문제로도 볼 수 있지만, 핵심은 무게입니다.", false]
-          ],
-          summary: "비행시간 증가는 15번 작동 시간으로, 무게 증가는 1번 이동 물체의 무게로 봅니다."
-        },
-        matrix: { improve: "15번 작동 시간", worsen: "1번 이동 물체의 무게", candidates: [35,10,2], summary: "15번 작동 시간 × 1번 이동 물체 무게 → 후보 원리" },
-        representative: 35,
-        generalReason: "배터리의 성능, 재료, 구조 같은 속성을 바꾸면 더 오래 날면서 무게 부담을 줄일 수 있기 때문입니다.",
-        general: "배터리와 기체의 속성을 바꾸어 무게 대비 성능을 높인다",
-        solutions: [
-          { title: "고효율·경량 배터리 사용", desc: "같은 무게에서도 더 많은 에너지를 저장하는 배터리를 사용해 비행시간을 늘립니다.", svg: "droneBattery" },
-          { title: "기체를 가볍게 설계하기", desc: "프레임과 부품을 가볍게 만들어 배터리가 커져도 전체 무게 증가를 줄입니다.", svg: "droneLight" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">비행시간</span>을 우선하는 TC1 경로를 선택했습니다.',
-          2: '3단계: 비행시간과 무게를 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">작동 시간 × 이동 물체 무게</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC1 경로에서는 <span class="accent">35번 속성 변화</span>를 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">무게 대비 성능을 높이는 해결안</span>으로 완성합니다.'
-        }
+    paths:{
+      TC1:{
+        improve:{label:"비행시간 증가", options:[
+          {name:"15번 작동 시간(이동)",correct:true,desc:"한 번 충전으로 작동하는 시간과 직접 연결"},
+          {name:"39번 생산성",correct:false,desc:"임무 수행량이지만, 비행 지속시간이 더 직접적"},
+          {name:"27번 신뢰성",correct:false,desc:"안정적 임무 수행과 관련되지만 비행시간과 거리 있음"}
+        ]},
+        worsen:{label:"무게 증가", options:[
+          {name:"1번 이동 물체의 무게",correct:true,desc:"드론은 움직이는 물체이므로 배터리 무게 증가와 직접 연결"},
+          {name:"2번 정지 물체의 무게",correct:false,desc:"정지 구조물이라면 가능, 드론은 비행 중 이동"},
+          {name:"33번 사용 용이성",correct:false,desc:"다루기 어려움이지만, 핵심은 무게"}
+        ]},
+        // 15번 작동시간(이동) × 1번 이동 무게 = 19, 5, 34, 31 (triz40 공식)
+        principles:[19,5,34,31],
+        rep:19,
+        general:"필요한 순간에만 강하게 작동하도록 주기적으로 운영한다",
+        reason:"항상 같은 출력으로 비행하지 않고 필요한 순간에 맞춰 작동하면, 큰 배터리 없이도 비행시간을 늘릴 수 있습니다",
+        solutions:[
+          {title:"고효율 경량 배터리 사용",desc:"같은 무게에서 더 많은 에너지를 저장하는 배터리로 비행시간을 늘립니다",svg:"droneBattery"},
+          {title:"기체를 가볍게 설계",desc:"프레임을 가볍게 만들어 배터리가 커져도 전체 무게 증가를 줄입니다",svg:"droneLight"}
+        ]
       },
-      TC2: {
-        pathLabel: "TC2 경로 · 기동성 우선",
-        miniFormula: '<span class="good">가벼움·기동성</span> ↔ <span class="bad">비행시간 짧음</span>',
-        choice: { improve: "가벼움·기동성", worsen: "비행시간 짧음" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC2에서 얻고 싶은 장점은 “가볍고 민첩하게 움직임”입니다.",
-          improveOptions: [
-            ["1번 이동 물체의 무게", "드론이 움직이는 물체이므로 가벼움과 직접 연결됩니다.", true],
-            ["9번 속도", "민첩성 관점에서는 가능하지만, 핵심은 무게 감소입니다.", false],
-            ["33번 사용 용이성", "조작이 쉬운 문제로도 볼 수 있지만, 물리적 원인은 가벼움입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC2의 단점은 “배터리가 작아져 비행시간이 짧아짐”입니다.",
-          worsenOptions: [
-            ["15번 작동 시간", "한 번 충전으로 작동하는 시간이 줄어드는 문제와 직접 연결됩니다.", true],
-            ["27번 신뢰성", "임무 안정성 저하와 관련되지만, 직접 표현은 작동 시간입니다.", false],
-            ["39번 생산성", "수행량 저하로 볼 수 있지만, 원인 표현은 비행시간입니다.", false]
-          ],
-          summary: "가벼움은 1번 이동 물체의 무게로, 비행시간 짧음은 15번 작동 시간으로 봅니다."
-        },
-        matrix: { improve: "1번 이동 물체의 무게", worsen: "15번 작동 시간", candidates: [10,35,19], summary: "1번 이동 물체 무게 × 15번 작동 시간 → 후보 원리" },
-        representative: 10,
-        generalReason: "비행 전에 에너지 사용 조건을 미리 준비하면 작은 배터리로도 더 효율적으로 비행할 수 있기 때문입니다.",
-        general: "비행 전에 에너지 낭비를 줄이는 조건을 미리 만든다",
-        solutions: [
-          { title: "비행 경로를 미리 최적화하기", desc: "불필요한 이동을 줄여 작은 배터리로도 더 오래 임무를 수행합니다.", svg: "droneRoute" },
-          { title: "배터리 교체·보조팩 구조", desc: "가볍게 출발하되 필요할 때 빠르게 교체하거나 보조 전원을 연결합니다.", svg: "droneSwap" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">가벼움과 기동성</span>을 우선하는 TC2 경로를 선택했습니다.',
-          2: '3단계: 가벼움과 작동 시간을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">이동 물체 무게 × 작동 시간</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC2 경로에서는 <span class="accent">10번 사전 조치</span>를 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">에너지 낭비를 줄이는 해결안</span>으로 완성합니다.'
-        }
+      TC2:{
+        improve:{label:"가벼움·기동성", options:[
+          {name:"1번 이동 물체의 무게",correct:true,desc:"드론이 움직이는 물체이므로 가벼움과 직접 연결"},
+          {name:"9번 속도",correct:false,desc:"민첩성이지만, 핵심은 무게 감소"},
+          {name:"33번 사용 용이성",correct:false,desc:"조작 편함이지만, 물리적 원인은 가벼움"}
+        ]},
+        worsen:{label:"비행시간 짧음", options:[
+          {name:"15번 작동 시간(이동)",correct:true,desc:"한 번 충전으로 작동하는 시간이 줄어드는 문제"},
+          {name:"27번 신뢰성",correct:false,desc:"임무 안정성이지만 직접 표현은 작동 시간"},
+          {name:"39번 생산성",correct:false,desc:"수행량 저하이지만 원인 표현은 비행시간"}
+        ]},
+        // 1번 이동 무게 × 15번 작동시간 = 5, 34, 31, 35 (JSON 매트릭스 기준)
+        principles:[5,34,31,35],
+        rep:5,
+        general:"작은 배터리 하나에만 의존하지 않고 에너지 저장·공급 방식을 결합한다",
+        reason:"가벼움을 유지하면서도 필요한 에너지를 확보하려면 배터리, 기체, 교체 방식 등 여러 요소를 함께 설계해야 합니다",
+        solutions:[
+          {title:"경량 보조 전원 결합",desc:"작은 기본 배터리에 필요한 순간만 쓰는 보조 전원이나 교체 구조를 결합합니다",svg:"droneSwap"},
+          {title:"가벼운 기체·에너지 효율 재료 적용",desc:"프레임과 배터리 주변 구조의 재료 성질을 바꿔 같은 에너지로 더 오래 날게 합니다",svg:"droneLight"}
+        ]
       }
     }
   },
-  smartphone: {
-    tab: "스마트폰 화면",
-    subtitle: "큰 화면 ↔ 휴대성",
-    badge: "사례 3 · 스마트폰 화면",
-    question: "스마트폰 화면은 크게 보면서도 어떻게 편하게 휴대할까?",
-    visual: "smartphone",
-    tc: {
-      TC1: {
-        label: "TC1",
-        title: "화면을 크게 하면<br>보기 편합니다",
-        desc: "하지만 기기가 커져 휴대하기 불편해질 수 있습니다."
-      },
-      TC2: {
-        label: "TC2",
-        title: "기기를 작게 하면<br>휴대하기 편합니다",
-        desc: "하지만 화면이 작아져 보기 불편할 수 있습니다."
-      }
+
+  smartphone:{
+    label:"스마트폰 화면", icon:"📱", num:3, formula:["보기 편함","휴대성"],
+    question:"스마트폰 화면은 크게 보면서도 어떻게 편하게 휴대할까?",
+    s1:{good:"화면 키움 → 보기 편함", bad:"기기 커짐 → 휴대 불편", goodLabel:"크게 보기", badLabel:"작게 들기", visual:"phone"},
+    tc:{
+      TC1:{title:"화면을 크게 하면<br>보기 편합니다", desc:"하지만 기기가 커져 휴대하기 불편해집니다"},
+      TC2:{title:"기기를 작게 하면<br>휴대가 편합니다", desc:"하지만 화면이 작아져 보기 불편해집니다"}
     },
-    paths: {
-      TC1: {
-        pathLabel: "TC1 경로 · 큰 화면 우선",
-        miniFormula: '<span class="good">보기 편함</span> ↔ <span class="bad">휴대성 저하</span>',
-        choice: { improve: "보기 편함", worsen: "휴대성 저하" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC1에서 얻고 싶은 장점은 “화면이 커져 보기 편함”입니다.",
-          improveOptions: [
-            ["5번 이동 물체의 면적", "스마트폰은 들고 다니는 물체이고, 화면이 차지하는 면적이 커지는 문제와 연결됩니다.", true],
-            ["33번 사용 용이성", "보기 편한 사용 경험으로도 볼 수 있지만, 이번 사례의 직접 원인은 화면 면적입니다.", false],
-            ["17번 차원 변경", "다른 공간을 활용하는 해결 방향에는 가깝지만, 변수 선택 단계에서는 면적이 더 직접적입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC1의 단점은 “기기가 커져 휴대하기 어려워짐”입니다.",
-          worsenOptions: [
-            ["7번 이동 물체의 부피", "휴대하는 물체가 커지고 두꺼워지는 문제와 연결됩니다.", true],
-            ["1번 이동 물체의 무게", "커지면 무거워질 수도 있지만, 이번 핵심은 크기와 휴대성입니다.", false],
-            ["33번 사용 용이성", "휴대 불편으로도 볼 수 있지만, 물리적 원인은 부피 증가입니다.", false]
-          ],
-          summary: "보기 편함은 5번 이동 물체의 면적으로, 휴대성 저하는 7번 이동 물체의 부피로 봅니다."
-        },
-        matrix: { improve: "5번 이동 물체의 면적", worsen: "7번 이동 물체의 부피", candidates: [15,7,17,35], summary: "5번 면적 × 7번 부피 → 후보 원리" },
-        representative: 15,
-        generalReason: "필요할 때는 크게, 휴대할 때는 작게 변하도록 만들면 두 요구를 함께 살릴 수 있기 때문입니다.",
-        general: "사용 상황에 따라 화면 크기나 형태가 달라지게 만든다",
-        solutions: [
-          { title: "접으면 작고, 펼치면 큰 화면", desc: "휴대할 때는 접어서 작게 들고 다니고, 사용할 때는 펼쳐 큰 화면으로 봅니다.", svg: "phoneFold" },
-          { title: "필요할 때 외부 화면으로 확장", desc: "평소에는 작은 화면을 쓰고, 큰 화면이 필요할 때는 외부 디스플레이나 보조 화면을 연결합니다.", svg: "phoneExternal" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">큰 화면</span>을 우선하는 TC1 경로를 선택했습니다.',
-          2: '3단계: 화면 크기와 휴대성을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">면적 × 부피</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC1 경로에서는 <span class="accent">15번 동적 특성</span>을 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">필요할 때 크기가 바뀌는 해결안</span>으로 완성합니다.'
-        }
+    paths:{
+      TC1:{
+        improve:{label:"보기 편함", options:[
+          {name:"5번 이동 물체의 면적",correct:true,desc:"화면이 차지하는 면적이 커지는 문제와 연결"},
+          {name:"33번 사용 용이성",correct:false,desc:"보기 편한 경험이지만, 직접 원인은 면적"},
+          {name:"17번 차원 전환",correct:false,desc:"해결 방향엔 가깝지만 변수 단계에선 면적이 직접적"}
+        ]},
+        worsen:{label:"휴대성 저하", options:[
+          {name:"7번 이동 물체의 부피",correct:true,desc:"휴대하는 물체가 커지고 두꺼워지는 문제와 연결"},
+          {name:"1번 이동 물체의 무게",correct:false,desc:"무거워질 수도 있지만 핵심은 크기"},
+          {name:"33번 사용 용이성",correct:false,desc:"휴대 불편이지만 물리적 원인은 부피"}
+        ]},
+        // 5번 면적(이동) × 7번 부피(이동) = 7, 14, 17, 4 (triz40 공식)
+        principles:[7,14,17,4],
+        rep:17,
+        general:"사용 상황에 따라 화면 크기나 형태가 달라지게 만든다",
+        reason:"필요할 땐 크게, 휴대할 땐 작게 변하면 두 요구를 함께 살릴 수 있습니다",
+        solutions:[
+          {title:"접으면 작고 펼치면 큰 화면",desc:"휴대할 땐 접어서 작게, 사용할 땐 펼쳐 큰 화면으로 봅니다",svg:"phoneFold"},
+          {title:"필요할 때 외부 화면 확장",desc:"평소엔 작은 화면, 필요할 때 외부 디스플레이 연결",svg:"phoneExternal"}
+        ]
       },
-      TC2: {
-        pathLabel: "TC2 경로 · 휴대성 우선",
-        miniFormula: '<span class="good">휴대 편함</span> ↔ <span class="bad">화면이 작음</span>',
-        choice: { improve: "휴대 편함", worsen: "화면이 작음" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC2에서 얻고 싶은 장점은 “작고 가벼워 휴대하기 편함”입니다.",
-          improveOptions: [
-            ["7번 이동 물체의 부피", "휴대하는 물체가 작아지는 문제와 직접 연결됩니다.", true],
-            ["1번 이동 물체의 무게", "가벼움도 관련되지만, 여기서는 화면/기기 크기가 핵심입니다.", false],
-            ["33번 사용 용이성", "휴대가 편한 사용성으로 볼 수 있지만, 직접 원인은 부피입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC2의 단점은 “화면이 작아 보기 불편함”입니다.",
-          worsenOptions: [
-            ["33번 사용 용이성", "작은 화면 때문에 읽기와 조작이 불편해지는 문제와 연결됩니다.", true],
-            ["28번 측정 정확도", "세밀한 정보 표시 문제로 볼 수 있지만, 일반 사용자 관점에서는 사용성이 더 직접적입니다.", false],
-            ["5번 이동 물체의 면적", "화면 면적이 줄어드는 원인으로 볼 수 있지만, 악화되는 경험은 사용성입니다.", false]
-          ],
-          summary: "휴대 편함은 7번 이동 물체의 부피로, 화면이 작아 불편함은 33번 사용 용이성으로 봅니다."
-        },
-        matrix: { improve: "7번 이동 물체의 부피", worsen: "33번 사용 용이성", candidates: [15,7,24], summary: "7번 부피 × 33번 사용 용이성 → 후보 원리" },
-        representative: 15,
-        generalReason: "평소에는 작게 두되, 필요한 순간에 화면을 확장하도록 만들면 휴대성과 사용성을 함께 살릴 수 있기 때문입니다.",
-        general: "평소에는 작게, 필요할 때는 크게 보이게 만든다",
-        solutions: [
-          { title: "평소에는 작게, 볼 때는 펼치기", desc: "휴대할 때는 작게 유지하고, 영상을 보거나 문서를 볼 때만 펼쳐 큰 화면으로 사용합니다.", svg: "phoneFold" },
-          { title: "작은 폰 + 보조 화면 연결", desc: "기본 기기는 작게 유지하고, 필요할 때는 보조 화면이나 태블릿·모니터와 연결합니다.", svg: "phoneExternal" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">휴대성</span>을 우선하는 TC2 경로를 선택했습니다.',
-          2: '3단계: 휴대성과 사용성을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">부피 × 사용 용이성</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC2 경로에서도 <span class="accent">15번 동적 특성</span>을 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">평소와 사용 순간이 달라지는 해결안</span>으로 완성합니다.'
-        }
+      TC2:{
+        improve:{label:"휴대 편함", options:[
+          {name:"7번 이동 물체의 부피",correct:true,desc:"휴대하는 물체가 작아지는 문제와 직접 연결"},
+          {name:"1번 이동 물체의 무게",correct:false,desc:"가벼움도 관련되지만 여기선 크기가 핵심"},
+          {name:"33번 사용 용이성",correct:false,desc:"휴대 편한 사용성이지만 직접 원인은 부피"}
+        ]},
+        worsen:{label:"화면이 작음", options:[
+          {name:"33번 사용 용이성",correct:true,desc:"작은 화면 때문에 읽기·조작이 불편한 문제"},
+          {name:"28번 측정 정확도",correct:false,desc:"세밀한 정보 표시이지만 일반 사용자엔 사용성"},
+          {name:"5번 이동 물체의 면적",correct:false,desc:"면적 줄어듦이지만 악화 경험은 사용성"}
+        ]},
+        // 7번 부피(이동) × 33번 사용 용이성 = 15, 13, 30, 12 (triz40 공식)
+        principles:[15,13,30,12],
+        rep:15,
+        general:"평소에는 작게, 필요할 때는 크게 보이게 만든다",
+        reason:"평소 작게 두되 필요한 순간 화면을 확장하면 휴대성과 사용성을 함께 살립니다",
+        solutions:[
+          {title:"평소 작게, 볼 때 펼치기",desc:"휴대할 땐 작게, 영상·문서 볼 때만 펼쳐 큰 화면으로 사용",svg:"phoneFold"},
+          {title:"작은 폰 + 보조 화면 연결",desc:"기본 기기는 작게, 필요할 때 보조 화면 연결",svg:"phoneExternal"}
+        ]
       }
     }
   },
-  login: {
-    tab: "보안 로그인",
-    subtitle: "보안성 ↔ 편의성",
-    badge: "사례 4 · 보안 로그인",
-    question: "로그인은 안전하면서도 어떻게 불편하지 않게 만들까?",
-    visual: "login",
-    tc: {
-      TC1: {
-        label: "TC1",
-        title: "인증 단계를 늘리면<br>보안성이 높아집니다",
-        desc: "하지만 로그인 시간이 길어지고 사용자가 불편해질 수 있습니다."
-      },
-      TC2: {
-        label: "TC2",
-        title: "인증 단계를 줄이면<br>로그인이 편해집니다",
-        desc: "하지만 계정 보호 수준이 낮아질 수 있습니다."
-      }
+
+  login:{
+    label:"보안 로그인", icon:"🔐", num:4, formula:["보안성","편의성"],
+    question:"로그인은 안전하면서도 어떻게 불편하지 않게 만들까?",
+    s1:{good:"단계 늘림 → 보안 강함", bad:"단계 늘림 → 불편 증가", goodLabel:"안전하게", badLabel:"빠르게", visual:"login"},
+    tc:{
+      TC1:{title:"인증 단계를 늘리면<br>보안이 강해집니다", desc:"하지만 로그인 시간이 길어지고 사용자가 불편합니다"},
+      TC2:{title:"인증 단계를 줄이면<br>로그인이 편해집니다", desc:"하지만 계정 보호 수준이 낮아집니다"}
     },
-    paths: {
-      TC1: {
-        pathLabel: "TC1 경로 · 보안성 우선",
-        miniFormula: '<span class="good">보안성 증가</span> ↔ <span class="bad">불편 증가</span>',
-        choice: { improve: "보안성 증가", worsen: "불편 증가" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC1에서 얻고 싶은 장점은 “계정을 더 안전하게 보호함”입니다.",
-          improveOptions: [
-            ["27번 신뢰성", "로그인 시스템이 안전하고 믿을 수 있게 작동하는 성질과 연결됩니다.", true],
-            ["30번 유해 요인", "위험을 줄이는 관점도 가능하지만, 시스템 품질로는 신뢰성이 더 직접적입니다.", false],
-            ["26번 물질의 양", "인증 수단이 늘어나는 양적 변화로 볼 수 있지만, 개선 목표는 보안 신뢰성입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC1의 단점은 “사용 시간이 늘고 불편해짐”입니다.",
-          worsenOptions: [
-            ["25번 시간 손실", "인증 단계가 늘어나 로그인 시간이 길어지는 문제와 연결됩니다.", true],
-            ["33번 사용 용이성", "사용자가 불편해지는 문제로도 볼 수 있습니다.", false],
-            ["36번 장치 복잡성", "시스템이 복잡해지는 관점도 가능하지만, 사용자 경험에서는 시간 손실이 직접적입니다.", false]
-          ],
-          summary: "보안성 증가는 27번 신뢰성으로, 불편 증가는 25번 시간 손실로 봅니다."
-        },
-        matrix: { improve: "27번 신뢰성", worsen: "25번 시간 손실", candidates: [23,10,25,35], summary: "27번 신뢰성 × 25번 시간 손실 → 후보 원리" },
-        representative: 23,
-        generalReason: "모든 사용자에게 같은 인증을 요구하지 않고, 위험 신호를 보고 인증 강도를 조절하면 보안과 편의성을 함께 살릴 수 있기 때문입니다.",
-        general: "위험도에 따라 인증 강도를 다르게 조절한다",
-        solutions: [
-          { title: "위험할 때만 추가 인증하기", desc: "새 기기, 해외 접속, 이상 행동처럼 위험 신호가 있을 때만 2차 인증을 요구합니다.", svg: "loginRisk" },
-          { title: "실시간 위험 점수로 조절하기", desc: "로그인 환경을 계속 확인해 안전하면 간단히, 위험하면 강하게 인증합니다.", svg: "loginFeedback" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">보안성</span>을 우선하는 TC1 경로를 선택했습니다.',
-          2: '3단계: 보안성과 시간 손실을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">신뢰성 × 시간 손실</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC1 경로에서는 <span class="accent">23번 피드백</span>을 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">위험도에 따라 달라지는 인증</span>으로 완성합니다.'
-        }
+    paths:{
+      TC1:{
+        improve:{label:"보안성 증가", options:[
+          {name:"27번 신뢰성",correct:true,desc:"로그인 시스템이 안전하게 작동하는 성질과 연결"},
+          {name:"30번 유해 요인",correct:false,desc:"위험 감소도 가능하지만 시스템 품질은 신뢰성"},
+          {name:"26번 물질의 양",correct:false,desc:"인증 수단의 양적 변화이지만 개선 목표는 신뢰성"}
+        ]},
+        worsen:{label:"불편 증가", options:[
+          {name:"25번 시간 손실",correct:true,desc:"인증 단계가 늘어 로그인 시간이 길어지는 문제"},
+          {name:"33번 사용 용이성",correct:false,desc:"사용자가 불편함이지만 직접 원인은 시간"},
+          {name:"36번 장치 복잡성",correct:false,desc:"시스템 복잡이지만 사용자 경험은 시간 손실"}
+        ]},
+        // 27번 신뢰성 × 25번 시간 손실 = 10, 30, 4 (triz40 공식)
+        principles:[10,30,4],
+        rep:10,
+        general:"위험도에 따라 인증 강도를 다르게 조절한다 (사전 조치)",
+        reason:"위험 신호가 있을 때를 미리 정해 두면 보안과 편의성을 함께 살릴 수 있습니다",
+        solutions:[
+          {title:"위험할 때만 추가 인증",desc:"새 기기·해외 접속 등 위험 신호가 있을 때만 2차 인증 요구",svg:"loginRisk"},
+          {title:"실시간 위험 점수로 조절",desc:"로그인 환경을 계속 확인해 안전하면 간단히, 위험하면 강하게",svg:"loginFeedback"}
+        ]
       },
-      TC2: {
-        pathLabel: "TC2 경로 · 편의성 우선",
-        miniFormula: '<span class="good">편의성 증가</span> ↔ <span class="bad">보안성 저하</span>',
-        choice: { improve: "편의성 증가", worsen: "보안성 저하" },
-        variable: {
-          improveTitle: "좋아지고 싶은 것",
-          improveText: "TC2에서 얻고 싶은 장점은 “빠르고 편하게 로그인함”입니다.",
-          improveOptions: [
-            ["33번 사용 용이성", "사용자가 쉽게 로그인하는 경험과 직접 연결됩니다.", true],
-            ["25번 시간 손실", "시간을 줄이는 관점도 가능하지만, 개선 목표는 편의성입니다.", false],
-            ["36번 장치 복잡성", "복잡성을 줄이는 문제로도 볼 수 있지만, 사용자 관점에서는 사용 용이성이 더 직접적입니다.", false]
-          ],
-          worsenTitle: "함께 나빠지는 것",
-          worsenText: "TC2의 단점은 “계정 보호 수준이 낮아짐”입니다.",
-          worsenOptions: [
-            ["27번 신뢰성", "시스템이 안전하고 믿을 수 있게 작동하는 정도와 연결됩니다.", true],
-            ["30번 유해 요인", "공격 위험 증가로 볼 수 있지만, 품질 표현은 신뢰성이 더 직접적입니다.", false],
-            ["11번 응력", "보안 압박이라는 비유는 가능하지만, 공학 변수로는 적합성이 낮습니다.", false]
-          ],
-          summary: "편의성 증가는 33번 사용 용이성으로, 보안성 저하는 27번 신뢰성으로 봅니다."
-        },
-        matrix: { improve: "33번 사용 용이성", worsen: "27번 신뢰성", candidates: [23,10,25,35], summary: "33번 사용 용이성 × 27번 신뢰성 → 후보 원리" },
-        representative: 10,
-        generalReason: "사용자가 매번 번거롭게 인증하지 않도록, 안전한 기기와 사용자 정보를 미리 준비해 둘 수 있기 때문입니다.",
-        general: "신뢰할 수 있는 조건을 미리 등록해 인증 부담을 줄인다",
-        solutions: [
-          { title: "신뢰 기기 등록하기", desc: "자주 쓰는 기기는 미리 등록해 두고, 평소에는 간단히 로그인하게 합니다.", svg: "loginTrusted" },
-          { title: "생체인증으로 빠르게 확인하기", desc: "비밀번호 대신 지문·얼굴 인식처럼 빠른 인증 수단으로 편의성을 높입니다.", svg: "loginBio" }
-        ],
-        bubbles: {
-          1: '2단계: <span class="accent">편의성</span>을 우선하는 TC2 경로를 선택했습니다.',
-          2: '3단계: 편의성과 보안성을 <span class="accent">TRIZ 공학 변수</span>로 바꿉니다.',
-          3: '4단계: <span class="accent">사용 용이성 × 신뢰성</span>의 원리 후보를 확인합니다.',
-          4: '5단계: TC2 경로에서는 <span class="accent">10번 사전 조치</span>를 대표 원리로 사용합니다.',
-          5: '6단계: <span class="accent">미리 등록한 신뢰 조건</span>으로 완성합니다.'
-        }
+      TC2:{
+        improve:{label:"편의성 증가", options:[
+          {name:"33번 사용 용이성",correct:true,desc:"사용자가 쉽게 로그인하는 경험과 직접 연결"},
+          {name:"25번 시간 손실",correct:false,desc:"시간 단축도 가능, 개선 목표는 편의성"},
+          {name:"36번 장치 복잡성",correct:false,desc:"복잡성 감소이지만 사용자 관점에선 사용 용이성"}
+        ]},
+        worsen:{label:"보안성 저하", options:[
+          {name:"27번 신뢰성",correct:true,desc:"시스템이 안전하게 작동하는 정도와 연결"},
+          {name:"30번 유해 요인",correct:false,desc:"공격 위험 증가이지만 품질 표현은 신뢰성"},
+          {name:"11번 응력",correct:false,desc:"보안 압박 비유이지만 공학 변수로 적합성 낮음"}
+        ]},
+        // 33번 사용 용이성 × 27번 신뢰성 = 17, 27, 8, 40 (triz40 공식)
+        principles:[17,27,8,40],
+        rep:27,
+        general:"신뢰할 수 있는 조건을 미리 등록해 인증 부담을 줄인다",
+        reason:"안전한 기기와 정보를 미리 준비하면 매번 번거롭게 인증하지 않아도 됩니다",
+        solutions:[
+          {title:"신뢰 기기 등록",desc:"자주 쓰는 기기를 미리 등록해 평소엔 간단히 로그인합니다",svg:"loginTrusted"},
+          {title:"생체인증으로 빠르게 확인",desc:"비밀번호 대신 지문·얼굴 인식으로 편의성을 높입니다",svg:"loginBio"}
+        ]
       }
     }
   }
 };
 
-let currentStep = 0;
-let currentCase = "pile";
-let selectedTC = "TC1";
-let selectedPrinciple = 35;
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  caseKey: "pile",
+  step: 0,            // 0..5 (Step 1..6)
+  tc: "TC1",          // chosen TC path
+  improvePicked: null, // {idx, correct}
+  worsenPicked: null,
+  principleChoice: null, // user-picked principle number
+  done: { improve:false, worsen:false }
+};
 
-function q(id){ return document.getElementById(id); }
+const $ = (id) => document.getElementById(id);
 
-function currentCaseData(){ return caseData[currentCase]; }
-function currentPath(){ return currentCaseData().paths[selectedTC]; }
-
-function renderCaseTabs(){
-  q("caseTabs").innerHTML = Object.entries(caseData).map(([key,c]) => `
-    <button class="caseTab ${key===currentCase?'active':''}" onclick="selectCase('${key}')">
-      <b>${c.tab}</b>
-      <small>${c.subtitle}</small>
+/* ============================================================
+   INTRO RENDER
+   ============================================================ */
+function renderIntro(){
+  const html = Object.entries(CASES).map(([key, c]) => `
+    <button class="case-card" onclick="startCase('${key}')">
+      <span class="cc-num">사례 ${c.num}</span>
+      <div class="cc-icon">${c.icon}</div>
+      <div class="cc-title">${c.label}</div>
+      <div class="cc-sub">${c.formula[0]} <span style="color:var(--warn-yellow)">↔</span> ${c.formula[1]}</div>
     </button>
   `).join("");
-  q("caseBadge").textContent = currentCaseData().badge;
-  q("caseQuestion").textContent = currentCaseData().question;
+  $("caseCards").innerHTML = html;
 }
 
-function selectCase(key){
-  currentCase = key;
-  selectedTC = "TC1";
-  selectedPrinciple = currentPath().matrix.candidates[0];
-  currentStep = 0;
-  renderAll();
+function startCase(key){
+  state.caseKey = key;
+  state.step = 0;
+  state.tc = "TC1";
+  state.improvePicked = null;
+  state.worsenPicked = null;
+  state.principleChoice = null;
+  state.done = { improve:false, worsen:false };
+  showScreen("sim");
+  render();
 }
 
-function renderDefinitionScene(){
-  const c = currentCaseData();
-  q("definitionTcRow").innerHTML = ["TC1","TC2"].map(tc => `
-    <div class="tcCard riseIn">
-      <div class="label">${c.tc[tc].label}</div>
-      <div class="title">${c.tc[tc].title}</div>
-      <div class="desc">${c.tc[tc].desc}</div>
-    </div>
-  `).join("");
-  q("caseVisualPanel").innerHTML = caseVisual(c.visual);
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0, 0);
 }
 
-function renderSelectionScene(){
-  const c = currentCaseData();
-  q("selectRow").innerHTML = ["TC1","TC2"].map(tc => `
-    <div class="tcCard ${tc===selectedTC?'selected':'dim'}" id="${tc.toLowerCase()}Card" onclick="selectTC('${tc}')">
-      <div class="label">${c.tc[tc].label}</div>
-      <div class="title">${c.tc[tc].title}</div>
-      <div class="desc">${c.tc[tc].desc}</div>
-      <div class="badgeSelected" style="${tc===selectedTC?'display:inline-flex;':'display:none;'}">선택됨</div>
-    </div>
-  `).join("");
-  q("tcActionButtons").innerHTML = `
-    <button class="miniBtn" onclick="selectTC('TC1')">TC1 선택</button>
-    <button class="miniBtn secondary" onclick="selectTC('TC2')">TC2 선택</button>
-  `;
+function restart(){
+  state.step = 0;
+  state.tc = "TC1";
+  state.improvePicked = null;
+  state.worsenPicked = null;
+  state.principleChoice = null;
+  state.done = { improve:false, worsen:false };
+  showScreen("intro");
 }
 
-function caseVisual(kind){
-  if(kind === "smartphone"){
-    return `
-      <svg viewBox="0 0 760 440" aria-label="스마트폰 화면 크기 문제 상황">
-        <rect x="20" y="20" width="720" height="400" rx="30" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g transform="translate(380 218)">
-          <rect x="-80" y="-130" width="160" height="260" rx="28" fill="#213a5a" stroke="#fff" stroke-width="5"/>
-          <rect x="-62" y="-108" width="124" height="216" rx="18" fill="rgba(75,231,202,.18)" stroke="#4be7ca" stroke-width="3"/>
-          <line x1="-40" y1="-54" x2="40" y2="-54" stroke="#d7efff" stroke-width="8" stroke-linecap="round"/>
-          <line x1="-40" y1="-18" x2="40" y2="-18" stroke="#d7efff" stroke-width="8" stroke-linecap="round"/>
-          <line x1="-40" y1="18" x2="40" y2="18" stroke="#d7efff" stroke-width="8" stroke-linecap="round"/>
-        </g>
-        <path d="M250 116 H145" stroke="#79c9ff" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="145,116 171,100 171,132" fill="#79c9ff"/>
-        <text x="126" y="110" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">큰 화면</text>
-        <text x="126" y="134" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">보기 편함</text>
-        <path d="M510 116 H615" stroke="#ff8fa7" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="615,116 589,100 589,132" fill="#ff8fa7"/>
-        <text x="634" y="110" fill="#ffd2db" font-size="18" font-weight="900">휴대성</text>
-        <text x="634" y="134" fill="#ffd2db" font-size="18" font-weight="900">저하</text>
-        <text x="380" y="54" fill="#b7c9db" font-size="24" font-weight="900" text-anchor="middle">스마트폰 화면 크기 문제 상황</text>
-      </svg>`;
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render(){
+  const c = CASES[state.caseKey];
+
+  // top bar
+  renderStepPipe();
+  renderCaseMenu();
+  $("casePickLabel").textContent = `사례 ${c.num} · ${c.label}`;
+
+  // question banner
+  $("qText").textContent = c.question;
+  const path = c.paths[state.tc];
+  if(state.step >= 1){
+    $("qFormula").innerHTML = `<span class="good">${path.improve.label}</span> ↔ <span class="bad">${path.worsen.label}</span>`;
+    $("qFormula").style.display = "";
+  } else {
+    $("qFormula").innerHTML = `<span class="good">${c.formula[0]}</span> ↔ <span class="bad">${c.formula[1]}</span>`;
+    $("qFormula").style.display = "";
   }
-  if(kind === "login"){
-    return `
-      <svg viewBox="0 0 760 440" aria-label="보안 로그인 문제 상황">
-        <rect x="20" y="20" width="720" height="400" rx="30" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g transform="translate(380 210)">
-          <path d="M-70 -20 V-72 C-70 -125 70 -125 70 -72 V-20" fill="none" stroke="#7bc9ff" stroke-width="18" stroke-linecap="round"/>
-          <rect x="-105" y="-24" width="210" height="160" rx="32" fill="#4be7ca"/>
-          <circle cx="0" cy="48" r="18" fill="#0b1d31"/>
-          <rect x="-10" y="64" width="20" height="42" rx="10" fill="#0b1d31"/>
-        </g>
-        <text x="380" y="54" fill="#b7c9db" font-size="24" font-weight="900" text-anchor="middle">보안 로그인 문제 상황</text>
-        <path d="M260 124 H145" stroke="#79c9ff" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="145,124 171,108 171,140" fill="#79c9ff"/>
-        <text x="126" y="118" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">보안성</text>
-        <text x="126" y="142" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">증가</text>
-        <path d="M500 124 H615" stroke="#ff8fa7" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="615,124 589,108 589,140" fill="#ff8fa7"/>
-        <text x="634" y="118" fill="#ffd2db" font-size="18" font-weight="900">불편</text>
-        <text x="634" y="142" fill="#ffd2db" font-size="18" font-weight="900">증가</text>
-      </svg>`;
-  }
-  if(kind === "drone"){
-    return `
-      <svg viewBox="0 0 760 440" aria-label="드론 배터리 문제 상황">
-        <rect x="20" y="20" width="720" height="400" rx="30" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g class="droneIconFloat" transform="translate(380 205)">
-          <line x1="-145" y1="0" x2="145" y2="0" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <line x1="0" y1="-120" x2="0" y2="120" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <circle cx="-145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <circle cx="145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <circle cx="0" cy="-120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <circle cx="0" cy="120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <rect x="-70" y="-42" width="140" height="84" rx="22" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-          <rect x="-45" y="-20" width="88" height="40" rx="12" fill="#4be7ca"/>
-        </g>
-        <path d="M210 108 H110" stroke="#79c9ff" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="110,108 136,92 136,124" fill="#79c9ff"/>
-        <text x="96" y="102" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">비행시간</text>
-        <text x="96" y="126" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">증가</text>
-        <path d="M550 108 H650" stroke="#ff8fa7" stroke-width="6" stroke-linecap="round"/>
-        <polygon points="650,108 624,92 624,124" fill="#ff8fa7"/>
-        <text x="666" y="102" fill="#ffd2db" font-size="18" font-weight="900">무게</text>
-        <text x="666" y="126" fill="#ffd2db" font-size="18" font-weight="900">증가</text>
-        <text x="380" y="54" fill="#b7c9db" font-size="24" font-weight="900" text-anchor="middle">드론 배터리 문제 상황</text>
-      </svg>`;
-  }
-  return `
-    <svg viewBox="0 0 760 440" aria-label="말뚝 공사 문제 상황">
-      <defs><linearGradient id="pileGrad" x1="0" x2="0"><stop offset="0" stop-color="#e2f2ff"/><stop offset="1" stop-color="#c9e2f7"/></linearGradient><linearGradient id="groundGrad" x1="0" x2="0"><stop offset="0" stop-color="#8d6c49"/><stop offset="1" stop-color="#6d5237"/></linearGradient></defs>
-      <rect x="20" y="20" width="720" height="400" rx="30" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-      <g class="hammerAnim"><rect x="308" y="68" width="146" height="48" rx="16" fill="#ffd166"/><rect x="366" y="112" width="30" height="92" rx="12" fill="#ffe7ad"/></g>
-      <rect x="342" y="192" width="78" height="122" rx="16" fill="url(#pileGrad)"/><polygon points="342,314 420,314 381,365" fill="url(#pileGrad)"/>
-      <rect x="170" y="365" width="420" height="24" rx="12" fill="url(#groundGrad)"/>
-      <text x="380" y="54" fill="#b7c9db" font-size="24" font-weight="900" text-anchor="middle">말뚝 공사 문제 상황</text>
-      <path d="M260 128 H155" fill="none" stroke="#79c9ff" stroke-width="6" stroke-linecap="round"/><polygon points="155,128 181,112 181,144" fill="#79c9ff"/>
-      <text x="121" y="120" fill="#d7efff" font-size="18" font-weight="900" text-anchor="end">박기 쉬움</text>
-      <path d="M500 128 H605" fill="none" stroke="#ff8fa7" stroke-width="6" stroke-linecap="round"/><polygon points="605,128 579,112 579,144" fill="#ff8fa7"/>
-      <text x="638" y="120" fill="#ffd2db" font-size="18" font-weight="900">지탱력</text><text x="638" y="144" fill="#ffd2db" font-size="18" font-weight="900">약함</text>
-    </svg>`;
+
+  // scene + side
+  renderScene();
+  renderSide();
+  renderNav();
 }
 
-function renderStepBar(){
-  q("stepBar").innerHTML = steps.map((s, i) => `
-    <div class="stepItem ${i===currentStep?'active':''} ${i<currentStep?'done':''}" onclick="goStep(${i})">
-      <div class="stepNo">${i+1}단계</div>
-      <div class="stepName">${s.title.replace((i+1)+'단계. ','')}</div>
-    </div>
+function renderStepPipe(){
+  $("stepPipe").innerHTML = STEPS.map((s, i) => {
+    const cls = i < state.step ? "done" : (i === state.step ? "active" : "");
+    return `<button class="sp-node ${cls}" onclick="jumpStep(${i})">
+      <span class="sp-num">${s.num}</span>
+      <span class="sp-name">${s.title}</span>
+    </button>`;
+  }).join("");
+}
+
+function renderCaseMenu(){
+  $("caseMenu").innerHTML = Object.entries(CASES).map(([key, c]) => `
+    <button class="cm-item ${key === state.caseKey ? 'active' : ''}" onclick="switchCase('${key}')">
+      ${c.icon} ${c.label}
+      <small>${c.formula[0]} ↔ ${c.formula[1]}</small>
+    </button>
   `).join("");
 }
 
-function showScene(){
-  for(let i=1;i<=6;i++){
-    q("scene"+i).classList.remove("active");
-  }
-  q("scene"+(currentStep+1)).classList.add("active");
+function toggleCaseMenu(){
+  $("caseMenu").classList.toggle("show");
 }
 
-function renderHead(){
-  const path = currentPath();
-  q("stageTitle").textContent = steps[currentStep].title;
-  q("stageSubtitle").textContent = steps[currentStep].subtitle;
-  q("miniFormula").innerHTML = path.miniFormula;
-  q("bubbleText").innerHTML = path.bubbles[currentStep] || steps[currentStep].bubble;
-  q("caseBadge").textContent = currentCaseData().badge;
-  q("caseQuestion").textContent = currentCaseData().question;
+function switchCase(key){
+  if(key === state.caseKey){
+    $("caseMenu").classList.remove("show");
+    return;
+  }
+  state.caseKey = key;
+  state.step = 0;
+  state.tc = "TC1";
+  state.improvePicked = null;
+  state.worsenPicked = null;
+  state.principleChoice = null;
+  state.done = { improve:false, worsen:false };
+  $("caseMenu").classList.remove("show");
+  render();
 }
 
-function selectTC(tc){
-  selectedTC = tc;
-  selectedPrinciple = currentPath().matrix.candidates[0];
-  renderAll();
+document.addEventListener("click", (e) => {
+  if(!e.target.closest(".case-picker")) $("caseMenu").classList.remove("show");
+});
+
+function jumpStep(i){
+  state.step = i;
+  render();
 }
 
-function setPrinciple(num){
-  selectedPrinciple = num;
-  document.querySelectorAll(".principleChip").forEach(chip=>{
-    chip.classList.toggle("active", Number(chip.dataset.num) === num);
-  });
-  if(q("principleTitle") && q("principleDesc")){
-    q("principleTitle").textContent = principleInfo[num].title;
-    q("principleDesc").textContent = principleInfo[num].desc + " 모순행렬은 정답표가 아니라, 해결 방향을 제안하는 힌트 도구입니다.";
-  }
-}
+function renderNav(){
+  $("prevBtn").disabled = state.step === 0;
+  $("nextBtn").textContent = state.step === 5 ? "처음으로 ↺" : "다음 ▶";
+  $("navStatus").textContent = `Step ${state.step + 1} / 6`;
+  const step = STEPS[state.step];
+  $("sceneStepTag").textContent = `STEP ${state.step + 1}/6 · ${step.tag}`;
+  $("sceneLabel").textContent = step.title;
 
-function animateIntersection(){
-  const left = q("improveVar");
-  const right = q("worseVar");
-  left.classList.remove("center");
-  right.classList.remove("center");
-  left.classList.add("start");
-  right.classList.add("start");
-  setTimeout(()=>{
-    left.classList.remove("start");
-    right.classList.remove("start");
-    left.classList.add("center");
-    right.classList.add("center");
-  }, 120);
-}
-
-function renderCurrentStepState(){
-  if(currentStep === 3){
-    animateIntersection();
-  }
-}
-
-
-function renderVariableScene(){
-  const path = currentPath();
-  const v = path.variable;
-  const makeOptions = (options, bad=false) => options.map(opt => `
-    <div class="varOption ${bad ? 'bad' : ''} ${opt[2] ? 'selected' : ''}">
-      <b>${opt[0]}</b>
-      <span>${opt[1]}</span>
-    </div>
-  `).join("");
-
-  q("variableSceneContent").innerHTML = `
-    <div class="pathBadge">${path.pathLabel}</div>
-    <div class="variableExplain">
-      <div class="variableGroup riseIn">
-        <h3>${v.improveTitle}</h3>
-        <p>${v.improveText}</p>
-        ${makeOptions(v.improveOptions, false)}
-      </div>
-
-      <div class="translateArrowBox riseIn">
-        <div class="arrow">→</div>
-        <div class="text">많은 변수 중<br>가장 가까운<br>TRIZ 이름표를 선택</div>
-      </div>
-
-      <div class="variableGroup riseIn">
-        <h3>${v.worsenTitle}</h3>
-        <p>${v.worsenText}</p>
-        ${makeOptions(v.worsenOptions, true)}
-      </div>
-    </div>
-
-    <div class="infoBlock">
-      <h3>공학 변수 선택은 정답 맞히기가 아닙니다</h3>
-      <p>문제의 핵심 특성과 가장 가까운 TRIZ 이름표를 고르는 과정입니다. 변수 선택은 관점에 따라 달라질 수 있으므로, 왜 그렇게 보았는지를 설명하는 것이 중요합니다. 이 강의에서는 <strong>${v.summary}</strong></p>
-    </div>
-  `;
-}
-
-function renderMatrixScene(){
-  const path = currentPath();
-  q("improveVarText").textContent = path.matrix.improve;
-  q("worseVarText").textContent = path.matrix.worsen;
-
-  const validCandidates = path.matrix.candidates.filter(num => principleInfo[num]);
-  if(!validCandidates.includes(selectedPrinciple)){
-    selectedPrinciple = validCandidates[0];
-  }
-
-  q("principleGrid").innerHTML = validCandidates.map(num => `
-    <div class="principleChip ${num === selectedPrinciple ? 'active' : ''}" data-num="${num}" onclick="setPrinciple(${num})">
-      <div class="num">${num}번</div>
-      <div class="name">${principleInfo[num].short}</div>
-    </div>
-  `).join("");
-
-  q("principleTitle").textContent = principleInfo[selectedPrinciple].title;
-  q("principleDesc").textContent = principleInfo[selectedPrinciple].desc + " 모순행렬은 정답표가 아니라, 해결 방향을 제안하는 힌트 도구입니다.";
-}
-
-function renderGeneralScene(){
-  const path = currentPath();
-  const validCandidates = path.matrix.candidates.filter(num => principleInfo[num]);
-  const candidateCards = validCandidates.map(num => `
-    <div class="principleSelectCard ${num === path.representative ? 'selected' : ''}">
-      <div class="num">${num}번</div>
-      <h3>${principleInfo[num].short}</h3>
-      <p>${principleInfo[num].desc}</p>
-    </div>
-  `).join("");
-
-  q("generalSceneContent").innerHTML = `
-    <div class="pathBadge">${path.pathLabel}</div>
-    <div class="principleSelectGrid">${candidateCards}</div>
-
-    <div class="compactReason">
-      대표 원리: <strong>${principleInfo[path.representative].title}</strong><br>
-      ${path.generalReason}
-    </div>
-
-    <div class="generalCompact">
-      <div class="generalCard riseIn">
-        <div class="small">대표 원리</div>
-        <div class="big">${principleInfo[path.representative].title}</div>
-      </div>
-      <div class="arrowDown">↓</div>
-      <div class="generalCard riseIn">
-        <div class="small">일반 해결안</div>
-        <div class="big">${path.general}</div>
-      </div>
-    </div>
-
-    <div class="finalNote">
-      이 단계의 목적은 원리 이름을 외우는 것이 아니라, 선택한 원리를 현재 문제에 맞는 해결 방향으로 바꾸는 것입니다.
-    </div>
-  `;
-}
-
-function solutionSvg(kind){
-  if(kind === "phoneFold"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="접히고 펼쳐지는 스마트폰 화면">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g transform="translate(300 148)">
-          <rect x="-118" y="-88" width="104" height="176" rx="20" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-          <rect x="14" y="-88" width="104" height="176" rx="20" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-          <rect x="-100" y="-68" width="200" height="136" rx="12" fill="rgba(75,231,202,.18)" stroke="#4be7ca" stroke-width="3"/>
-          <line x1="0" y1="-88" x2="0" y2="88" stroke="#ffd166" stroke-width="6" stroke-linecap="round"/>
-        </g>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">접으면 작고, 펼치면 크게</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">상황에 따라 화면 크기가 달라짐</text>
-      </svg>`;
-  }
-  if(kind === "phoneExternal"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="스마트폰 외부 화면 연결">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="110" y="105" width="86" height="140" rx="18" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        <rect x="128" y="126" width="50" height="96" rx="10" fill="rgba(75,231,202,.18)" stroke="#4be7ca" stroke-width="3"/>
-        <path d="M210 170 H300" stroke="#ffd166" stroke-width="7" stroke-linecap="round"/>
-        <polygon points="300,170 274,154 274,186" fill="#ffd166"/>
-        <rect x="318" y="80" width="180" height="120" rx="16" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        <rect x="338" y="100" width="140" height="80" rx="10" fill="rgba(123,201,255,.18)" stroke="#7bc9ff" stroke-width="3"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">필요할 때 큰 화면으로 확장</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">작은 폰 + 보조 화면</text>
-      </svg>`;
-  }
-  if(kind === "loginRisk"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="위험할 때만 추가 인증">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="92" y="130" width="120" height="54" rx="16" fill="rgba(75,231,202,.16)" stroke="#4be7ca" stroke-width="3"/>
-        <text x="152" y="164" fill="#cbfff6" font-size="18" font-weight="1000" text-anchor="middle">평소</text>
-        <path d="M225 157 H330" stroke="#ffd166" stroke-width="7" stroke-linecap="round"/><polygon points="330,157 304,141 304,173" fill="#ffd166"/>
-        <rect x="350" y="106" width="150" height="100" rx="20" fill="rgba(255,111,138,.13)" stroke="#ff6f8a" stroke-width="3"/>
-        <text x="425" y="145" fill="#ffd2db" font-size="18" font-weight="1000" text-anchor="middle">위험 신호</text>
-        <text x="425" y="174" fill="#fff" font-size="18" font-weight="1000" text-anchor="middle">추가 인증</text>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">위험할 때만 강하게 인증</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">보안성과 편의성을 함께 확보</text>
-      </svg>`;
-  }
-  if(kind === "loginFeedback"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="위험 점수 기반 인증">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <circle cx="165" cy="152" r="58" fill="rgba(75,231,202,.13)" stroke="#4be7ca" stroke-width="4"/>
-        <text x="165" y="146" fill="#cbfff6" font-size="18" font-weight="1000" text-anchor="middle">위험</text>
-        <text x="165" y="172" fill="#cbfff6" font-size="18" font-weight="1000" text-anchor="middle">점수</text>
-        <path d="M235 152 H340" stroke="#ffd166" stroke-width="7" stroke-linecap="round"/><polygon points="340,152 314,136 314,168" fill="#ffd166"/>
-        <rect x="360" y="104" width="150" height="96" rx="20" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        <text x="435" y="143" fill="#fff" font-size="17" font-weight="1000" text-anchor="middle">낮음: 간단</text>
-        <text x="435" y="170" fill="#ffd2db" font-size="17" font-weight="1000" text-anchor="middle">높음: 강하게</text>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">상태를 보고 인증 강도 조절</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">피드백 기반 로그인</text>
-      </svg>`;
-  }
-  if(kind === "loginTrusted"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="신뢰 기기 등록">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="135" y="92" width="110" height="150" rx="24" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        <rect x="158" y="118" width="64" height="88" rx="10" fill="rgba(75,231,202,.18)" stroke="#4be7ca" stroke-width="3"/>
-        <path d="M310 158 l32 32 l78 -86" fill="none" stroke="#4be7ca" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">미리 신뢰 기기 등록</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">평소에는 빠르게, 낯선 상황에서는 강하게</text>
-      </svg>`;
-  }
-  if(kind === "loginBio"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="생체인증 로그인">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <circle cx="300" cy="152" r="74" fill="rgba(75,231,202,.12)" stroke="#4be7ca" stroke-width="5"/>
-        <path d="M300 96 C250 98 242 150 250 178 C260 212 290 224 318 210" fill="none" stroke="#dceeff" stroke-width="8" stroke-linecap="round"/>
-        <path d="M300 116 C270 118 266 150 272 172 C278 194 300 202 320 190" fill="none" stroke="#dceeff" stroke-width="7" stroke-linecap="round"/>
-        <path d="M300 136 C288 138 286 156 292 170 C298 184 314 184 322 172" fill="none" stroke="#dceeff" stroke-width="6" stroke-linecap="round"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">비밀번호 대신 빠른 본인 확인</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">생체인증으로 편의성과 보안을 함께 확보</text>
-      </svg>`;
-  }
-  if(kind === "droneBattery"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="고효율 경량 배터리 해결안">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g class="droneIconFloat" transform="translate(300 135) scale(.7)">
-          <line x1="-145" y1="0" x2="145" y2="0" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <line x1="0" y1="-120" x2="0" y2="120" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <circle cx="-145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/><circle cx="145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <circle cx="0" cy="-120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/><circle cx="0" cy="120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <rect x="-70" y="-42" width="140" height="84" rx="22" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-          <rect x="-42" y="-18" width="84" height="36" rx="10" fill="#4be7ca"/>
-        </g>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">같은 무게로 더 오래 날기</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">배터리 속성 변화: 에너지 밀도 향상</text>
-      </svg>`;
-  }
-  if(kind === "droneLight"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="드론 기체 경량화 해결안">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <g transform="translate(300 145) scale(.72)">
-          <line x1="-145" y1="0" x2="145" y2="0" stroke="#7bc9ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="18 12"/>
-          <line x1="0" y1="-120" x2="0" y2="120" stroke="#7bc9ff" stroke-width="8" stroke-linecap="round" stroke-dasharray="18 12"/>
-          <circle cx="-145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="8"/><circle cx="145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="8"/>
-          <circle cx="0" cy="-120" r="42" fill="none" stroke="#dceeff" stroke-width="8"/><circle cx="0" cy="120" r="42" fill="none" stroke="#dceeff" stroke-width="8"/>
-          <rect x="-58" y="-35" width="116" height="70" rx="20" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        </g>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">기체를 가볍게 만들어 보상</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">프레임 속성 변화: 경량 구조</text>
-      </svg>`;
-  }
-  if(kind === "droneRoute"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="비행 경로 최적화 해결안">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <path d="M110 215 C180 105, 285 95, 370 150 S485 190, 510 85" fill="none" stroke="#ffd166" stroke-width="7" stroke-linecap="round" stroke-dasharray="14 10"/>
-        <circle cx="110" cy="215" r="10" fill="#4be7ca"/><circle cx="510" cy="85" r="10" fill="#ff6f8a"/>
-        <g class="droneIconFloat" transform="translate(300 142) scale(.38)">
-          <line x1="-145" y1="0" x2="145" y2="0" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <line x1="0" y1="-120" x2="0" y2="120" stroke="#dceeff" stroke-width="12" stroke-linecap="round"/>
-          <circle cx="-145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/><circle cx="145" cy="0" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <circle cx="0" cy="-120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/><circle cx="0" cy="120" r="42" fill="none" stroke="#dceeff" stroke-width="10"/>
-          <rect x="-70" y="-42" width="140" height="84" rx="22" fill="#213a5a" stroke="#fff" stroke-width="4"/>
-        </g>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">비행 전에 낭비 경로 제거</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">사전 조치: 최적 경로 계획</text>
-      </svg>`;
-  }
-  if(kind === "droneSwap"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="배터리 교체 보조팩 구조">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="160" y="128" width="110" height="54" rx="14" fill="#4be7ca"/><rect x="270" y="143" width="16" height="24" rx="5" fill="#7bc9ff"/>
-        <path d="M310 155 H405" stroke="#ffd166" stroke-width="7" stroke-linecap="round"/><polygon points="405,155 378,138 378,172" fill="#ffd166"/>
-        <rect x="420" y="128" width="110" height="54" rx="14" fill="#ffd166"/><rect x="530" y="143" width="16" height="24" rx="5" fill="#7bc9ff"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">필요할 때 빠르게 전원 교체</text>
-        <text x="300" y="270" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">작게 출발하고, 필요 시 보조 전원 사용</text>
-      </svg>`;
-  }
-  if(kind === "drill"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="미리 구멍을 뚫는 해결안">
-        <defs><linearGradient id="soilGrad1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8d6c49"/><stop offset="1" stop-color="#5f472f"/></linearGradient></defs>
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="90" y="230" width="420" height="26" rx="13" fill="url(#soilGrad1)"/>
-        <ellipse class="holePulse" cx="300" cy="230" rx="54" ry="12" fill="#1a1110" opacity=".8"/>
-        <g class="drillDown"><rect x="270" y="72" width="28" height="82" rx="10" fill="#ffd166"/><polygon class="drillSpin" points="284,154 310,202 258,202" fill="#dceeff"/><line x1="284" y1="160" x2="284" y2="214" stroke="#7bc9ff" stroke-width="5" stroke-linecap="round"/></g>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">작업 전에 조건을 만든다</text>
-        <text x="300" y="286" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">큰 충격 없이 쉽게 박을 수 있음</text>
-      </svg>`;
-  }
-  if(kind === "expand"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="박은 뒤 끝부분이 벌어지는 해결안">
-        <defs><linearGradient id="soilGrad2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8d6c49"/><stop offset="1" stop-color="#5f472f"/></linearGradient></defs>
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="90" y="230" width="420" height="26" rx="13" fill="url(#soilGrad2)"/>
-        <g class="pileInsert"><rect x="270" y="82" width="60" height="150" rx="12" fill="#dceeff"/><polygon points="270,232 330,232 300,266" fill="#dceeff"/></g>
-        <g class="supportGlow"><ellipse cx="300" cy="250" rx="92" ry="18" fill="rgba(75,231,202,.25)"/></g>
-        <polygon class="expandLeft" points="300,238 264,268 288,244" fill="#7bc9ff"/><polygon class="expandRight" points="300,238 336,268 312,244" fill="#7bc9ff"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">박힌 뒤 지탱력을 키운다</text>
-        <text x="300" y="286" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">박기 쉬움과 지탱력을 동시에 확보</text>
-      </svg>`;
-  }
-  if(kind === "foldExpand"){
-    return `
-      <svg viewBox="0 0 600 300" aria-label="접힌 상태로 삽입 후 확장">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="90" y="230" width="420" height="26" rx="13" fill="#6d5237"/>
-        <g class="pileInsert">
-          <rect x="276" y="78" width="48" height="150" rx="12" fill="#dceeff"/>
-          <polygon points="276,228 324,228 300,260" fill="#dceeff"/>
-        </g>
-        <g class="supportGlow"><ellipse cx="300" cy="250" rx="105" ry="18" fill="rgba(75,231,202,.25)"/></g>
-        <polygon class="expandLeft" points="300,236 252,268 286,244" fill="#7bc9ff"/>
-        <polygon class="expandRight" points="300,236 348,268 314,244" fill="#7bc9ff"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">삽입 중 접힘 → 지중에서 확장</text>
-        <text x="300" y="286" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">시공성은 낮추지 않고 지탱력 확보</text>
-      </svg>`;
-  }
-  return `
-      <svg viewBox="0 0 600 300" aria-label="설치 후 아래 지지부가 좌우로 넓어지는 해결안">
-        <rect x="30" y="30" width="540" height="240" rx="24" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)"/>
-        <rect x="90" y="230" width="420" height="26" rx="13" fill="#6d5237"/>
-        <g class="supportGlow">
-          <ellipse cx="300" cy="245" rx="122" ry="18" fill="rgba(75,231,202,.20)"/>
-        </g>
-        <g class="tc2BaseStem">
-          <rect x="282" y="70" width="36" height="156" rx="12" fill="#dceeff"/>
-          <rect x="292" y="206" width="16" height="28" rx="8" fill="#bfe4ff"/>
-        </g>
-        <rect class="basePlate" x="270" y="220" width="60" height="14" rx="7" fill="#7bc9ff"/>
-        <rect class="leftFin" x="210" y="220" width="90" height="14" rx="7" fill="#7bc9ff"/>
-        <rect class="rightFin" x="300" y="220" width="90" height="14" rx="7" fill="#7bc9ff"/>
-        <text x="300" y="52" fill="#ffe6ad" font-size="22" font-weight="1000" text-anchor="middle">설치 후 아래 지지부가 넓어짐</text>
-        <text x="300" y="286" fill="#b7c9db" font-size="17" font-weight="900" text-anchor="middle">처음엔 작게 들어가고, 설치 후 좌우로 넓게 버팀</text>
-      </svg>`;
-}
-
-function renderSolutionScene(){
-  const path = currentPath();
-  q("solutionSceneContent").innerHTML = `
-    <div class="pathBadge">${path.pathLabel}</div>
-    <div class="solutionVisualGrid">
-      ${path.solutions.map(sol => `
-        <div class="solutionVisual riseIn">
-          <h3>${sol.title}</h3>
-          ${solutionSvg(sol.svg)}
-          <p>${sol.desc}</p>
-        </div>
-      `).join("")}
-    </div>
-    <div class="infoBlock">
-      <h3>최종 메시지</h3>
-      <p>특정 해결안은 말로 끝나는 아이디어가 아니라 <strong>구조가 어떻게 바뀌는지</strong> 보여야 합니다. 선택한 사례와 TC 경로에 따라 해결안의 방향도 달라집니다.</p>
-    </div>
-  `;
-}
-
-function renderDynamicScenes(){
-  renderDefinitionScene();
-  renderSelectionScene();
-  renderVariableScene();
-  renderMatrixScene();
-  renderGeneralScene();
-  renderSolutionScene();
-}
-
-function goStep(i){
-  currentStep = i;
-  renderAll();
+  // 정답 보기 버튼: Step 2(TC선택), 3(변수), 4(매트릭스)에서만 의미있음
+  // Step 1(문제정의), 5(일반해결안 - 자동표시), 6(특정해결안)에선 숨김
+  const showAns = (state.step >= 1 && state.step <= 3);
+  $("showAnswerBtn").style.display = showAns ? "" : "none";
 }
 
 function nextStep(){
-  if(currentStep < 5){
-    currentStep += 1;
-    renderAll();
+  if(state.step < 5){
+    state.step++;
+    if(state.step === 5){ burstConfetti(40); }
+    render();
+  } else {
+    restart();
   }
 }
-
 function prevStep(){
-  if(currentStep > 0){
-    currentStep -= 1;
-    renderAll();
+  if(state.step > 0){
+    state.step--;
+    render();
   }
 }
 
-function resetCurrent(){
-  if(currentStep === 1){
-    selectedTC = "TC1";
-    selectTC("TC1");
-  }else if(currentStep === 3){
-    selectedPrinciple = currentPath().matrix.candidates[0];
-    renderMatrixScene();
-    animateIntersection();
+/* ============================================================
+   SCENE RENDERING (the LEFT big visual)
+   ============================================================ */
+function renderScene(){
+  const c = CASES[state.caseKey];
+  const path = c.paths[state.tc];
+  const stage = $("stage");
+  const caption = $("sceneCaption");
+
+  switch(state.step){
+    case 0: // Problem
+      stage.innerHTML = renderProblemStage(c);
+      caption.innerHTML = `<b>같은 문제</b>가 두 방향으로 갈라집니다 — 어느 쪽을 우선할까요?`;
+      break;
+    case 1: // TC choice
+      stage.innerHTML = renderTCStage(c);
+      caption.innerHTML = state.tc === "TC1"
+        ? `<span class="good">TC1</span> 선택 시 <b>${c.paths.TC1.improve.label}</b>을 우선합니다`
+        : `<span class="good">TC2</span> 선택 시 <b>${c.paths.TC2.improve.label}</b>을 우선합니다`;
+      break;
+    case 2: // Variable translation
+      stage.innerHTML = renderMorphStage(c, path);
+      caption.innerHTML = `현실 표현이 <b>TRIZ 공학 변수</b>로 번역되는 과정입니다`;
+      break;
+    case 3: // Matrix
+      stage.innerHTML = renderMatrixStage(c, path);
+      caption.innerHTML = `두 변수의 교차점에서 <span class="triz">발명원리 후보</span>가 등장합니다`;
+      // trigger principle stagger animation
+      setTimeout(animatePrinciples, 60);
+      break;
+    case 4: // General solution
+      stage.innerHTML = renderGeneralStage(c, path);
+      caption.innerHTML = `발명원리 <span class="triz">${path.rep}번 ${PRINCIPLE_INFO[path.rep].name}</span>으로 일반 해결안을 도출합니다`;
+      break;
+    case 5: // Specific solution
+      stage.innerHTML = renderSpecificStage(c, path);
+      caption.innerHTML = `<b>${path.solutions[0].title}</b> — 발명원리가 실제 해결안으로 구체화됩니다`;
+      break;
   }
 }
 
-function renderAll(){
-  renderCaseTabs();
-  renderStepBar();
-  renderDynamicScenes();
-  renderHead();
-  showScene();
-  renderCurrentStepState();
+/* ============================================================
+   SIDE PANEL RENDERING
+   ============================================================ */
+function renderSide(){
+  const c = CASES[state.caseKey];
+  const path = c.paths[state.tc];
+  const step = STEPS[state.step];
+  $("panelStepNum").textContent = step.num;
+  $("panelTitle").textContent = step.title;
+  $("panelSub").textContent = step.sub;
+
+  const body = $("panelBody");
+  switch(state.step){
+    case 0:
+      body.innerHTML = `
+        <p>이 문제는 <b style="color:var(--warn-yellow)">기술적 모순</b>입니다.</p>
+        <p>하나를 좋게 하면 다른 하나가 나빠집니다. <b>${c.formula[0]}</b>과 <b>${c.formula[1]}</b>이 함께 만족할 수 없는 상태입니다.</p>
+        <div class="hint"><b>다음 단계:</b> 두 방향(TC1·TC2) 중 어느 쪽을 먼저 풀지 정합니다.</div>`;
+      break;
+    case 1:
+      body.innerHTML = `
+        <div class="tc-grid">
+          <button class="tc-card ${state.tc==='TC1'?'selected':''}" onclick="pickTC('TC1')">
+            <span class="tc-tag">TC1</span>
+            <div class="tc-title">${c.tc.TC1.title}</div>
+            <div class="tc-desc">${c.tc.TC1.desc}</div>
+          </button>
+          <button class="tc-card ${state.tc==='TC2'?'selected':''}" onclick="pickTC('TC2')">
+            <span class="tc-tag">TC2</span>
+            <div class="tc-title">${c.tc.TC2.title}</div>
+            <div class="tc-desc">${c.tc.TC2.desc}</div>
+          </button>
+        </div>
+        <div class="hint" style="margin-top:14px"><b>같은 문제도 어느 방향을 선택하느냐</b>에 따라 해결안이 달라집니다.</div>`;
+      break;
+    case 2:
+      body.innerHTML = renderVarPanel(path);
+      break;
+    case 3:
+      body.innerHTML = renderMatrixPanel(path);
+      break;
+    case 4:
+      body.innerHTML = renderGeneralPanel(c, path);
+      break;
+    case 5:
+      body.innerHTML = renderSolutionPanel(path);
+      break;
+  }
 }
 
-renderAll();
+function pickTC(tc){
+  if(state.tc === tc) return;
+  state.tc = tc;
+  state.improvePicked = null;
+  state.worsenPicked = null;
+  state.principleChoice = null;
+  state.done = { improve:false, worsen:false };
+  render();
+}
+
+/* ---- Variable picker UI ---- */
+function renderVarPanel(path){
+  const imp = path.improve;
+  const wor = path.worsen;
+  return `
+    <div class="var-section good">
+      <p class="var-section-title">▸ 좋아지고 싶은 것 (개선 특성)</p>
+      <p class="var-intro">"${imp.label}"을 39 공학 변수에서 어디로 볼까요?</p>
+      <div class="var-options" id="improveOpts">
+        ${imp.options.map((o,i) => `
+          <button class="var-opt" onclick="pickVar('improve',${i})">
+            <b>${o.name}</b>
+            <small>${o.desc}</small>
+          </button>`).join("")}
+      </div>
+    </div>
+    <div class="var-section bad">
+      <p class="var-section-title">▸ 함께 나빠지는 것 (악화 특성)</p>
+      <p class="var-intro">"${wor.label}"을 39 공학 변수에서 어디로 볼까요?</p>
+      <div class="var-options" id="worsenOpts">
+        ${wor.options.map((o,i) => `
+          <button class="var-opt" onclick="pickVar('worsen',${i})">
+            <b>${o.name}</b>
+            <small>${o.desc}</small>
+          </button>`).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function pickVar(kind, idx){
+  const path = CASES[state.caseKey].paths[state.tc];
+  const opts = path[kind].options;
+  const opt = opts[idx];
+  const selector = kind === 'improve' ? "#improveOpts .var-opt" : "#worsenOpts .var-opt";
+  const container = document.querySelectorAll(selector);
+
+  if(opt.correct){
+    // 정답: 모든 옵션을 lock하고 정답·오답 표시
+    container.forEach((el, i) => {
+      const o = opts[i];
+      el.classList.remove("wrong","dim");
+      if(i === idx){
+        el.classList.add("correct");
+      } else {
+        el.classList.add(o.correct ? "correct" : "dim");
+      }
+      el.disabled = true;
+    });
+    state[kind === 'improve' ? 'improvePicked' : 'worsenPicked'] = { idx, correct:true };
+    state.done[kind] = true;
+    // Trigger scene morph for the picked variable
+    triggerMorph(kind, opt.name);
+    if(state.done.improve && state.done.worsen) burstConfetti(20);
+  } else {
+    // 오답: 클릭한 옵션만 wrong 표시, 잠시 후 다시 시도 가능
+    const clicked = container[idx];
+    clicked.classList.add("wrong");
+    clicked.disabled = true;
+    state[kind === 'improve' ? 'improvePicked' : 'worsenPicked'] = { idx, correct:false };
+    setTimeout(() => {
+      clicked.classList.remove("wrong");
+      clicked.disabled = false;
+    }, 1100);
+  }
+}
+
+function triggerMorph(kind, trizName){
+  const cardId = kind === 'improve' ? 'morphTrizGood' : 'morphTrizBad';
+  const card = $(cardId);
+  if(card){
+    card.querySelector('.mc-text').textContent = trizName;
+    card.classList.add('show');
+  }
+}
+
+/* ---- Matrix panel ---- */
+function renderMatrixPanel(path){
+  return `
+    <p>두 공학 변수의 <b style="color:var(--warn-yellow)">교차점</b>에서 4개의 발명원리 후보가 나타났습니다.</p>
+    <p style="margin-top:10px">왼쪽 워크벤치에서 카드를 확인하세요. 모순행렬은 <b>정답을 주는 표가 아니라 후보를 제안</b>하는 도구입니다.</p>
+    <div class="hint" style="margin-top:14px"><b>다음 단계:</b> 후보 중 가장 적절한 대표 원리를 골라 일반 해결안을 도출합니다.</div>`;
+}
+
+/* ---- General solution panel ---- */
+function renderGeneralPanel(c, path){
+  return `
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:10px;font-weight:800">▸ 모순행렬 후보 원리</p>
+    <div class="principle-pick">
+      ${path.principles.map(n => {
+        const info = PRINCIPLE_INFO[n];
+        const isRep = n === path.rep;
+        return `<div class="pp-item ${isRep?'selected representative':''}" style="cursor:default">
+          <span class="pp-num">${n}</span>
+          <div>
+            <b>${info.name}</b>
+            <small>${info.desc}</small>
+          </div>
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="hint" style="margin-top:14px"><b>대표 원리</b>(${path.rep}번 ${PRINCIPLE_INFO[path.rep].name})를 골라 일반 해결안으로 이어집니다.</div>`;
+}
+
+// (참고용 - 더이상 호출되지 않음) 후보 원리 선택은 비활성화
+function pickPrinciple(n){
+  // 대표 원리만 의미있으므로 별도 선택 행위 없음
+}
+
+/* ---- Solution panel ---- */
+function renderSolutionPanel(path){
+  return `
+    <p>일반 해결안을 <b style="color:var(--solve-green)">현장에서 실행 가능한 구체 아이디어</b>로 바꿉니다.</p>
+    <div class="solution-list" style="margin-top:14px">
+      ${path.solutions.map((s, i) => `
+        <div class="sol-card">
+          <span class="sol-num">SOLUTION ${i+1}</span>
+          <div class="sol-title">${s.title}</div>
+          <div class="sol-desc">${s.desc}</div>
+        </div>`).join("")}
+    </div>
+    <div class="hint" style="margin-top:14px"><b>완성!</b> 발명원리는 추상적 힌트, 특정 해결안은 상황에 맞춘 구체화입니다.</div>`;
+}
+
+function showAnswer(){
+  const c = CASES[state.caseKey];
+  const path = c.paths[state.tc];
+
+  switch(state.step){
+    case 0:
+      // Step 1: 문제 정의 - 정답이 따로 없음
+      break;
+    case 1:
+      // Step 2: TC 선택 - 강의 권장은 TC1
+      state.tc = 'TC1';
+      state.improvePicked = null;
+      state.worsenPicked = null;
+      state.done = { improve:false, worsen:false };
+      render();
+      break;
+    case 2:
+      // Step 3: 변수 치환 - 정답 옵션 자동 선택
+      ['improve','worsen'].forEach(kind => {
+        const opts = path[kind].options;
+        const correctIdx = opts.findIndex(o => o.correct);
+        if(correctIdx >= 0){
+          // 직접 정답 처리 (pickVar의 정답 분기와 동일)
+          state[kind === 'improve' ? 'improvePicked' : 'worsenPicked'] = { idx:correctIdx, correct:true };
+          state.done[kind] = true;
+        }
+      });
+      render();
+      // morph 카드는 render 이후 별도 표시
+      setTimeout(() => {
+        ['improve','worsen'].forEach(kind => {
+          const opts = path[kind].options;
+          const correctIdx = opts.findIndex(o => o.correct);
+          const selector = kind === 'improve' ? "#improveOpts .var-opt" : "#worsenOpts .var-opt";
+          document.querySelectorAll(selector).forEach((el, i) => {
+            el.disabled = true;
+            if(i === correctIdx) el.classList.add("correct");
+            else el.classList.add("dim");
+          });
+        });
+        burstConfetti(20);
+      }, 50);
+      break;
+    case 3:
+      // Step 4: 발명원리 - 자동 등장 (이미 자동이지만 명시)
+      animatePrinciples();
+      break;
+    case 4:
+      // Step 5: 일반 해결안 - 대표 원리 강조 (이미 자동)
+      // No-op: 패널이 대표 원리를 항상 보여줌
+      break;
+    case 5:
+      // Step 6: 특정 해결안 - 정답이 따로 없음
+      break;
+  }
+}
+
+/* ============================================================
+   STAGE SVG GENERATORS
+   ============================================================ */
+function renderProblemStage(c){
+  return `
+    <div class="s1-grid">
+      <div class="s1-side good">
+        <div class="label">↑ ${c.s1.goodLabel}</div>
+        <div style="display:flex;justify-content:center">${visualSVG(c.s1.visual, 'good')}</div>
+        <p style="margin:14px 0 0;color:var(--good-blue);font-weight:900;font-size:14px">${c.s1.good}</p>
+      </div>
+      <div class="s1-side bad">
+        <div class="label">↓ ${c.s1.badLabel}</div>
+        <div style="display:flex;justify-content:center">${visualSVG(c.s1.visual, 'bad')}</div>
+        <p style="margin:14px 0 0;color:var(--bad-red);font-weight:900;font-size:14px">${c.s1.bad}</p>
+      </div>
+    </div>`;
+}
+
+function renderTCStage(c){
+  // Show both TC options side-by-side, selected one highlighted with pulse
+  const sel = state.tc;
+  return `
+    <div class="s1-grid">
+      <div class="s1-side ${sel==='TC1'?'good':''}" style="${sel==='TC1'?'':'opacity:.45'}">
+        <div class="label" style="background:rgba(255,209,102,.16);color:var(--warn-yellow);border:1px solid rgba(255,209,102,.42)">TC1 · ${c.paths.TC1.improve.label}</div>
+        <div style="display:flex;justify-content:center">${visualSVG(c.s1.visual, 'good')}</div>
+        <p style="margin:14px 0 0;font-weight:900;font-size:14px;color:${sel==='TC1'?'var(--text)':'var(--text-dim)'}">
+          ${c.paths.TC1.improve.label} ↑ → ${c.paths.TC1.worsen.label} ↓
+        </p>
+      </div>
+      <div class="s1-side ${sel==='TC2'?'good':''}" style="${sel==='TC2'?'':'opacity:.45'}">
+        <div class="label" style="background:rgba(255,209,102,.16);color:var(--warn-yellow);border:1px solid rgba(255,209,102,.42)">TC2 · ${c.paths.TC2.improve.label}</div>
+        <div style="display:flex;justify-content:center">${visualSVG(c.s1.visual, 'bad')}</div>
+        <p style="margin:14px 0 0;font-weight:900;font-size:14px;color:${sel==='TC2'?'var(--text)':'var(--text-dim)'}">
+          ${c.paths.TC2.improve.label} ↑ → ${c.paths.TC2.worsen.label} ↓
+        </p>
+      </div>
+    </div>`;
+}
+
+function renderMorphStage(c, path){
+  return `
+    <div class="morph-stack">
+      <div class="morph-row">
+        <div class="morph-card real">
+          <div class="mc-label">현실 표현 · 좋아지는 것</div>
+          <div class="mc-text" style="color:var(--good-blue)">${path.improve.label}</div>
+        </div>
+        <div class="morph-arrow">→</div>
+        <div class="morph-card triz ${state.improvePicked && state.improvePicked.correct ? 'show' : ''}" id="morphTrizGood">
+          <div class="mc-label">TRIZ 공학 변수</div>
+          <div class="mc-text">${state.improvePicked && state.improvePicked.correct ? path.improve.options.find(o=>o.correct).name : '???'}</div>
+        </div>
+      </div>
+      <div class="morph-row">
+        <div class="morph-card real">
+          <div class="mc-label">현실 표현 · 나빠지는 것</div>
+          <div class="mc-text" style="color:var(--bad-red)">${path.worsen.label}</div>
+        </div>
+        <div class="morph-arrow">→</div>
+        <div class="morph-card triz ${state.worsenPicked && state.worsenPicked.correct ? 'show' : ''}" id="morphTrizBad">
+          <div class="mc-label">TRIZ 공학 변수</div>
+          <div class="mc-text">${state.worsenPicked && state.worsenPicked.correct ? path.worsen.options.find(o=>o.correct).name : '???'}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderMatrixStage(c, path){
+  const impVar = path.improve.options.find(o => o.correct).name;
+  const worVar = path.worsen.options.find(o => o.correct).name;
+  return `
+    <div class="matrix-stage">
+      <div class="mx-row">
+        <div class="mx-var improve">
+          <div class="mxv-tag">개선 변수</div>
+          <div class="mxv-name">${impVar}</div>
+        </div>
+        <div class="mx-cross"><div class="mx-cross-icon">×</div></div>
+        <div class="mx-var worsen">
+          <div class="mxv-tag">악화 변수</div>
+          <div class="mxv-name">${worVar}</div>
+        </div>
+      </div>
+      <div class="principles-pop" id="principlesPop">
+        ${path.principles.map((n, i) => {
+          const info = PRINCIPLE_INFO[n];
+          return `<div class="prn-card" style="animation-delay:${0.15 + i*0.18}s">
+            <div class="prn-num">${n}번</div>
+            <div class="prn-name">${info.name}</div>
+            <div class="prn-desc">${info.desc}</div>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>`;
+}
+
+function animatePrinciples(){
+  document.querySelectorAll("#principlesPop .prn-card").forEach(el => {
+    el.classList.add('in');
+  });
+}
+
+function renderGeneralStage(c, path){
+  const info = PRINCIPLE_INFO[path.rep];
+  return `
+    <div class="general-box">
+      <div class="general-pill">▸ 대표 원리: ${path.rep}번 ${info.name}</div>
+      <div class="general-text"><span class="accent">${path.general}</span></div>
+      <div class="general-reason">${path.reason}</div>
+    </div>`;
+}
+
+function renderSpecificStage(c, path){
+  const sol = path.solutions[0];
+  return `
+    <div class="solution-stage">
+      <div class="solution-banner">✓ ${sol.title}</div>
+      <div class="solution-svg">${solutionSVG(sol.svg)}</div>
+    </div>`;
+}
+
+/* ============================================================
+   SVG ASSETS - case visuals for problem/TC stages
+   ============================================================ */
+function visualSVG(kind, side){
+  if(kind === 'pile') return pileSVG(side);
+  if(kind === 'drone') return droneSVG(side);
+  if(kind === 'phone') return phoneSVG(side);
+  if(kind === 'login') return loginSVG(side);
+  return '';
+}
+
+function pileSVG(side){
+  // good = sharp pile (easy to drive), bad = blunt pile (stable)
+  const isGood = side === 'good';
+  return `<svg viewBox="0 0 220 200" width="200" height="180">
+    <defs>
+      <linearGradient id="pile-g-${side}" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="${isGood ? '#5ec3ff' : '#ff6b8e'}"/>
+        <stop offset="1" stop-color="${isGood ? '#2c6fb4' : '#a23656'}"/>
+      </linearGradient>
+    </defs>
+    <!-- ground -->
+    <rect x="0" y="140" width="220" height="60" fill="#1a3556" opacity=".6"/>
+    <line x1="0" y1="140" x2="220" y2="140" stroke="#9fb3cc" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <!-- impact hammer above -->
+    <g>
+      <rect x="86" y="6" width="48" height="20" rx="3" fill="#9fb3cc"/>
+      <line x1="110" y1="26" x2="110" y2="${isGood ? '38' : '38'}" stroke="#9fb3cc" stroke-width="3"/>
+      ${isGood ? `
+        <!-- motion lines -->
+        <line x1="70" y1="14" x2="80" y2="14" stroke="#5ec3ff" stroke-width="2" opacity=".7"/>
+        <line x1="140" y1="14" x2="150" y2="14" stroke="#5ec3ff" stroke-width="2" opacity=".7"/>
+      ` : ''}
+    </g>
+    <!-- pile body -->
+    <g transform="translate(110 ${isGood ? '95' : '90'})">
+      ${isGood
+        ? `<!-- sharp pile (deep in ground) -->
+           <rect x="-10" y="-50" width="20" height="80" fill="url(#pile-g-${side})"/>
+           <polygon points="-10,30 10,30 0,68" fill="url(#pile-g-${side})"/>
+           <!-- depth indicator (deep) -->
+           <g opacity=".8">
+             <line x1="22" y1="50" x2="40" y2="50" stroke="#5ec3ff" stroke-width="2"/>
+             <line x1="22" y1="68" x2="40" y2="68" stroke="#5ec3ff" stroke-width="2"/>
+             <text x="44" y="62" fill="#5ec3ff" font-size="12" font-weight="900">깊이</text>
+           </g>`
+        : `<!-- blunt pile (shallow) -->
+           <rect x="-12" y="-50" width="24" height="80" fill="url(#pile-g-${side})"/>
+           <rect x="-14" y="30" width="28" height="14" rx="3" fill="url(#pile-g-${side})"/>
+           <!-- stability arrows (firm) -->
+           <g opacity=".85">
+             <line x1="-30" y1="40" x2="-18" y2="40" stroke="#ff6b8e" stroke-width="2.5" marker-end="url(#arrL${side})"/>
+             <line x1="30" y1="40" x2="18" y2="40" stroke="#ff6b8e" stroke-width="2.5" marker-end="url(#arrR${side})"/>
+           </g>`
+      }
+    </g>
+  </svg>`;
+}
+
+function droneSVG(side){
+  const isGood = side === 'good';
+  return `<svg viewBox="0 0 240 200" width="200" height="180">
+    <!-- drone body -->
+    <g transform="translate(120 100)">
+      <line x1="-60" y1="0" x2="60" y2="0" stroke="#d8edff" stroke-width="6" stroke-linecap="round"/>
+      <line x1="0" y1="-40" x2="0" y2="40" stroke="#d8edff" stroke-width="6" stroke-linecap="round"/>
+      <!-- propellers -->
+      <ellipse cx="-60" cy="0" rx="22" ry="5" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="60" cy="0" rx="22" ry="5" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="0" cy="-40" rx="22" ry="5" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="0" cy="40" rx="22" ry="5" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <!-- body cabin / battery size -->
+      ${isGood
+        ? `<rect x="-30" y="-18" width="60" height="36" rx="8" fill="#5ec3ff" stroke="#2c6fb4" stroke-width="2"/>
+           <text x="0" y="6" text-anchor="middle" font-size="13" font-weight="1000" fill="#04222d">BIG BATT</text>
+           <!-- droop -->
+           <g transform="translate(0 18)" opacity=".7">
+             <line x1="0" y1="0" x2="0" y2="12" stroke="#ff6b8e" stroke-width="2"/>
+             <polygon points="0,16 -5,8 5,8" fill="#ff6b8e"/>
+           </g>`
+        : `<rect x="-22" y="-12" width="44" height="24" rx="6" fill="#4be7ca" stroke="#2c9ee0" stroke-width="2"/>
+           <text x="0" y="4" text-anchor="middle" font-size="11" font-weight="1000" fill="#04222d">SMALL</text>`
+      }
+    </g>
+    <!-- label -->
+    <text x="120" y="180" text-anchor="middle" font-size="12" font-weight="900" fill="${isGood?'#5ec3ff':'#ff6b8e'}">
+      ${isGood ? '오래 비행 / 무거움' : '가벼움 / 짧은 비행'}
+    </text>
+  </svg>`;
+}
+
+function phoneSVG(side){
+  const isGood = side === 'good';
+  return `<svg viewBox="0 0 220 200" width="200" height="180">
+    ${isGood
+      ? `<!-- big phone / tablet -->
+         <rect x="40" y="20" width="140" height="160" rx="14" fill="#1a3556" stroke="#5ec3ff" stroke-width="3"/>
+         <rect x="50" y="32" width="120" height="136" rx="6" fill="#0d2239"/>
+         <rect x="60" y="42" width="100" height="48" rx="4" fill="#5ec3ff" opacity=".7"/>
+         <rect x="60" y="98" width="46" height="60" rx="4" fill="#4be7ca" opacity=".7"/>
+         <rect x="114" y="98" width="46" height="60" rx="4" fill="#ffd166" opacity=".7"/>
+         <text x="110" y="195" text-anchor="middle" font-size="11" font-weight="900" fill="#5ec3ff">크게 보기 좋음</text>`
+      : `<!-- small phone -->
+         <rect x="80" y="50" width="60" height="100" rx="10" fill="#1a3556" stroke="#ff6b8e" stroke-width="3"/>
+         <rect x="86" y="58" width="48" height="84" rx="3" fill="#0d2239"/>
+         <circle cx="110" cy="100" r="6" fill="#4be7ca" opacity=".5"/>
+         <!-- pocket / hand symbol -->
+         <path d="M 50 165 Q 110 180 170 165" fill="none" stroke="#ff6b8e" stroke-width="2.5"/>
+         <text x="110" y="195" text-anchor="middle" font-size="11" font-weight="900" fill="#ff6b8e">휴대 편함</text>`
+    }
+  </svg>`;
+}
+
+function loginSVG(side){
+  const isGood = side === 'good';
+  return `<svg viewBox="0 0 220 200" width="200" height="180">
+    ${isGood
+      ? `<!-- strong lock + many steps -->
+         <g transform="translate(110 60)">
+           <path d="M -28 60 V 8 C -28 -18 -14 -28 0 -28 C 14 -28 28 -18 28 8 V 60" fill="none" stroke="#5ec3ff" stroke-width="9" stroke-linecap="round"/>
+           <rect x="-40" y="50" width="80" height="60" rx="10" fill="#4be7ca" stroke="#1a3556" stroke-width="2"/>
+           <circle cx="0" cy="80" r="9" fill="#1a3556"/>
+         </g>
+         <g transform="translate(40 180)" font-size="10" font-weight="900" fill="#5ec3ff">
+           <rect x="0" y="-8" width="46" height="18" rx="4" fill="rgba(94,195,255,.18)"/>
+           <text x="23" y="4" text-anchor="middle">1단계</text>
+           <rect x="56" y="-8" width="46" height="18" rx="4" fill="rgba(94,195,255,.18)"/>
+           <text x="79" y="4" text-anchor="middle">2단계</text>
+           <rect x="112" y="-8" width="46" height="18" rx="4" fill="rgba(94,195,255,.18)"/>
+           <text x="135" y="4" text-anchor="middle">3단계</text>
+         </g>`
+      : `<!-- quick / minimal -->
+         <g transform="translate(110 100)">
+           <circle r="50" fill="rgba(255,107,142,.14)" stroke="#ff6b8e" stroke-width="2"/>
+           <text x="0" y="-6" text-anchor="middle" font-size="32">⚡</text>
+           <text x="0" y="22" text-anchor="middle" font-size="13" font-weight="1000" fill="#ff6b8e">빠른 로그인</text>
+         </g>
+         <text x="110" y="180" text-anchor="middle" font-size="11" font-weight="900" fill="#ff6b8e">편함 / 보안 약함</text>`
+    }
+  </svg>`;
+}
+
+/* ============================================================
+   SOLUTION SVG (Step 6 specific illustrations)
+   ============================================================ */
+function solutionSVG(kind){
+  switch(kind){
+    case 'pilePreHole': return solPilePreHole();
+    case 'pileExpand': return solPileExpand();
+    case 'pileSleeve': return solPileSleeve();
+    case 'droneBattery': return solDroneBattery();
+    case 'droneLight': return solDroneLight();
+    case 'droneRoute': return solDroneRoute();
+    case 'droneSwap': return solDroneSwap();
+    case 'phoneFold': return solPhoneFold();
+    case 'phoneExternal': return solPhoneExternal();
+    case 'loginRisk': return solLoginRisk();
+    case 'loginFeedback': return solLoginFeedback();
+    case 'loginTrusted': return solLoginTrusted();
+    case 'loginBio': return solLoginBio();
+  }
+  return '<svg viewBox="0 0 400 240"></svg>';
+}
+
+function solPilePreHole(){
+  return `<svg viewBox="0 0 420 240">
+    <rect x="0" y="160" width="420" height="80" fill="#1a3556" opacity=".6"/>
+    <line x1="0" y1="160" x2="420" y2="160" stroke="#5ec3ff" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <!-- step 1: drill pre-hole -->
+    <g transform="translate(100 100)">
+      <text x="0" y="-50" text-anchor="middle" font-size="12" font-weight="1000" fill="#ffd166">① 먼저 구멍을 뚫고</text>
+      <rect x="-8" y="-40" width="16" height="40" rx="2" fill="#9fb3cc"/>
+      <polygon points="-8,0 8,0 0,30" fill="#ffd166"/>
+      <!-- spinning indication -->
+      <line x1="-20" y1="-10" x2="-12" y2="-10" stroke="#ffd166" stroke-width="2"/>
+      <line x1="12" y1="-10" x2="20" y2="-10" stroke="#ffd166" stroke-width="2"/>
+      <!-- existing small hole -->
+      <ellipse cx="0" cy="60" rx="6" ry="4" fill="#040b18"/>
+    </g>
+    <!-- arrow -->
+    <text x="200" y="100" text-anchor="middle" font-size="28" fill="#7ee787" font-weight="1000">→</text>
+    <!-- step 2: pile inserts easily -->
+    <g transform="translate(300 100)">
+      <text x="0" y="-50" text-anchor="middle" font-size="12" font-weight="1000" fill="#7ee787">② 말뚝이 쉽게 들어감</text>
+      <rect x="-10" y="-40" width="20" height="80" fill="#7ee787"/>
+      <polygon points="-10,40 10,40 0,70" fill="#7ee787"/>
+      <!-- check -->
+      <g transform="translate(40 30)">
+        <circle r="14" fill="#7ee787"/>
+        <path d="M -6 0 L -2 4 L 6 -4" stroke="#04222d" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+function solPileExpand(){
+  return `<svg viewBox="0 0 420 240">
+    <rect x="0" y="160" width="420" height="80" fill="#1a3556" opacity=".6"/>
+    <line x1="0" y1="160" x2="420" y2="160" stroke="#5ec3ff" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <!-- before: thin pile entering -->
+    <g transform="translate(110 100)">
+      <text x="0" y="-60" text-anchor="middle" font-size="12" font-weight="1000" fill="#ffd166">① 박을 때: 좁게</text>
+      <rect x="-7" y="-50" width="14" height="100" fill="#5ec3ff"/>
+      <polygon points="-7,50 7,50 0,80" fill="#5ec3ff"/>
+      <!-- arrow down (driving) -->
+      <g transform="translate(0 -68)">
+        <line x1="0" y1="-10" x2="0" y2="6" stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="0,8 -4,2 4,2" fill="#ffd166"/>
+      </g>
+    </g>
+    <text x="200" y="100" text-anchor="middle" font-size="28" fill="#7ee787" font-weight="1000">→</text>
+    <!-- after: bottom expanded -->
+    <g transform="translate(310 100)">
+      <text x="0" y="-60" text-anchor="middle" font-size="12" font-weight="1000" fill="#7ee787">② 박힌 뒤: 펼쳐짐</text>
+      <rect x="-7" y="-50" width="14" height="90" fill="#7ee787"/>
+      <!-- expanded fins -->
+      <polygon points="-7,40 -32,80 -8,76" fill="#7ee787"/>
+      <polygon points="7,40 32,80 8,76" fill="#7ee787"/>
+      <polygon points="-7,40 7,40 0,75" fill="#7ee787"/>
+      <!-- stability arrows -->
+      <g opacity=".85">
+        <line x1="-45" y1="60" x2="-32" y2="60" stroke="#ff6b8e" stroke-width="2"/>
+        <polygon points="-30,60 -34,57 -34,63" fill="#ff6b8e"/>
+        <line x1="45" y1="60" x2="32" y2="60" stroke="#ff6b8e" stroke-width="2"/>
+        <polygon points="30,60 34,57 34,63" fill="#ff6b8e"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+function solPileSleeve(){
+  return `<svg viewBox="0 0 420 240">
+    <rect x="0" y="160" width="420" height="80" fill="#1a3556" opacity=".6"/>
+    <line x1="0" y1="160" x2="420" y2="160" stroke="#5ec3ff" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <g transform="translate(110 100)">
+      <text x="0" y="-60" text-anchor="middle" font-size="12" font-weight="1000" fill="#ffd166">① 좁은 형태로 들어감</text>
+      <rect x="-8" y="-50" width="16" height="100" fill="#5ec3ff"/>
+      <polygon points="-8,50 8,50 0,75" fill="#5ec3ff"/>
+    </g>
+    <text x="200" y="100" text-anchor="middle" font-size="28" fill="#7ee787" font-weight="1000">→</text>
+    <g transform="translate(310 100)">
+      <text x="0" y="-60" text-anchor="middle" font-size="12" font-weight="1000" fill="#7ee787">② 하단 지지부 펼침</text>
+      <rect x="-8" y="-50" width="16" height="80" fill="#7ee787"/>
+      <!-- sleeve / wide base -->
+      <rect x="-32" y="30" width="64" height="14" rx="3" fill="#7ee787"/>
+      <rect x="-26" y="44" width="52" height="20" rx="3" fill="#7ee787" opacity=".7"/>
+      <polygon points="-26,64 26,64 0,76" fill="#7ee787" opacity=".5"/>
+    </g>
+  </svg>`;
+}
+
+function solDroneBattery(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">고효율 · 경량 배터리</text>
+    <g transform="translate(210 130)">
+      <!-- drone -->
+      <line x1="-70" y1="0" x2="70" y2="0" stroke="#d8edff" stroke-width="7" stroke-linecap="round"/>
+      <line x1="0" y1="-50" x2="0" y2="50" stroke="#d8edff" stroke-width="7" stroke-linecap="round"/>
+      <ellipse cx="-70" cy="0" rx="26" ry="6" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="70" cy="0" rx="26" ry="6" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="0" cy="-50" rx="26" ry="6" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <ellipse cx="0" cy="50" rx="26" ry="6" fill="none" stroke="#d8edff" stroke-width="3"/>
+      <!-- new battery (gold) -->
+      <rect x="-32" y="-18" width="64" height="36" rx="8" fill="url(#gbatt)"/>
+      <defs>
+        <linearGradient id="gbatt" x1="0" x2="1">
+          <stop offset="0" stop-color="#ffd166"/>
+          <stop offset="1" stop-color="#7ee787"/>
+        </linearGradient>
+      </defs>
+      <text x="0" y="6" text-anchor="middle" font-size="11" font-weight="1000" fill="#04222d">HI-EFF</text>
+    </g>
+    <!-- flight time bar -->
+    <g transform="translate(80 200)">
+      <rect width="260" height="10" rx="5" fill="rgba(255,255,255,.08)"/>
+      <rect width="220" height="10" rx="5" fill="#7ee787"/>
+      <text x="270" y="9" font-size="11" font-weight="1000" fill="#7ee787">↑ 비행시간</text>
+    </g>
+  </svg>`;
+}
+
+function solDroneLight(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">기체 경량 설계</text>
+    <g transform="translate(210 120)">
+      <!-- lighter frame (thin) -->
+      <line x1="-70" y1="0" x2="70" y2="0" stroke="#7ee787" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 3"/>
+      <line x1="0" y1="-50" x2="0" y2="50" stroke="#7ee787" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 3"/>
+      <ellipse cx="-70" cy="0" rx="24" ry="5" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="70" cy="0" rx="24" ry="5" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="0" cy="-50" rx="24" ry="5" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="0" cy="50" rx="24" ry="5" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <rect x="-28" y="-16" width="56" height="32" rx="6" fill="#5ec3ff"/>
+      <text x="0" y="6" text-anchor="middle" font-size="10" font-weight="1000" fill="#04222d">LIGHT</text>
+    </g>
+    <!-- weight reduction indicator -->
+    <g transform="translate(110 200)" font-size="12" font-weight="1000" fill="#7ee787">
+      <text>무게 ↓</text>
+      <text x="180">성능 ↑</text>
+    </g>
+  </svg>`;
+}
+
+function solDroneRoute(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">사전 경로 최적화</text>
+    <g transform="translate(50 100)">
+      <!-- waypoints -->
+      <circle cx="0" cy="40" r="8" fill="#7ee787"/>
+      <circle cx="100" cy="20" r="6" fill="#5ec3ff"/>
+      <circle cx="200" cy="60" r="6" fill="#5ec3ff"/>
+      <circle cx="300" cy="30" r="8" fill="#ff6b8e"/>
+      <!-- optimized path -->
+      <path d="M 0 40 Q 80 -10 100 20 Q 160 40 200 60 Q 270 80 300 30"
+            fill="none" stroke="#7ee787" stroke-width="3" stroke-dasharray="6 4">
+        <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.4s" repeatCount="indefinite"/>
+      </path>
+      <!-- small drone -->
+      <g transform="translate(150 35)">
+        <circle r="9" fill="#ffd166"/>
+        <text y="3" text-anchor="middle" font-size="11">🚁</text>
+      </g>
+      <text x="0" y="70" font-size="11" font-weight="900" fill="#7ee787">출발</text>
+      <text x="300" y="60" font-size="11" font-weight="900" fill="#ff6b8e">도착</text>
+    </g>
+  </svg>`;
+}
+
+function solDroneSwap(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">배터리 교체 · 보조팩</text>
+    <!-- drone -->
+    <g transform="translate(140 130)">
+      <line x1="-50" y1="0" x2="50" y2="0" stroke="#d8edff" stroke-width="6"/>
+      <line x1="0" y1="-32" x2="0" y2="32" stroke="#d8edff" stroke-width="6"/>
+      <ellipse cx="-50" cy="0" rx="18" ry="4" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="50" cy="0" rx="18" ry="4" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="0" cy="-32" rx="18" ry="4" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <ellipse cx="0" cy="32" rx="18" ry="4" fill="none" stroke="#d8edff" stroke-width="2"/>
+      <rect x="-20" y="-12" width="40" height="24" rx="5" fill="#5ec3ff"/>
+    </g>
+    <!-- swap arrow -->
+    <g transform="translate(230 130)">
+      <line x1="0" y1="0" x2="40" y2="0" stroke="#7ee787" stroke-width="3"/>
+      <polygon points="40,0 32,-5 32,5" fill="#7ee787"/>
+      <text x="20" y="-10" text-anchor="middle" font-size="11" font-weight="1000" fill="#7ee787">교체</text>
+    </g>
+    <!-- spare batteries -->
+    <g transform="translate(290 105)">
+      <rect width="50" height="22" rx="4" fill="#ffd166" stroke="#3b2700" stroke-width="1"/>
+      <text x="25" y="15" text-anchor="middle" font-size="10" font-weight="1000" fill="#3b2700">BATT-A</text>
+      <rect y="32" width="50" height="22" rx="4" fill="#ffd166" stroke="#3b2700" stroke-width="1"/>
+      <text x="25" y="47" text-anchor="middle" font-size="10" font-weight="1000" fill="#3b2700">BATT-B</text>
+    </g>
+  </svg>`;
+}
+
+function solPhoneFold(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">접으면 작고, 펼치면 크고</text>
+    <!-- folded (small) -->
+    <g transform="translate(100 130)">
+      <rect x="-26" y="-50" width="52" height="100" rx="8" fill="#1a3556" stroke="#5ec3ff" stroke-width="2"/>
+      <rect x="-22" y="-46" width="44" height="92" rx="3" fill="#0d2239"/>
+      <line x1="0" y1="-50" x2="0" y2="50" stroke="#5ec3ff" stroke-width="1" opacity=".4" stroke-dasharray="3 3"/>
+      <text x="0" y="78" text-anchor="middle" font-size="11" font-weight="1000" fill="#5ec3ff">접힘 (휴대)</text>
+    </g>
+    <!-- arrow -->
+    <text x="195" y="135" text-anchor="middle" font-size="24" fill="#7ee787" font-weight="1000">↔</text>
+    <!-- unfolded (large) -->
+    <g transform="translate(300 130)">
+      <rect x="-50" y="-50" width="100" height="100" rx="8" fill="#1a3556" stroke="#7ee787" stroke-width="2.5"/>
+      <rect x="-44" y="-44" width="88" height="88" rx="3" fill="#0d2239"/>
+      <rect x="-38" y="-38" width="36" height="36" rx="3" fill="#5ec3ff" opacity=".6"/>
+      <rect x="4" y="-38" width="34" height="36" rx="3" fill="#4be7ca" opacity=".6"/>
+      <rect x="-38" y="4" width="76" height="34" rx="3" fill="#ffd166" opacity=".6"/>
+      <text x="0" y="78" text-anchor="middle" font-size="11" font-weight="1000" fill="#7ee787">펼침 (사용)</text>
+    </g>
+  </svg>`;
+}
+
+function solPhoneExternal(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">외부 화면 확장</text>
+    <!-- small phone -->
+    <g transform="translate(90 130)">
+      <rect x="-22" y="-44" width="44" height="88" rx="8" fill="#1a3556" stroke="#5ec3ff" stroke-width="2"/>
+      <rect x="-18" y="-40" width="36" height="80" rx="3" fill="#0d2239"/>
+      <text x="0" y="70" text-anchor="middle" font-size="11" font-weight="1000" fill="#5ec3ff">작은 폰</text>
+    </g>
+    <!-- connector line -->
+    <g>
+      <line x1="118" y1="130" x2="200" y2="130" stroke="#7ee787" stroke-width="3" stroke-dasharray="6 3">
+        <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="1.2s" repeatCount="indefinite"/>
+      </line>
+      <text x="160" y="120" text-anchor="middle" font-size="11" font-weight="900" fill="#7ee787">연결</text>
+    </g>
+    <!-- external display -->
+    <g transform="translate(300 130)">
+      <rect x="-80" y="-50" width="160" height="100" rx="6" fill="#1a3556" stroke="#7ee787" stroke-width="2.5"/>
+      <rect x="-74" y="-44" width="148" height="80" rx="3" fill="#0d2239"/>
+      <rect x="-68" y="-38" width="56" height="68" rx="3" fill="#5ec3ff" opacity=".6"/>
+      <rect x="-6" y="-38" width="74" height="32" rx="3" fill="#4be7ca" opacity=".6"/>
+      <rect x="-6" y="0" width="74" height="30" rx="3" fill="#ffd166" opacity=".6"/>
+      <!-- stand -->
+      <rect x="-20" y="50" width="40" height="6" rx="2" fill="#9fb3cc"/>
+      <text x="0" y="76" text-anchor="middle" font-size="11" font-weight="1000" fill="#7ee787">외부 디스플레이</text>
+    </g>
+  </svg>`;
+}
+
+function solLoginRisk(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="32" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">위험 신호 감지 시에만 강한 인증</text>
+    <!-- safe path -->
+    <g transform="translate(50 100)">
+      <rect width="120" height="38" rx="19" fill="rgba(126,231,135,.16)" stroke="#7ee787" stroke-width="1.5"/>
+      <text x="60" y="24" text-anchor="middle" font-size="12" font-weight="900" fill="#7ee787">✓ 평소: 1단계</text>
+    </g>
+    <text x="200" y="124" text-anchor="middle" font-size="22" fill="#ffd166" font-weight="1000">⇄</text>
+    <g transform="translate(240 100)">
+      <rect width="130" height="38" rx="19" fill="rgba(255,107,142,.16)" stroke="#ff6b8e" stroke-width="1.5"/>
+      <text x="65" y="24" text-anchor="middle" font-size="12" font-weight="900" fill="#ff6b8e">⚠ 위험: 2단계</text>
+    </g>
+    <!-- risk signals -->
+    <g transform="translate(50 170)" font-size="11" font-weight="800" fill="#ff6b8e">
+      <rect width="100" height="22" rx="11" fill="rgba(255,107,142,.10)" stroke="#ff6b8e" stroke-width="1"/>
+      <text x="50" y="15" text-anchor="middle">새 기기</text>
+      <rect x="110" width="100" height="22" rx="11" fill="rgba(255,107,142,.10)" stroke="#ff6b8e" stroke-width="1"/>
+      <text x="160" y="15" text-anchor="middle">해외 접속</text>
+      <rect x="220" width="100" height="22" rx="11" fill="rgba(255,107,142,.10)" stroke="#ff6b8e" stroke-width="1"/>
+      <text x="270" y="15" text-anchor="middle">이상 행동</text>
+    </g>
+  </svg>`;
+}
+
+function solLoginFeedback(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="32" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">실시간 위험 점수 피드백</text>
+    <!-- gauge -->
+    <g transform="translate(210 150)">
+      <path d="M -90 0 A 90 90 0 0 1 90 0" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="16" stroke-linecap="round"/>
+      <path d="M -90 0 A 90 90 0 0 1 60 -68" fill="none" stroke="#7ee787" stroke-width="16" stroke-linecap="round">
+        <animate attributeName="stroke-dasharray" values="0 300;180 300;0 300" dur="3s" repeatCount="indefinite"/>
+      </path>
+      <text x="0" y="-20" text-anchor="middle" font-size="32" font-weight="1000" fill="#7ee787">85</text>
+      <text x="0" y="0" text-anchor="middle" font-size="11" font-weight="900" fill="#9fb3cc">신뢰 점수</text>
+      <!-- needle -->
+      <line x1="0" y1="0" x2="60" y2="-68" stroke="#ffd166" stroke-width="3" stroke-linecap="round"/>
+      <circle r="6" fill="#ffd166"/>
+    </g>
+    <text x="60" y="200" font-size="10" font-weight="900" fill="#ff6b8e">위험</text>
+    <text x="350" y="200" font-size="10" font-weight="900" fill="#7ee787" text-anchor="end">안전</text>
+  </svg>`;
+}
+
+function solLoginTrusted(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">신뢰 기기 사전 등록</text>
+    <g transform="translate(210 130)">
+      <!-- center user -->
+      <circle r="34" fill="#1a3556" stroke="#7ee787" stroke-width="2.5"/>
+      <text y="6" text-anchor="middle" font-size="24">👤</text>
+      <!-- devices around -->
+      <g transform="translate(-110 -30)">
+        <rect x="-18" y="-12" width="36" height="42" rx="5" fill="#5ec3ff"/>
+        <text x="0" y="44" text-anchor="middle" font-size="10" font-weight="900" fill="#5ec3ff">📱 폰</text>
+      </g>
+      <g transform="translate(110 -30)">
+        <rect x="-25" y="-18" width="50" height="32" rx="3" fill="#5ec3ff"/>
+        <rect x="-30" y="14" width="60" height="3" fill="#9fb3cc"/>
+        <text x="0" y="36" text-anchor="middle" font-size="10" font-weight="900" fill="#5ec3ff">💻 노트북</text>
+      </g>
+      <!-- check marks for each (registered) -->
+      <g transform="translate(-110 -55)" >
+        <circle r="10" fill="#7ee787"/><path d="M -4 0 L -1 3 L 4 -3" stroke="#04222d" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(110 -55)">
+        <circle r="10" fill="#7ee787"/><path d="M -4 0 L -1 3 L 4 -3" stroke="#04222d" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </g>
+      <!-- connecting lines -->
+      <line x1="-30" y1="-15" x2="-90" y2="-30" stroke="#7ee787" stroke-width="2" stroke-dasharray="3 3"/>
+      <line x1="30" y1="-15" x2="90" y2="-30" stroke="#7ee787" stroke-width="2" stroke-dasharray="3 3"/>
+    </g>
+  </svg>`;
+}
+
+function solLoginBio(){
+  return `<svg viewBox="0 0 420 240">
+    <text x="210" y="34" text-anchor="middle" font-size="13" font-weight="1000" fill="#ffd166">생체인증 (지문 / 얼굴)</text>
+    <!-- fingerprint -->
+    <g transform="translate(130 130)">
+      <circle r="44" fill="rgba(126,231,135,.08)" stroke="#7ee787" stroke-width="2"/>
+      <g stroke="#7ee787" stroke-width="2" fill="none">
+        <path d="M -22 12 Q -22 -8 0 -8 Q 22 -8 22 12"/>
+        <path d="M -16 12 Q -16 -2 0 -2 Q 16 -2 16 12"/>
+        <path d="M -10 12 Q -10 4 0 4 Q 10 4 10 12"/>
+        <path d="M -28 22 Q -10 28 0 28 Q 10 28 28 22"/>
+      </g>
+      <text x="0" y="68" text-anchor="middle" font-size="11" font-weight="1000" fill="#7ee787">지문</text>
+    </g>
+    <!-- face -->
+    <g transform="translate(290 130)">
+      <rect x="-44" y="-44" width="88" height="88" rx="6" fill="none" stroke="#7ee787" stroke-width="2"/>
+      <!-- corner brackets -->
+      <path d="M -44 -30 V -44 H -30" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <path d="M 30 -44 H 44 V -30" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <path d="M -44 30 V 44 H -30" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <path d="M 30 44 H 44 V 30" stroke="#ffd166" stroke-width="3" fill="none"/>
+      <text y="6" text-anchor="middle" font-size="32">😊</text>
+      <text x="0" y="68" text-anchor="middle" font-size="11" font-weight="1000" fill="#7ee787">얼굴</text>
+    </g>
+  </svg>`;
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function burstConfetti(count = 32){
+  const c = $("confetti");
+  const colors = ["#4be7ca","#5ec3ff","#ffd166","#ff6b8e","#b794f6","#7ee787"];
+  for(let i = 0; i < count; i++){
+    const s = document.createElement("span");
+    s.style.left = Math.random() * 100 + "%";
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    s.style.animation = `confetti-fall ${1.6 + Math.random()*1.2}s ease-in ${Math.random()*0.3}s forwards`;
+    s.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.appendChild(s);
+    setTimeout(() => s.remove(), 3500);
+  }
+}
+
+const cstyle = document.createElement("style");
+cstyle.textContent = `
+@keyframes confetti-fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+}`;
+document.head.appendChild(cstyle);
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener("keydown", (e) => {
+  if(!$("sim").classList.contains("active")) return;
+  if(e.key === "ArrowRight") nextStep();
+  if(e.key === "ArrowLeft") prevStep();
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderIntro();
+
 </script>
+
 </body>
 </html>
