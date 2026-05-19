@@ -3,922 +3,2210 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>가중순위 의사결정 실험실 - 3 Cases</title>
+<title>가중순위 의사결정 시뮬레이터 | 12주차</title>
 <style>
+/* ============================================================
+   DESIGN TOKENS (1·2차 시뮬레이터에서 검증된 시스템 재사용)
+   ============================================================ */
 :root{
-  --bg:#061323; --panel:#0d2239; --text:#f6fbff; --muted:#b8cbe0;
-  --cyan:#78c9ff; --mint:#4be7ca; --red:#ff6f8a; --yellow:#ffd166;
-  --green:#65e6a4; --purple:#b99cff; --line:rgba(255,255,255,.16);
-  --shadow:rgba(0,0,0,.38);
+  --bg-deep:#040b18;
+  --bg-mid:#08182c;
+  --bg-panel:rgba(13,34,57,.78);
+  --bg-card:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.13);
+  --line-strong:rgba(255,255,255,.22);
+
+  --text:#eef6ff;
+  --text-muted:#9fb3cc;
+  --text-dim:#6a8099;
+
+  --scan-cyan:#4be7ca;
+  --scan-glow:rgba(75,231,202,.55);
+  --good-blue:#5ec3ff;
+  --good-glow:rgba(94,195,255,.55);
+  --bad-red:#ff6b8e;
+  --bad-glow:rgba(255,107,142,.55);
+  --warn-yellow:#ffd166;
+  --warn-glow:rgba(255,209,102,.65);
+  --gold:#ffb946;
+  --principle:#ffd166;
+  --principle-glow:rgba(255,209,102,.55);
+  --split-purple:#b794f6;
+  --split-glow:rgba(183,148,246,.55);
+  --solve-green:#7ee787;
+  --solve-glow:rgba(126,231,135,.55);
+
+  --grad-tech:linear-gradient(135deg,#5ec3ff,#2c6fb4);
+  --grad-action:linear-gradient(135deg,#4be7ca,#2c9ee0);
+  --grad-principle:linear-gradient(135deg,#ffd166,#ffb946);
+  --grad-solve:linear-gradient(135deg,#7ee787,#4be7ca);
+  --grad-danger:linear-gradient(135deg,#ff6b8e,#a23656);
+
+  --shadow-soft:0 18px 44px rgba(0,0,0,.45);
+  --shadow-hard:0 28px 68px rgba(0,0,0,.55);
+
+  --radius-s:14px;
+  --radius-m:20px;
+  --radius-l:28px;
+  --radius-pill:999px;
 }
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
 body{
-  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
+  font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 15% 8%, rgba(75,231,202,.18), transparent 24%),
-    radial-gradient(circle at 86% 4%, rgba(120,201,255,.15), transparent 28%),
-    linear-gradient(135deg,#050f1c,#0a1c31 55%,#061323);
-  padding:14px;
-  overflow-x:hidden;
+    radial-gradient(circle at 12% 8%, rgba(75,231,202,.18), transparent 28%),
+    radial-gradient(circle at 88% 4%, rgba(94,195,255,.15), transparent 32%),
+    radial-gradient(circle at 50% 100%, rgba(183,148,246,.12), transparent 40%),
+    linear-gradient(135deg,#040b18,#0a1c31 55%,#061323);
+  min-height:100vh;
+  font-weight:500;
+  letter-spacing:-.01em;
+}
+
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(75,231,202,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,231,202,.04) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  z-index:0;
+  mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+button{font-family:inherit;color:inherit}
+
+/* ============================================================
+   SCREEN MANAGEMENT (1차에서 검증된 우선순위 충돌 회피)
+   ============================================================ */
+.screen{width:100%}
+.screen:not(.active){display:none !important}
+.screen.active{animation:screenIn .5s cubic-bezier(.2,.7,.3,1.2)}
+@keyframes screenIn{
+  from{opacity:0;transform:translateY(12px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* ============================================================
+   INTRO SCREEN
+   ============================================================ */
+#intro{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  position:relative;
+  z-index:1;
+}
+.intro-wrap{
+  max-width:1080px;
+  width:100%;
+  text-align:center;
+}
+.intro-eyebrow{
+  display:inline-block;
+  padding:8px 16px;
+  border-radius:var(--radius-pill);
+  background:rgba(75,231,202,.10);
+  border:1px solid rgba(75,231,202,.34);
+  color:var(--scan-cyan);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.18em;
+  margin-bottom:24px;
+  animation:pulseBadge 2.4s ease-in-out infinite;
+}
+@keyframes pulseBadge{
+  0%,100%{box-shadow:0 0 0 0 rgba(75,231,202,.4)}
+  50%{box-shadow:0 0 0 14px rgba(75,231,202,0)}
+}
+.intro-title{
+  margin:0 0 16px;
+  font-size:clamp(34px,5.5vw,64px);
+  font-weight:1000;
+  line-height:1.05;
+  letter-spacing:-.05em;
+  background:linear-gradient(135deg,#fff 0%,#a8e6ff 45%,#4be7ca 100%);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 4px 24px rgba(75,231,202,.18));
+}
+.intro-sub{
+  margin:0 0 36px;
+  font-size:clamp(15px,1.7vw,19px);
+  color:var(--text-muted);
+  font-weight:600;
+  line-height:1.55;
+  max-width:720px;
+  margin-left:auto;margin-right:auto;
+}
+.intro-sub b{color:var(--warn-yellow);font-weight:900}
+
+/* 5-step preview pipeline */
+.pipe-preview{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+  max-width:880px;
+  margin:0 auto 40px;
+}
+.pipe-node{
+  padding:14px 8px;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  text-align:center;
+  position:relative;
+}
+.pipe-node .pn-num{
+  display:inline-block;
+  width:26px;height:26px;
+  border-radius:50%;
+  background:rgba(75,231,202,.18);
+  border:1px solid rgba(75,231,202,.42);
+  color:var(--scan-cyan);
+  font-size:12px;
+  font-weight:1000;
+  line-height:24px;
+  margin-bottom:6px;
+}
+.pipe-node .pn-name{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:-.02em;
+  line-height:1.2;
+  color:var(--text);
+}
+.pipe-node::after{
+  content:"→";
+  position:absolute;
+  right:-9px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--scan-cyan);
+  font-weight:1000;
+  z-index:2;
+  font-size:14px;
+}
+.pipe-node:last-child::after{display:none}
+
+/* Case selection cards */
+.case-select-title{
+  margin:0 0 16px;
+  font-size:15px;
+  font-weight:900;
+  color:var(--text-muted);
+  letter-spacing:.06em;
+}
+.case-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  max-width:1040px;
+  margin:0 auto;
+}
+.case-card{
+  padding:24px 20px;
+  border-radius:var(--radius-l);
+  background:var(--bg-card);
+  border:1px solid var(--line);
+  cursor:pointer;
+  text-align:left;
+  transition:all .25s cubic-bezier(.2,.7,.3,1.2);
+  position:relative;
+  overflow:hidden;
+  color:inherit;
+}
+.case-card::before{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 50%,rgba(75,231,202,.10));
+  opacity:0;
+  transition:.3s;
+}
+.case-card:hover{
+  transform:translateY(-5px);
+  border-color:var(--scan-cyan);
+  box-shadow:0 22px 44px rgba(75,231,202,.18);
+}
+.case-card:hover::before{opacity:1}
+.case-card .cc-num{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  font-weight:1000;
+  background:rgba(255,209,102,.14);
+  color:var(--warn-yellow);
+  letter-spacing:.06em;
+  margin-bottom:10px;
+}
+.case-card .cc-icon{
+  font-size:40px;
+  margin-bottom:10px;
+  filter:drop-shadow(0 0 12px rgba(75,231,202,.4));
+}
+.case-card .cc-title{
+  font-size:19px;
+  font-weight:1000;
+  letter-spacing:-.03em;
+  margin-bottom:8px;
+}
+.case-card .cc-sub{
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.45;
+  margin-bottom:12px;
+}
+.case-card .cc-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.case-card .cc-tag{
+  font-size:11px;
+  padding:3px 8px;
+  border-radius:var(--radius-pill);
+  background:rgba(94,195,255,.12);
+  color:var(--good-blue);
+  font-weight:700;
+}
+.intro-footer{
+  margin-top:36px;
+  color:var(--text-dim);
+  font-size:13px;
+}
+
+/* ============================================================
+   MAIN SIM SCREEN
+   ============================================================ */
+#sim{
+  padding:18px;
+  min-height:100vh;
+  position:relative;
+  z-index:1;
 }
 .app{
-  width:min(1260px,100%);
-  min-height:calc(100vh - 28px);
+  max-width:1320px;
   margin:0 auto;
   display:grid;
   grid-template-rows:auto auto 1fr auto;
-  gap:12px;
+  gap:14px;
+  min-height:calc(100vh - 36px);
 }
-.card{
-  background:rgba(13,34,57,.88);
-  border:1px solid var(--line);
-  border-radius:26px;
-  box-shadow:0 22px 55px var(--shadow);
-  backdrop-filter:blur(14px);
-}
-.header{
-  padding:16px 20px;
+
+/* Top bar: brand + step pipe + case picker */
+.top-bar{
   display:grid;
   grid-template-columns:auto 1fr auto;
-  gap:16px;
+  gap:18px;
   align-items:center;
+  padding:14px 20px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-soft);
+  position:relative;
+  z-index:50;
 }
-.badge{
-  padding:9px 13px;
-  border-radius:999px;
-  background:rgba(75,231,202,.12);
-  border:1px solid rgba(75,231,202,.34);
-  color:#c9fff6;
+.brand{
+  display:flex;align-items:center;gap:10px;
+  font-weight:1000;
+  font-size:17px;
+  letter-spacing:-.03em;
+}
+.brand-dot{
+  width:11px;height:11px;border-radius:50%;
+  background:var(--scan-cyan);
+  box-shadow:0 0 14px var(--scan-cyan);
+  animation:dotPulse 1.6s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 14px var(--scan-cyan)}
+  50%{transform:scale(1.3);box-shadow:0 0 24px var(--scan-cyan)}
+}
+.brand-text{background:linear-gradient(135deg,#fff,#a8e6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* Step pipe (5 steps) */
+.step-pipe{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex:1;
+  justify-content:center;
+}
+.sp-node{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  font-size:12px;
   font-weight:900;
-  font-size:15px;
+  color:var(--text-muted);
+  cursor:pointer;
+  transition:.2s;
   white-space:nowrap;
 }
-.titleWrap{text-align:center}
-.title{
-  margin:0;
-  font-size:clamp(28px,4vw,46px);
-  line-height:1.06;
-  letter-spacing:-.045em;
+.sp-node:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.sp-node .sp-num{
+  width:20px;height:20px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  display:grid;place-items:center;
+  font-size:11px;
   font-weight:1000;
+  color:var(--text-muted);
+  transition:.2s;
 }
-.subtitle{
-  margin:7px 0 0;
-  color:var(--muted);
-  font-size:clamp(15px,1.7vw,18px);
-  font-weight:750;
+.sp-node.done{
+  background:rgba(126,231,135,.10);
+  border-color:rgba(126,231,135,.36);
+  color:var(--solve-green);
 }
-.modeBadge{
-  min-width:150px;
-  justify-self:end;
-  text-align:center;
-  padding:10px 14px;
-  border-radius:18px;
-  background:rgba(255,209,102,.12);
+.sp-node.done .sp-num{background:var(--solve-green);color:#04222d}
+.sp-node.active{
+  background:linear-gradient(135deg,rgba(75,231,202,.22),rgba(94,195,255,.18));
+  border-color:var(--scan-cyan);
+  color:var(--text);
+  box-shadow:0 6px 18px rgba(75,231,202,.22);
+}
+.sp-node.active .sp-num{
+  background:var(--scan-cyan);
+  color:#04222d;
+  animation:dotPulse 1.4s ease-in-out infinite;
+}
+
+.case-picker{
+  position:relative;
+  z-index:60;
+}
+.case-pick-btn{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.10);
   border:1px solid rgba(255,209,102,.36);
-  color:#ffe6ad;
+  color:var(--warn-yellow);
   font-weight:1000;
-}
-.caseTabs{
-  padding:12px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.caseTab{
-  min-height:62px;
-  border:none;
-  border-radius:20px;
-  color:#fff;
-  background:rgba(255,255,255,.075);
-  border:1px solid rgba(255,255,255,.14);
-  cursor:pointer;
-  transition:.14s ease;
-  text-align:left;
-  padding:12px 15px;
-}
-.caseTab:hover,.preset:hover,.actionBtn:hover{
-  transform:translateY(-2px);
-  filter:brightness(1.08);
-}
-.caseTab.active{
-  color:#042033;
-  background:linear-gradient(135deg,var(--mint),#2c9ee0);
-  border-color:transparent;
-}
-.caseTab b{
-  display:block;
-  font-size:clamp(17px,2vw,23px);
-  letter-spacing:-.035em;
-}
-.caseTab small{
-  display:block;
-  margin-top:3px;
-  color:var(--muted);
-  font-weight:850;
   font-size:13px;
+  cursor:pointer;
+  transition:.2s;
 }
-.caseTab.active small{color:rgba(4,32,51,.76)}
-.main{
-  padding:14px;
-  display:grid;
-  grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);
+.case-pick-btn:hover{background:rgba(255,209,102,.16)}
+.case-pick-btn::after{content:"▾";font-size:10px;margin-left:2px}
+.case-menu{
+  position:absolute;
+  top:calc(100% + 8px);
+  right:0;
+  min-width:240px;
+  padding:8px;
+  border-radius:var(--radius-m);
+  background:#0b1f33;
+  border:1px solid var(--line-strong);
+  box-shadow:var(--shadow-hard);
+  z-index:200;
+  display:none;
+}
+.case-menu.show{display:block;animation:menuIn .2s ease}
+@keyframes menuIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.case-menu .cm-item{
+  display:block;width:100%;
+  padding:10px 12px;
+  border:none;border-radius:12px;
+  background:transparent;color:var(--text);
+  text-align:left;cursor:pointer;
+  font-size:13px;font-weight:800;
+  transition:.15s;
+}
+.case-menu .cm-item:hover{background:rgba(255,255,255,.06)}
+.case-menu .cm-item.active{background:rgba(75,231,202,.12);color:var(--scan-cyan)}
+.case-menu .cm-item small{display:block;color:var(--text-dim);font-size:11px;font-weight:700;margin-top:2px}
+
+/* Question banner */
+.q-banner{
+  padding:14px 22px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  display:flex;
+  align-items:center;
   gap:14px;
 }
-.left{
-  display:grid;
-  grid-template-rows:auto auto auto 1fr;
-  gap:12px;
+.q-tag{
+  padding:6px 12px;
+  border-radius:var(--radius-pill);
+  background:rgba(75,231,202,.14);
+  border:1px solid rgba(75,231,202,.42);
+  color:var(--scan-cyan);
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.1em;
+  white-space:nowrap;
 }
-.context,
-.noteBox,
-.matrix,
-.weights,
-.ranking,
-.explain,
-.formulaPanel,
-.changePanel{
-  padding:16px;
-  border-radius:24px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.13);
-}
-.context h2, .matrix h3, .weights h3, .ranking h3, .formulaPanel h3{
-  margin:0 0 10px;
-  font-size:clamp(22px,2.7vw,32px);
-  letter-spacing:-.04em;
-}
-.context p, .noteBox p, .formulaPanel p{
+.q-text{
+  flex:1;
   margin:0;
-  color:var(--muted);
-  font-size:16px;
-  line-height:1.5;
-  font-weight:800;
-}
-.context .alert{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:16px;
-  background:rgba(255,209,102,.08);
-  border:1px solid rgba(255,209,102,.25);
-  color:#ffe6ad;
-  font-size:15px;
-  font-weight:900;
-}
-.noteBox{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.note{
-  border-radius:18px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.1);
-  padding:12px;
-}
-.note h4{
-  margin:0 0 8px;
-  font-size:18px;
+  font-size:clamp(17px,2vw,22px);
+  font-weight:1000;
   letter-spacing:-.03em;
 }
-.note p{
-  font-size:14px;
-  line-height:1.45;
-}
-.ideas{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-.idea{
-  position:relative;
-  min-height:224px;
-  border-radius:24px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.13);
-  padding:16px;
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  gap:10px;
-  overflow:hidden;
-  transition:.2s ease;
-}
-.idea.winner{
-  border-color:rgba(255,209,102,.65);
-  box-shadow:0 0 28px rgba(255,209,102,.14), 0 18px 40px rgba(0,0,0,.25);
-  transform:translateY(-3px);
-}
-.idea.winner::before{
-  content:"현재 1위";
-  position:absolute;
-  right:12px;
-  top:12px;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(255,209,102,.16);
-  border:1px solid rgba(255,209,102,.5);
-  color:#ffe6ad;
-  font-size:13px;
-  font-weight:1000;
-}
-.ideaIcon{
-  width:58px;height:58px;
-  border-radius:20px;
-  display:grid;
-  place-items:center;
-  font-size:31px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.16);
-}
-.idea h3{
-  margin:0;
-  font-size:clamp(19px,2.3vw,26px);
-  letter-spacing:-.04em;
-  line-height:1.15;
-}
-.idea p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.42;
-  font-weight:750;
-}
-.scorePill{
-  width:max-content;
-  max-width:100%;
-  border-radius:999px;
-  padding:8px 11px;
-  background:rgba(75,231,202,.10);
-  border:1px solid rgba(75,231,202,.28);
-  color:#c9fff6;
-  font-weight:1000;
-}
-.scoreTable{
-  width:100%;
-  border-collapse:separate;
-  border-spacing:0 8px;
-}
-.scoreTable th{
-  color:var(--muted);
-  font-size:13px;
-  font-weight:900;
-  text-align:center;
-  padding:0 6px;
-}
-.scoreTable th:first-child{text-align:left}
-.scoreTable td{
-  background:rgba(255,255,255,.06);
-  border-top:1px solid rgba(255,255,255,.10);
-  border-bottom:1px solid rgba(255,255,255,.10);
-  padding:10px 8px;
-  text-align:center;
-  font-weight:900;
-  color:#fff;
-}
-.scoreTable td:first-child{
-  border-left:1px solid rgba(255,255,255,.10);
-  border-radius:14px 0 0 14px;
-  text-align:left;
-  color:#f6fbff;
-  font-weight:1000;
-}
-.scoreTable td:last-child{
-  border-right:1px solid rgba(255,255,255,.10);
-  border-radius:0 14px 14px 0;
-}
-.formulaPanel .formula{
-  margin-top:10px;
-  padding:12px 14px;
-  border-radius:18px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.1);
-  color:#ffe6ad;
-  font-weight:1000;
-  font-size:17px;
-  line-height:1.5;
-}
-.formulaPanel .example{
-  margin-top:10px;
-  color:#c9fff6;
-  font-size:15px;
-  font-weight:850;
-}
-.right{
-  display:grid;
-  grid-template-rows:auto auto auto 1fr auto;
-  gap:12px;
-}
-.weights h3, .ranking h3, .changePanel h3{
-  font-size:clamp(21px,2.5vw,30px);
-}
-.weightList{
-  display:grid;
-  gap:12px;
-}
-.weightItem{
-  display:grid;
-  gap:7px;
-}
-.weightTop{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center;
-  font-weight:1000;
-}
-.weightName{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.dot{
-  width:12px;height:12px;border-radius:50%;
-  background:var(--mint);
-}
-.weightPercent{
-  color:#ffe6ad;
-  font-weight:1000;
-}
-input[type="range"]{
-  width:100%;
-  accent-color:var(--mint);
-  cursor:pointer;
-}
-.presetGrid{
-  margin-top:14px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.preset{
-  min-height:48px;
-  border:none;
-  border-radius:14px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.14);
-  color:#fff;
-  font-size:14px;
-  font-weight:900;
-  cursor:pointer;
-  transition:.14s ease;
-}
-.presetHelp{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.45;
-  font-weight:750;
-}
-.rankList{
-  display:grid;
-  gap:9px;
-}
-.rankRow{
-  display:grid;
-  grid-template-columns:42px 1fr 74px;
-  align-items:center;
-  gap:10px;
-  min-height:54px;
-  padding:8px 10px;
-  border-radius:18px;
-  background:rgba(255,255,255,.065);
-  border:1px solid rgba(255,255,255,.12);
-  transition:.2s ease;
-}
-.rankRow.top{
-  border-color:rgba(255,209,102,.5);
+.q-constraint{
+  padding:7px 13px;
+  border-radius:var(--radius-pill);
   background:rgba(255,209,102,.10);
-}
-.rankNo{
-  width:34px;height:34px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-weight:1000;
-  background:rgba(255,255,255,.10);
-}
-.rankRow.top .rankNo{
-  background:#ffd166;
-  color:#042033;
-}
-.rankName{
-  font-weight:1000;
-  letter-spacing:-.03em;
-}
-.rankScore{
-  text-align:right;
-  color:#c9fff6;
-  font-weight:1000;
-}
-.changePanel{
-  display:grid;
-  gap:8px;
-  background:rgba(255,209,102,.08);
-  border:1px solid rgba(255,209,102,.25);
-}
-.changePanel h3{
-  margin:0;
-  color:#ffe6ad;
-}
-.changePanel p{
-  margin:0;
-  color:#e7f0fb;
-  line-height:1.45;
-  font-size:15px;
-  font-weight:850;
-}
-.explain{
-  background:rgba(5,16,29,.72);
-  border:1px solid rgba(255,255,255,.15);
-  display:grid;
-  align-content:center;
-  gap:10px;
-}
-.explainBadge{
-  width:max-content;
-  max-width:100%;
-  border-radius:999px;
-  padding:9px 12px;
-  background:rgba(255,209,102,.12);
-  border:1px solid rgba(255,209,102,.35);
-  color:#ffe6ad;
-  font-size:15px;
-  font-weight:1000;
-}
-.explainTitle{
-  margin:0;
-  font-size:clamp(24px,3vw,38px);
-  letter-spacing:-.045em;
-  font-weight:1000;
-}
-.explainText{
-  margin:0;
-  color:var(--muted);
-  font-size:16px;
-  line-height:1.48;
+  border:1px solid rgba(255,209,102,.32);
+  font-size:12px;
   font-weight:800;
+  color:var(--warn-yellow);
+  white-space:nowrap;
 }
-.actions{
+
+/* Main body: stage + side panel */
+.main-body{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(360px,1fr);
+  gap:14px;
+}
+.scene{
+  position:relative;
+  border-radius:var(--radius-l);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01)),#061425;
+  border:1px solid var(--line);
+  overflow:hidden;
+  min-height:560px;
+  box-shadow:var(--shadow-soft);
+}
+.scene::before,.scene::after{
+  content:"";
+  position:absolute;
+  width:34px;height:34px;
+  border:2px solid var(--scan-cyan);
+  pointer-events:none;
+  z-index:5;
+}
+.scene::before{top:14px;left:14px;border-right:none;border-bottom:none;border-radius:8px 0 0 0}
+.scene::after{bottom:14px;right:14px;border-left:none;border-top:none;border-radius:0 0 8px 0}
+.scene-corner-tr,.scene-corner-bl{
+  position:absolute;
+  width:34px;height:34px;
+  border:2px solid var(--scan-cyan);
+  pointer-events:none;
+  z-index:5;
+}
+.scene-corner-tr{top:14px;right:14px;border-left:none;border-bottom:none;border-radius:0 8px 0 0}
+.scene-corner-bl{bottom:14px;left:14px;border-right:none;border-top:none;border-radius:0 0 0 8px}
+
+.scene-label{
+  position:absolute;
+  top:18px;left:54px;
+  font-size:11px;font-weight:900;
+  color:var(--scan-cyan);
+  letter-spacing:.16em;
+  z-index:6;
+  text-transform:uppercase;
+}
+.scene-label::before{
+  content:"●";margin-right:8px;
+  animation:dotPulse 1.4s ease-in-out infinite;
+  display:inline-block;
+}
+.scene-step-tag{
+  position:absolute;
+  top:18px;right:54px;
+  padding:4px 10px;
+  border-radius:var(--radius-pill);
+  background:rgba(75,231,202,.12);
+  border:1px solid rgba(75,231,202,.36);
+  color:var(--scan-cyan);
+  font-size:11px;font-weight:1000;
+  letter-spacing:.06em;
+  z-index:6;
+}
+.stage{
+  position:absolute;
+  inset:60px 30px 76px 30px;
+  overflow-y:auto;
+  padding:6px 4px;
+}
+.stage::-webkit-scrollbar{width:6px}
+.stage::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+.scene-caption{
+  position:absolute;
+  left:50%;bottom:18px;
+  transform:translateX(-50%);
+  width:min(720px,calc(100% - 80px));
+  padding:11px 18px;
+  border-radius:var(--radius-pill);
+  background:rgba(5,16,29,.78);
+  border:1px solid var(--line-strong);
+  text-align:center;
+  font-size:13px;font-weight:800;
+  z-index:7;
+  color:var(--text-muted);
+}
+.scene-caption b{color:var(--warn-yellow)}
+.scene-caption .good{color:var(--solve-green)}
+.scene-caption .bad{color:var(--bad-red)}
+
+/* Side panel */
+.side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  min-width:0;
+}
+.panel{
+  padding:18px 20px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+}
+.panel-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.panel-step{
+  width:34px;height:34px;
+  border-radius:10px;
+  background:var(--grad-action);
+  color:#04222d;
+  display:grid;place-items:center;
+  font-size:15px;font-weight:1000;
+}
+.panel-title{
+  margin:0;
+  font-size:17px;font-weight:1000;
+  letter-spacing:-.03em;line-height:1.2;
+}
+.panel-sub{
+  margin:2px 0 0;
+  font-size:12px;color:var(--text-muted);
+  font-weight:700;
+}
+.panel-body{
+  font-size:13.5px;
+  color:var(--text);
+  line-height:1.55;
+}
+.panel-body p{margin:0 0 10px}
+.panel-body p:last-child{margin-bottom:0}
+.hint{
+  padding:11px 14px;
+  border-radius:var(--radius-m);
+  background:rgba(75,231,202,.08);
+  border:1px solid rgba(75,231,202,.28);
+  font-size:12.5px;font-weight:700;
+  color:var(--text);
+}
+.hint b{color:var(--scan-cyan);font-weight:1000}
+.hint.warn{
+  background:rgba(255,209,102,.08);
+  border-color:rgba(255,209,102,.32);
+}
+.hint.warn b{color:var(--warn-yellow)}
+
+/* ============================================================
+   STEP 1 - OPTIONS CARDS
+   ============================================================ */
+.opt-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.opt-card{
+  padding:16px;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  cursor:pointer;
+  transition:all .2s ease;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  text-align:left;
+  position:relative;
+}
+.opt-card:hover{
+  background:rgba(255,255,255,.08);
+  border-color:var(--scan-cyan);
+  transform:translateY(-2px);
+}
+.opt-card.intuition{
+  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,185,70,.10));
+  border-color:var(--principle);
+  box-shadow:0 0 0 1px var(--principle),0 14px 28px rgba(255,209,102,.22);
+}
+.opt-card .opt-icon{
+  font-size:34px;
+}
+.opt-card .opt-name{
+  font-size:15px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+}
+.opt-card .opt-short{
+  font-size:11.5px;
+  color:var(--text-muted);
+  font-weight:600;
+  line-height:1.4;
+}
+.opt-card .intuition-badge{
+  position:absolute;
+  top:8px;right:8px;
+  padding:3px 9px;
+  border-radius:var(--radius-pill);
+  background:var(--grad-principle);
+  color:#3b2700;
+  font-size:10px;font-weight:1000;
+  letter-spacing:.06em;
+}
+
+/* Criteria preview */
+.criteria-preview{
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:var(--radius-m);
+  background:rgba(94,195,255,.06);
+  border:1px solid rgba(94,195,255,.22);
+}
+.criteria-preview .cp-title{
+  font-size:11px;
+  font-weight:900;
+  color:var(--good-blue);
+  letter-spacing:.08em;
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+.criteria-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.criteria-chip{
+  padding:6px 11px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  font-size:12px;
+  font-weight:800;
+  color:var(--text);
+  display:flex;align-items:center;gap:4px;
+}
+
+/* ============================================================
+   STEP 2 - WEIGHT SLIDERS
+   ============================================================ */
+.weight-section{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.weight-row{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:14px;
+  align-items:center;
+}
+.weight-label{
+  display:flex;align-items:center;gap:8px;
+  min-width:130px;
+  font-size:13px;font-weight:900;
+}
+.weight-label .wl-icon{font-size:18px}
+.weight-slider{
+  -webkit-appearance:none;appearance:none;
+  width:100%;
+  height:6px;
+  border-radius:3px;
+  background:rgba(255,255,255,.10);
+  outline:none;
+  cursor:pointer;
+}
+.weight-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--grad-action);
+  cursor:grab;
+  border:3px solid #061425;
+  box-shadow:0 0 12px var(--scan-glow);
+  transition:.15s;
+}
+.weight-slider::-webkit-slider-thumb:active{cursor:grabbing;transform:scale(1.18)}
+.weight-slider::-moz-range-thumb{
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--scan-cyan);
+  cursor:grab;
+  border:3px solid #061425;
+}
+.weight-value{
+  min-width:48px;
+  text-align:right;
+  font-size:15px;font-weight:1000;
+  color:var(--scan-cyan);
+  font-variant-numeric:tabular-nums;
+}
+.weight-sum{
+  margin-top:12px;
+  padding:10px 14px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  color:var(--text-muted);
+}
+.weight-sum b{
+  color:var(--solve-green);
+  font-size:15px;
+}
+
+/* Preset buttons */
+.preset-section{
+  margin-top:14px;
+}
+.preset-title{
+  font-size:11px;font-weight:900;
+  color:var(--text-muted);
+  letter-spacing:.1em;
+  margin:0 0 8px;
+  text-transform:uppercase;
+}
+.preset-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+.preset-btn{
+  padding:10px 8px;
+  border:none;
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:var(--text-muted);
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.15s;
+}
+.preset-btn:hover{background:rgba(255,255,255,.08);color:var(--text)}
+.preset-btn.active{
+  background:linear-gradient(135deg,rgba(75,231,202,.18),rgba(94,195,255,.14));
+  border-color:var(--scan-cyan);
+  color:var(--text);
+}
+
+/* ============================================================
+   RANKING DISPLAY (Step 2, 4)
+   ============================================================ */
+.ranking-board{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  width:100%;
+  max-width:680px;
+  margin:0 auto;
+}
+.rank-row{
+  display:grid;
+  grid-template-columns:54px 38px 1fr auto;
+  gap:12px;
+  align-items:center;
+  padding:14px 16px;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  transition:all .5s cubic-bezier(.2,.8,.3,1.2);
+  position:relative;
+  overflow:hidden;
+}
+.rank-row.rank-1{
+  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,185,70,.10));
+  border-color:var(--principle);
+  box-shadow:0 0 0 1px var(--principle),0 12px 28px rgba(255,209,102,.22);
+}
+.rank-row .rank-num{
+  font-size:24px;
+  font-weight:1000;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  color:var(--text-muted);
+}
+.rank-row.rank-1 .rank-num{
+  color:var(--principle);
+  font-size:28px;
+  filter:drop-shadow(0 0 10px var(--principle-glow));
+}
+.rank-row .rank-icon{
+  font-size:28px;
+  text-align:center;
+}
+.rank-row .rank-name{
+  font-size:14px;font-weight:1000;
+  letter-spacing:-.02em;
+}
+.rank-row .rank-bar{
+  margin-top:4px;
+  height:6px;
+  border-radius:3px;
+  background:rgba(255,255,255,.06);
+  overflow:hidden;
+  position:relative;
+}
+.rank-row .rank-bar-fill{
+  height:100%;
+  background:var(--grad-action);
+  border-radius:3px;
+  transition:width .5s cubic-bezier(.2,.8,.3,1.2);
+}
+.rank-row.rank-1 .rank-bar-fill{background:var(--grad-principle)}
+.rank-row .rank-score{
+  font-size:18px;
+  font-weight:1000;
+  color:var(--text);
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+  min-width:60px;
+}
+.rank-row.rank-1 .rank-score{color:var(--principle)}
+.rank-row.intuition-mark::before{
+  content:"내 직관";
+  position:absolute;
+  top:-1px;left:-1px;
+  padding:3px 8px;
+  border-radius:0 0 10px 0;
+  background:var(--principle);
+  color:#3b2700;
+  font-size:10px;font-weight:1000;
+  letter-spacing:.04em;
+}
+.rank-row.changed-up{
+  animation:rankUp .6s cubic-bezier(.2,.8,.3,1.4);
+}
+.rank-row.changed-down{
+  animation:rankDown .6s cubic-bezier(.2,.8,.3,1.4);
+}
+@keyframes rankUp{
+  0%{transform:translateY(20px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+@keyframes rankDown{
+  0%{transform:translateY(-20px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+
+/* Rank change notice */
+.rank-notice{
+  margin-top:14px;
+  padding:12px 16px;
+  border-radius:var(--radius-m);
+  background:rgba(255,209,102,.12);
+  border:1px solid var(--warn-yellow);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-size:13px;
+  font-weight:800;
+  animation:noticeIn .4s ease;
+}
+@keyframes noticeIn{
+  from{opacity:0;transform:translateY(-6px) scale(.96)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.rank-notice .rn-icon{font-size:22px}
+
+/* ============================================================
+   STEP 3 - SCORE MATRIX (compact, readable)
+   ============================================================ */
+.score-matrix{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:12.5px;
+}
+.score-matrix th{
+  padding:10px 8px;
+  font-size:11.5px;font-weight:900;
+  color:var(--text-muted);
+  text-align:center;
+  letter-spacing:.04em;
+  border-bottom:1px solid var(--line);
+}
+.score-matrix th.opt-th{
+  text-align:left;padding-left:14px;
+}
+.score-matrix td{
+  padding:11px 8px;
+  text-align:center;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+}
+.score-matrix tbody tr{
+  border-radius:var(--radius-m);
+  transition:.2s;
+}
+.score-matrix tbody tr:hover td{background:rgba(255,255,255,.04)}
+.score-matrix td.opt-name{
+  text-align:left;
+  padding-left:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;font-weight:1000;
+  letter-spacing:-.02em;
+}
+.score-matrix td.opt-name .om-icon{font-size:18px}
+.score-matrix td.score-cell{
+  border-radius:8px;
+}
+.score-matrix .total-th{
+  color:var(--principle);
+}
+.score-matrix td.total-cell{
+  font-size:15px;
+  color:var(--principle);
+  font-weight:1000;
+}
+.score-matrix tbody tr.is-winner td{
+  background:linear-gradient(90deg,rgba(255,209,102,.12),rgba(255,185,70,.06));
+}
+.score-cell .sc-bar{
+  position:relative;
+  display:inline-flex;
+  width:100%;
+  max-width:54px;
+  height:18px;
+  align-items:center;
+  justify-content:center;
+}
+.score-cell .sc-bar::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:6px;
+  background:rgba(94,195,255,.10);
+}
+.score-cell .sc-bar .sc-fill{
+  position:absolute;
+  left:0;top:0;bottom:0;
+  border-radius:6px;
+  background:rgba(94,195,255,.32);
+}
+.score-cell .sc-bar .sc-text{
+  position:relative;
+  z-index:2;
+  font-size:11.5px;
+  font-weight:1000;
+  color:var(--text);
+}
+
+/* Formula line */
+.formula-box{
+  margin-top:18px;
+  padding:14px 18px;
+  border-radius:var(--radius-m);
+  background:linear-gradient(135deg,rgba(255,209,102,.10),rgba(255,185,70,.06));
+  border:1px solid rgba(255,209,102,.32);
+  text-align:center;
+}
+.formula-box .fb-label{
+  font-size:11px;font-weight:900;
+  color:var(--principle);
+  letter-spacing:.08em;
+  margin-bottom:8px;
+  text-transform:uppercase;
+}
+.formula-box .fb-formula{
+  font-size:14px;
+  font-weight:1000;
+  letter-spacing:-.02em;
+  line-height:1.5;
+}
+.formula-box .fb-formula .x{color:var(--principle);margin:0 4px}
+.formula-box .fb-example{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ============================================================
+   STEP 5 - VERIFICATION SCANNER
+   ============================================================ */
+.verify-stage{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+}
+.verify-winner{
+  padding:18px 20px;
+  border-radius:var(--radius-l);
+  background:linear-gradient(135deg,rgba(255,209,102,.18),rgba(255,185,70,.10));
+  border:1px solid var(--principle);
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:14px;
+  align-items:center;
+}
+.verify-winner .vw-icon{font-size:38px}
+.verify-winner .vw-tag{
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:var(--radius-pill);
+  background:rgba(255,209,102,.24);
+  color:var(--principle);
+  font-size:10px;font-weight:1000;
+  letter-spacing:.08em;
+  margin-bottom:4px;
+}
+.verify-winner .vw-name{
+  font-size:18px;font-weight:1000;
+  letter-spacing:-.02em;
+}
+.verify-winner .vw-score{
+  font-size:22px;font-weight:1000;
+  color:var(--principle);
+  font-variant-numeric:tabular-nums;
+}
+.verify-checks{
+  display:flex;
+  flex-direction:column;
   gap:10px;
 }
-.actionBtn{
-  min-height:54px;
+.verify-item{
+  padding:14px 16px;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:14px;
+  align-items:center;
+  transition:.2s;
+}
+.verify-item .vi-icon{
+  width:36px;height:36px;
+  border-radius:10px;
+  background:rgba(94,195,255,.14);
+  display:grid;place-items:center;
+  font-size:18px;
+}
+.verify-item .vi-title{
+  font-size:13px;font-weight:1000;
+  letter-spacing:-.02em;
+  margin-bottom:3px;
+}
+.verify-item .vi-q{
+  font-size:12px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.4;
+}
+.verify-item .vi-buttons{
+  display:flex;
+  gap:6px;
+}
+.verify-item .vi-btn{
+  padding:7px 11px;
   border:none;
-  border-radius:18px;
-  color:#042033;
-  background:linear-gradient(135deg,var(--mint),#2c9ee0);
-  font-size:17px;
+  border-radius:10px;
+  font-size:11.5px;
   font-weight:1000;
   cursor:pointer;
-  transition:.14s ease;
-}
-.actionBtn.secondary{
-  color:#fff;
-  background:rgba(255,255,255,.09);
+  background:rgba(255,255,255,.06);
   border:1px solid var(--line);
+  color:var(--text-muted);
+  transition:.15s;
 }
-.footer{
+.verify-item .vi-btn:hover{background:rgba(255,255,255,.10);color:var(--text)}
+.verify-item.passed{
+  background:linear-gradient(90deg,rgba(126,231,135,.10),rgba(75,231,202,.05));
+  border-color:rgba(126,231,135,.36);
+}
+.verify-item.passed .vi-icon{background:rgba(126,231,135,.18);color:var(--solve-green)}
+.verify-item.passed .vi-btn.pass{background:var(--solve-green);color:#04222d;border-color:transparent}
+.verify-item.failed{
+  background:linear-gradient(90deg,rgba(255,107,142,.10),rgba(255,107,142,.04));
+  border-color:rgba(255,107,142,.42);
+}
+.verify-item.failed .vi-icon{background:rgba(255,107,142,.18);color:var(--bad-red)}
+.verify-item.failed .vi-btn.fail{background:var(--bad-red);color:#fff;border-color:transparent}
+.verify-item.warned{
+  background:linear-gradient(90deg,rgba(255,209,102,.10),rgba(255,209,102,.04));
+  border-color:rgba(255,209,102,.42);
+}
+.verify-item.warned .vi-icon{background:rgba(255,209,102,.18);color:var(--principle)}
+.verify-item.warned .vi-btn.warn{background:var(--principle);color:#3b2700;border-color:transparent}
+
+/* Verdict (final) */
+.verdict{
+  padding:22px 24px;
+  border-radius:var(--radius-l);
+  text-align:center;
+  font-weight:1000;
+  animation:verdictPop .55s cubic-bezier(.2,.8,.3,1.4);
+}
+@keyframes verdictPop{
+  0%{opacity:0;transform:scale(.85)}
+  60%{transform:scale(1.05)}
+  100%{opacity:1;transform:scale(1)}
+}
+.verdict.pass{
+  background:linear-gradient(135deg,rgba(126,231,135,.22),rgba(75,231,202,.12));
+  border:2px solid var(--solve-green);
+  box-shadow:0 18px 44px rgba(126,231,135,.22);
+}
+.verdict.fail{
+  background:linear-gradient(135deg,rgba(255,107,142,.22),rgba(255,107,142,.10));
+  border:2px solid var(--bad-red);
+  box-shadow:0 18px 44px rgba(255,107,142,.22);
+}
+.verdict.warn{
+  background:linear-gradient(135deg,rgba(255,209,102,.22),rgba(255,185,70,.10));
+  border:2px solid var(--principle);
+  box-shadow:0 18px 44px rgba(255,209,102,.22);
+}
+.verdict .v-icon{
+  font-size:42px;margin-bottom:8px;
+}
+.verdict .v-title{
+  font-size:22px;
+  letter-spacing:-.03em;
+  margin-bottom:6px;
+}
+.verdict.pass .v-title{color:var(--solve-green)}
+.verdict.fail .v-title{color:var(--bad-red)}
+.verdict.warn .v-title{color:var(--principle)}
+.verdict .v-body{
+  font-size:13.5px;
+  color:var(--text-muted);
+  font-weight:700;
+  line-height:1.5;
+  max-width:520px;
+  margin:0 auto;
+}
+
+/* ============================================================
+   NAV BAR
+   ============================================================ */
+.nav-bar{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:auto auto 1fr auto auto;
   gap:10px;
-  padding:14px;
+  align-items:center;
+  padding:14px 18px;
+  border-radius:var(--radius-l);
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(14px);
+  box-shadow:var(--shadow-soft);
 }
-.footerBox{
-  border-radius:20px;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.13);
-  padding:14px;
+.nav-btn{
+  padding:13px 18px;
+  border:none;
+  border-radius:var(--radius-m);
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-weight:1000;font-size:14px;
+  cursor:pointer;
+  transition:all .18s ease;
+  display:flex;align-items:center;gap:8px;
+  white-space:nowrap;
 }
-.footerBox h3{
-  margin:0 0 8px;
-  font-size:20px;
-  letter-spacing:-.035em;
+.nav-btn:hover:not(:disabled){transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:var(--line-strong)}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-btn.primary{
+  background:var(--grad-action);
+  color:#04222d;
+  border-color:transparent;
 }
-.footerBox p{
-  margin:0;
-  color:var(--muted);
-  font-weight:850;
-  line-height:1.45;
-  font-size:14px;
+.nav-btn.primary:hover:not(:disabled){box-shadow:0 14px 28px rgba(75,231,202,.3)}
+.nav-btn.ghost{
+  background:transparent;
+  color:var(--text-muted);
 }
-.changeFlash{ animation:flash .45s ease; }
-@keyframes flash{
-  0%{filter:brightness(1)}
-  50%{filter:brightness(1.4)}
-  100%{filter:brightness(1)}
+.nav-status{
+  text-align:center;
+  font-size:13px;
+  color:var(--text-muted);
+  font-weight:700;
 }
-@media(max-width:1020px){
-  body{padding:8px}
-  .app{min-height:calc(100vh - 16px)}
-  .header{grid-template-columns:1fr}
-  .titleWrap{text-align:left}
-  .modeBadge{justify-self:start}
-  .caseTabs{grid-template-columns:1fr}
-  .main{grid-template-columns:1fr}
-  .ideas{grid-template-columns:1fr}
-  .noteBox,.footer,.presetGrid,.actions{grid-template-columns:1fr}
+
+/* Confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.confetti span{position:absolute;top:-10px;width:8px;height:14px;opacity:0;border-radius:2px}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px){
+  .step-pipe{gap:4px}
+  .sp-node{padding:6px 8px;font-size:11px}
+  .sp-node .sp-name{display:none}
+}
+@media (max-width: 960px){
+  body{font-size:14px}
+  #sim{padding:12px}
+  .top-bar{grid-template-columns:auto 1fr;padding:12px 14px;gap:10px}
+  .step-pipe{order:3;grid-column:1/-1;overflow-x:auto;justify-content:flex-start;padding-bottom:4px}
+  .step-pipe::-webkit-scrollbar{display:none}
+  .case-picker{order:2;justify-self:end}
+  .q-banner{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 14px}
+  .q-constraint{align-self:flex-start;white-space:normal}
+  .main-body{grid-template-columns:1fr}
+  .scene{min-height:480px}
+  .stage{inset:54px 16px 64px 16px}
+  .scene-label{font-size:10px;left:50px}
+  .scene-step-tag{right:50px;font-size:10px}
+  .nav-bar{grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
+  .nav-status{grid-column:1/-1;order:-1}
+  .case-cards{grid-template-columns:1fr}
+  .pipe-preview{grid-template-columns:repeat(5,1fr);gap:4px}
+  .pipe-node{padding:8px 4px}
+  .pipe-node::after{content:""}
+  .pipe-node .pn-name{font-size:9.5px}
+  .pipe-node .pn-num{width:22px;height:22px;font-size:10px;line-height:20px}
+  .opt-grid{grid-template-columns:1fr}
+  .weight-row{grid-template-columns:auto 1fr 50px;gap:8px}
+  .weight-label{min-width:auto;font-size:12px}
+  .preset-grid{grid-template-columns:1fr}
+  .verify-item{grid-template-columns:auto 1fr;gap:10px}
+  .verify-item .vi-buttons{grid-column:1/-1;justify-content:flex-end}
+  .score-matrix{font-size:11px}
+  .score-matrix th{padding:6px 4px;font-size:10px}
+  .score-matrix td{padding:8px 4px}
+  .score-matrix td.opt-name{font-size:11.5px;padding-left:6px;gap:4px}
+  .score-matrix td.opt-name .om-icon{font-size:14px}
+}
+@media (max-width: 500px){
+  .intro-title{font-size:36px}
+  .verify-winner{grid-template-columns:auto 1fr;gap:10px}
+  .verify-winner .vw-score{grid-column:2;text-align:right}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="card header">
-    <div class="badge">12주차 · 의사결정</div>
-    <div class="titleWrap">
-      <h1 class="title">가중순위 의사결정 실험실</h1>
-      <p class="subtitle">기준의 중요도를 바꾸면 선택이 달라진다</p>
+
+<!-- ============================================================
+     INTRO SCREEN
+     ============================================================ -->
+<section id="intro" class="screen active">
+  <div class="intro-wrap">
+    <div class="intro-eyebrow">12주차 · 가중순위 의사결정 시뮬레이터</div>
+
+    <h1 class="intro-title">아이디어 평가는<br>인기투표가 아니라 구조다</h1>
+    <p class="intro-sub">
+      <b>기준 · 가중치 · 점수 · 검증</b>의 5단계로 최적해를 도출합니다.<br>
+      가중치가 바뀌면 1위가 달라지고, 1위라도 도덕성·안전성·환경성을 통과해야 합니다.
+    </p>
+
+    <div class="pipe-preview">
+      <div class="pipe-node"><span class="pn-num">1</span><div class="pn-name">대안<br>확인</div></div>
+      <div class="pipe-node"><span class="pn-num">2</span><div class="pn-name">가중치<br>조정</div></div>
+      <div class="pipe-node"><span class="pn-num">3</span><div class="pn-name">점수<br>확인</div></div>
+      <div class="pipe-node"><span class="pn-num">4</span><div class="pn-name">최종<br>순위</div></div>
+      <div class="pipe-node"><span class="pn-num">5</span><div class="pn-name">최종<br>검증</div></div>
     </div>
-    <div class="modeBadge" id="modeBadge">가중순위 평가</div>
-  </header>
 
-  <section class="card caseTabs" id="caseTabs"></section>
+    <p class="case-select-title">▸ 풀어볼 사례를 선택하세요</p>
+    <div class="case-cards" id="caseCards"></div>
 
-  <main class="card main">
-    <section class="left">
-      <section class="context">
-        <h2 id="caseTitle"></h2>
-        <p id="caseIntro"></p>
-        <div class="alert" id="caseConstraint"></div>
+    <div class="intro-footer">BDU-X · 창의적 문제해결 · 12주차 1~2강</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MAIN SIM SCREEN
+     ============================================================ -->
+<section id="sim" class="screen">
+  <div class="app">
+
+    <!-- Top bar -->
+    <header class="top-bar">
+      <div class="brand">
+        <span class="brand-dot"></span>
+        <span class="brand-text">의사결정 워크벤치</span>
+      </div>
+      <div class="step-pipe" id="stepPipe"></div>
+      <div class="case-picker">
+        <button class="case-pick-btn" id="casePickBtn" onclick="toggleCaseMenu()">
+          <span id="casePickLabel">사례 선택</span>
+        </button>
+        <div class="case-menu" id="caseMenu"></div>
+      </div>
+    </header>
+
+    <!-- Question banner -->
+    <div class="q-banner">
+      <span class="q-tag">현재 사례</span>
+      <h2 class="q-text" id="qText"></h2>
+      <span class="q-constraint" id="qConstraint"></span>
+    </div>
+
+    <!-- Main body -->
+    <div class="main-body">
+      <section class="scene" id="scene">
+        <div class="scene-corner-tr"></div>
+        <div class="scene-corner-bl"></div>
+        <div class="scene-label" id="sceneLabel"></div>
+        <div class="scene-step-tag" id="sceneStepTag"></div>
+        <div class="stage" id="stage"></div>
+        <div class="scene-caption" id="sceneCaption"></div>
       </section>
 
-      <section class="noteBox">
-        <div class="note">
-          <h4>기준 점수란?</h4>
-          <p id="scoreGuide"></p>
+      <aside class="side">
+        <div class="panel" id="sidePanel">
+          <div class="panel-head">
+            <div class="panel-step" id="panelStepNum">1</div>
+            <div>
+              <h3 class="panel-title" id="panelTitle"></h3>
+              <p class="panel-sub" id="panelSub"></p>
+            </div>
+          </div>
+          <div class="panel-body" id="panelBody"></div>
         </div>
-        <div class="note">
-          <h4>가중치란?</h4>
-          <p id="weightGuide"></p>
-        </div>
-      </section>
-
-      <section class="ideas" id="ideas"></section>
-
-      <section class="matrix">
-        <h3>대안별 기준 점수</h3>
-        <table class="scoreTable" id="scoreTable"></table>
-      </section>
-    </section>
-
-    <aside class="right">
-      <section class="weights">
-        <h3>평가 기준 가중치</h3>
-        <div class="weightList" id="weightList"></div>
-        <div class="presetGrid" id="presetGrid"></div>
-        <div class="presetHelp" id="presetHelp"></div>
-      </section>
-
-      <section class="ranking">
-        <h3>실시간 순위</h3>
-        <div class="rankList" id="rankList"></div>
-      </section>
-
-      <section class="changePanel" id="changePanel">
-        <h3>순위 변화 추적</h3>
-        <p id="changeText">아직 1위 변화는 없습니다. 가중치를 조절해 보세요.</p>
-      </section>
-
-      <section class="explain" id="explain">
-        <div class="explainBadge">현재 1위</div>
-        <h3 class="explainTitle" id="explainTitle"></h3>
-        <p class="explainText" id="explainText"></p>
-      </section>
-
-      <section class="actions">
-        <button class="actionBtn" onclick="showWhy()">왜 순위가 바뀌나요?</button>
-        <button class="actionBtn secondary" onclick="resetWeights()">초기화</button>
-      </section>
-    </aside>
-  </main>
-
-  <section class="card footer">
-    <div class="formulaPanel">
-      <h3>가중순위 계산식</h3>
-      <p>가중순위 결정법의 핵심은 “기준 점수 × 가중치”를 모두 더하여 최종점수를 계산하는 것입니다.</p>
-      <div class="formula" id="formulaText"></div>
-      <div class="example" id="formulaExample"></div>
+      </aside>
     </div>
-    <div class="footerBox">
-      <h3>핵심 메시지</h3>
-      <p id="keyMessage"></p>
-    </div>
-  </section>
-</div>
+
+    <!-- Nav -->
+    <footer class="nav-bar">
+      <button class="nav-btn" id="prevBtn" onclick="prevStep()">◀ 이전</button>
+      <button class="nav-btn ghost" onclick="restart()">처음으로</button>
+      <div class="nav-status"><span id="navStatus">Step 1 / 5</span></div>
+      <button class="nav-btn ghost" id="presetBtn" onclick="applyExamplePresets()">예시 적용</button>
+      <button class="nav-btn primary" id="nextBtn" onclick="nextStep()">다음 ▶</button>
+    </footer>
+
+  </div>
+  <div class="confetti" id="confetti"></div>
+</section>
 
 <script>
-const cases = [
-  {
-    id:"team",
-    tab:"팀 프로젝트",
-    subtitle:"아이디어 선정",
+/* ============================================================
+   STEPS DEFINITION
+   ============================================================ */
+const STEPS = [
+  { num:1, title:"대안 확인", sub:"평가 대상과 기준을 살펴봅니다", tag:"OPTIONS" },
+  { num:2, title:"가중치 조정", sub:"기준의 중요도를 정합니다", tag:"WEIGHTS" },
+  { num:3, title:"점수 확인", sub:"기준 점수 × 가중치 구조", tag:"SCORES" },
+  { num:4, title:"최종 순위", sub:"계산 결과 확인", tag:"RANKING" },
+  { num:5, title:"최종 검증", sub:"도덕성·안전성·환경성", tag:"VERIFY" }
+];
+
+/* ============================================================
+   CASE DATA — 3 cases (case 2 has 4 options as planned)
+   ============================================================ */
+const CASES = {
+  team:{
+    label:"팀 프로젝트", icon:"👥", num:1,
     title:"팀 프로젝트 아이디어 선정",
-    intro:"팀 프로젝트에서 3개 아이디어 중 하나를 먼저 선택해야 합니다. 모든 아이디어가 괜찮아 보이지만, 과제 기간·팀 역량·발표 평가를 고려하면 우선순위는 달라질 수 있습니다.",
-    constraint:"상황 제약: 발표까지 3주, 팀원 4명, 최종 결과물은 시연 가능한 프로토타입과 발표자료입니다.",
-    scoreGuide:"기준 점수는 각 아이디어가 특정 기준에서 얼마나 강한지를 나타냅니다. 예를 들어 문제해결성 90점은 실제 불편을 잘 해결한다는 뜻입니다.",
-    weightGuide:"가중치는 현재 의사결정에서 그 기준을 얼마나 중요하게 볼지 나타냅니다. 팀이 무엇을 중시하느냐에 따라 선택이 달라집니다.",
-    keyMessage:"아이디어 선정은 인기투표가 아닙니다. 어떤 기준을 중요하게 볼지 드러내고, 그 기준에 따라 선택하는 과정입니다.",
+    question:"팀 프로젝트의 최적 아이디어를 어떻게 고를까?",
+    constraint:"발표까지 3주, 팀원 4명",
     criteria:[
-      { id:"problem", name:"문제해결성", icon:"🎯", color:"#78c9ff" },
-      { id:"ease", name:"구현용이성", icon:"🛠️", color:"#4be7ca" },
-      { id:"creativity", name:"창의성", icon:"💡", color:"#ffd166" },
-      { id:"presentation", name:"발표설득력", icon:"📣", color:"#b99cff" }
+      { id:"problem", name:"문제해결성", icon:"🎯" },
+      { id:"ease", name:"구현용이성", icon:"🛠️" },
+      { id:"creativity", name:"창의성", icon:"💡" },
+      { id:"presentation", name:"발표설득력", icon:"📣" }
     ],
     options:[
-      { id:"campus", icon:"🗺️", name:"캠퍼스 길찾기 앱", short:"건물·강의실·편의시설 위치를 쉽게 찾도록 돕는 서비스", scores:{ problem:88, ease:72, creativity:62, presentation:78 }, reason:"실제 불편을 해결하는 힘이 강하고 발표에서 문제 상황을 설명하기 쉽습니다." },
-      { id:"meal", icon:"🍱", name:"식단 추천 서비스", short:"예산·건강·취향을 반영해 하루 식단을 추천하는 서비스", scores:{ problem:74, ease:82, creativity:70, presentation:72 }, reason:"구현용이성이 높고 일상성도 좋습니다. 제한된 기간 안에 프로토타입을 만들기 유리합니다." },
-      { id:"lost", icon:"🔎", name:"분실물 공유 플랫폼", short:"잃어버린 물건을 등록하고 검색·연락할 수 있는 플랫폼", scores:{ problem:82, ease:58, creativity:88, presentation:86 }, reason:"창의성과 발표설득력이 강합니다. 다만 구현 범위와 운영 방식은 조정이 필요합니다." }
+      { id:"campus", icon:"🗺️", name:"캠퍼스 길찾기 앱", short:"건물·강의실 위치를 쉽게 찾도록 돕는 서비스",
+        scores:{ problem:88, ease:72, creativity:62, presentation:78 } },
+      { id:"meal", icon:"🍱", name:"식단 추천 서비스", short:"예산·건강·취향을 반영한 하루 식단 추천",
+        scores:{ problem:74, ease:88, creativity:70, presentation:72 } },
+      { id:"lost", icon:"🔎", name:"분실물 공유 플랫폼", short:"잃어버린 물건을 등록·검색하는 플랫폼",
+        scores:{ problem:82, ease:58, creativity:92, presentation:86 } }
     ],
     defaultWeights:{ problem:35, ease:25, creativity:20, presentation:20 },
     presets:[
-      { id:"problem", label:"문제해결 중심", weights:{ problem:55, ease:15, creativity:15, presentation:15 } },
-      { id:"practical", label:"실행가능성 중심", weights:{ problem:20, ease:50, creativity:15, presentation:15 } },
-      { id:"creative", label:"창의성 중심", weights:{ problem:20, ease:10, creativity:45, presentation:25 } },
-      { id:"balanced", label:"균형 평가", weights:{ problem:25, ease:25, creativity:25, presentation:25 } }
+      { label:"문제해결 중심", weights:{ problem:55, ease:15, creativity:15, presentation:15 } },
+      { label:"실행가능성 중심", weights:{ problem:20, ease:50, creativity:15, presentation:15 } },
+      { label:"창의성 중심", weights:{ problem:20, ease:10, creativity:50, presentation:20 } },
+      { label:"균형 평가", weights:{ problem:25, ease:25, creativity:25, presentation:25 } }
     ],
-    presetHelp:"프리셋은 각각 문제해결, 구현 현실성, 창의적 차별성, 균형 판단을 우선할 때의 예시입니다."
+    // verify scenario — 사례별 다양화: 팀프로젝트는 PASS
+    verify:{
+      checks:[
+        { id:"ethics", title:"도덕성", q:"이 선택을 팀 외부에 공개적으로 설명할 수 있는가?", expected:"pass" },
+        { id:"bigpicture", title:"큰 그림", q:"장기적으로 팀·사용자에게 도움이 되는가?", expected:"pass" },
+        { id:"safety", title:"안전성", q:"이용자의 안전·개인정보를 해치지 않는가?", expected:"warn" },
+        { id:"environment", title:"환경성", q:"디지털 서비스로 환경 부담은 거의 없는가?", expected:"pass" },
+        { id:"law", title:"법·윤리", q:"학내 규정·저작권을 위반하지 않는가?", expected:"pass" }
+      ],
+      // pass/warn 조합이면 1위 유지 가능
+      verdict:{
+        allPass:{
+          tone:"pass", icon:"✅", title:"실행 가능",
+          body:"수학적 1위가 도덕성·안전성·환경성 기준을 모두 통과했습니다. 이 아이디어로 실행 단계로 넘어갈 수 있습니다."
+        },
+        someWarn:{
+          tone:"warn", icon:"⚠️", title:"주의 사항 있음 · 보완 후 실행",
+          body:"1위 아이디어는 기본 검증을 통과했지만, 일부 항목에서 보완이 필요합니다. 사용자 개인정보 처리·접근성 등에 대한 안전장치를 마련해 실행하세요."
+        }
+      }
+    }
   },
-  {
-    id:"phone",
-    tab:"스마트폰 구매",
-    subtitle:"선택 기준 비교",
-    title:"스마트폰 구매 결정",
-    intro:"새 스마트폰을 고를 때 모든 선택지가 장점과 단점을 가집니다. 성능을 중시할지, 가격을 중시할지, 배터리를 중시할지에 따라 최종 선택은 달라질 수 있습니다.",
-    constraint:"상황 제약: 2년 이상 사용할 스마트폰을 구매해야 하며, 예산과 실제 사용 패턴을 함께 고려해야 합니다.",
-    scoreGuide:"기준 점수는 각 스마트폰 유형이 특정 기준에서 얼마나 강한지를 나타냅니다. 예를 들어 배터리 90점은 오래 사용할 수 있다는 뜻입니다.",
-    weightGuide:"가중치는 지금 구매 상황에서 어떤 기준을 더 중요하게 보는지 나타냅니다. 사용자의 생활 패턴에 따라 선택은 달라집니다.",
-    keyMessage:"좋은 제품은 하나로 고정되지 않습니다. 나에게 중요한 기준을 드러내야 합리적 선택이 가능합니다.",
+
+  phone:{
+    label:"스마트폰 구매", icon:"📱", num:2,
+    title:"스마트폰 구매 결정 (강의노트 4종)",
+    question:"4개 스마트폰 중 무엇을 선택할까?",
+    constraint:"2년 이상 사용, 예산과 패턴 고려",
     criteria:[
-      { id:"performance", name:"성능", icon:"⚡", color:"#78c9ff" },
-      { id:"price", name:"가격만족도", icon:"💰", color:"#4be7ca" },
-      { id:"battery", name:"배터리", icon:"🔋", color:"#ffd166" },
-      { id:"portability", name:"휴대성", icon:"📱", color:"#b99cff" }
+      { id:"performance", name:"성능", icon:"⚡" },
+      { id:"price", name:"가격만족도", icon:"💰" },
+      { id:"screen", name:"화면 크기", icon:"📐" },
+      { id:"design", name:"디자인", icon:"✨" }
     ],
     options:[
-      { id:"flagship", icon:"🚀", name:"고성능 플래그십폰", short:"성능·카메라가 우수하지만 가격과 무게 부담이 있는 선택", scores:{ performance:95, price:48, battery:72, portability:62 }, reason:"성능이 압도적으로 높습니다. 성능 가중치가 높을수록 유리합니다." },
-      { id:"midrange", icon:"⚖️", name:"가성비 중급폰", short:"가격과 성능의 균형이 좋은 무난한 선택", scores:{ performance:74, price:88, battery:76, portability:82 }, reason:"가격만족도와 휴대성이 좋습니다. 균형 평가나 가격 중심에서 강합니다." },
-      { id:"batteryphone", icon:"🔋", name:"배터리 특화폰", short:"오래 쓰기 좋지만 성능·디자인은 보통인 선택", scores:{ performance:62, price:72, battery:94, portability:56 }, reason:"배터리 기준에서 강합니다. 장시간 사용을 중요하게 보면 우선순위가 올라갑니다." }
+      { id:"s6", icon:"📱", name:"갤럭시 S6", short:"균형 잡힌 표준형",
+        scores:{ performance:75, price:65, screen:60, design:80 } },
+      { id:"i6s", icon:"📱", name:"아이폰 6S", short:"성능·디자인 강점",
+        scores:{ performance:85, price:55, screen:55, design:92 } },
+      { id:"v10", icon:"📱", name:"LG V10", short:"가성비·실용성",
+        scores:{ performance:70, price:88, screen:78, design:62 } },
+      { id:"note5", icon:"📱", name:"갤럭시 노트5", short:"성능·큰 화면",
+        scores:{ performance:90, price:60, screen:95, design:78 } }
     ],
-    defaultWeights:{ performance:30, price:30, battery:25, portability:15 },
+    defaultWeights:{ performance:40, price:30, screen:20, design:10 },
     presets:[
-      { id:"performance", label:"성능 중심", weights:{ performance:55, price:15, battery:15, portability:15 } },
-      { id:"price", label:"가격 중심", weights:{ performance:15, price:55, battery:15, portability:15 } },
-      { id:"battery", label:"배터리 중심", weights:{ performance:15, price:15, battery:55, portability:15 } },
-      { id:"balanced", label:"균형 평가", weights:{ performance:25, price:25, battery:25, portability:25 } }
+      { label:"성능 중심", weights:{ performance:55, price:15, screen:15, design:15 } },
+      { label:"가격 중심", weights:{ performance:15, price:55, screen:15, design:15 } },
+      { label:"화면 중심", weights:{ performance:15, price:15, screen:55, design:15 } },
+      { label:"균형 평가", weights:{ performance:25, price:25, screen:25, design:25 } }
     ],
-    presetHelp:"프리셋은 성능, 가격, 배터리, 균형 구매 관점을 비교하기 위한 예시입니다."
+    // 스마트폰: 환경성·법윤리 주의 (배터리 폐기, 디자인 IP)
+    verify:{
+      checks:[
+        { id:"ethics", title:"도덕성", q:"이 구매 결정을 공개적으로 설명할 수 있는가?", expected:"pass" },
+        { id:"bigpicture", title:"큰 그림", q:"2년 이상 사용해도 가치가 유지되는가?", expected:"pass" },
+        { id:"safety", title:"안전성", q:"배터리·발열 등 안전성 이슈는 없는가?", expected:"warn" },
+        { id:"environment", title:"환경성", q:"기존 폰의 처리·재활용을 고려했는가?", expected:"warn" },
+        { id:"law", title:"법·윤리", q:"정품 유통·노동권 등 사회 윤리에 문제가 없는가?", expected:"pass" }
+      ],
+      verdict:{
+        allPass:{
+          tone:"pass", icon:"✅", title:"실행 가능",
+          body:"수학적 1위가 모든 검증을 통과했습니다. 안심하고 이 모델을 선택할 수 있습니다."
+        },
+        someWarn:{
+          tone:"warn", icon:"⚠️", title:"주의 후 실행",
+          body:"1위 모델은 안전성·환경성에서 주의가 필요합니다. 기존 폰의 재활용 처리 계획, 배터리 점검 후 실행하세요."
+        }
+      }
+    }
   },
-  {
-    id:"aitool",
-    tab:"AI 도구 선택",
-    subtitle:"과제 수행 도구",
-    title:"과제 수행을 위한 AI 도구 선택",
-    intro:"과제를 할 때 AI 도구를 무조건 많이 쓰는 것이 좋은 것은 아닙니다. 과제의 성격, 사용 난이도, 결과 품질, 시간 절약 효과를 기준으로 적합한 도구 유형을 선택해야 합니다.",
-    constraint:"상황 제약: 이번 주 안에 과제 결과물을 제출해야 하며, 초안 작성·자료 제작·간단한 구현 중 우선 지원받을 AI 도구 유형을 선택해야 합니다.",
-    scoreGuide:"기준 점수는 각 AI 도구 유형이 과제 수행에 얼마나 도움이 되는지를 나타냅니다. 예를 들어 결과품질 90점은 산출물 수준이 높다는 뜻입니다.",
-    weightGuide:"가중치는 이번 과제에서 무엇을 더 중요하게 볼지 나타냅니다. 과제 유형에 따라 적합한 AI 도구는 달라집니다.",
-    keyMessage:"AI 도구 선택도 기준 기반 의사결정입니다. 최신 도구가 아니라, 현재 과제에 가장 적합한 도구를 선택해야 합니다.",
+
+  aitool:{
+    label:"AI 도구 선택", icon:"🤖", num:3,
+    title:"과제 수행 AI 도구 선택",
+    question:"어떤 AI 도구가 이번 과제에 가장 적합한가?",
+    constraint:"이번 주 내 결과물 제출",
     criteria:[
-      { id:"fit", name:"과제적합성", icon:"🎯", color:"#78c9ff" },
-      { id:"ease", name:"사용용이성", icon:"👍", color:"#4be7ca" },
-      { id:"quality", name:"결과품질", icon:"🏆", color:"#ffd166" },
-      { id:"time", name:"시간절약", icon:"⏱️", color:"#b99cff" }
+      { id:"fit", name:"과제적합성", icon:"🎯" },
+      { id:"ease", name:"사용용이성", icon:"👍" },
+      { id:"quality", name:"결과품질", icon:"🏆" },
+      { id:"time", name:"시간절약", icon:"⏱️" }
     ],
     options:[
-      { id:"writing", icon:"✍️", name:"글쓰기 AI", short:"보고서 초안·요약·문장 다듬기에 강한 도구 유형", scores:{ fit:86, ease:90, quality:78, time:88 }, reason:"사용이 쉽고 시간 절약 효과가 큽니다. 글쓰기 과제나 정리 과제에 특히 강합니다." },
-      { id:"visual", icon:"🎨", name:"시각자료 AI", short:"포스터·발표자료·이미지 콘셉트 제작에 강한 도구 유형", scores:{ fit:76, ease:72, quality:86, time:74 }, reason:"결과품질과 시각적 설득력이 좋습니다. 발표자료나 홍보물 과제에서 유리합니다." },
-      { id:"coding", icon:"💻", name:"코딩 보조 AI", short:"웹페이지·프로그램 구조 작성과 오류 해결에 강한 도구 유형", scores:{ fit:82, ease:56, quality:90, time:80 }, reason:"결과품질과 구현 지원 효과가 큽니다. 다만 사용 난이도는 상대적으로 높습니다." }
+      { id:"writing", icon:"✍️", name:"글쓰기 AI", short:"보고서 초안·요약·문장 다듬기에 강함",
+        scores:{ fit:86, ease:92, quality:80, time:88 } },
+      { id:"visual", icon:"🎨", name:"시각자료 AI", short:"포스터·발표자료·이미지 제작에 강함",
+        scores:{ fit:76, ease:72, quality:88, time:74 } },
+      { id:"coding", icon:"💻", name:"코딩 보조 AI", short:"웹페이지·프로그램·오류 해결에 강함",
+        scores:{ fit:82, ease:58, quality:92, time:80 } }
     ],
     defaultWeights:{ fit:35, ease:20, quality:25, time:20 },
     presets:[
-      { id:"fit", label:"과제적합성 중심", weights:{ fit:55, ease:15, quality:15, time:15 } },
-      { id:"easy", label:"사용쉬움 중심", weights:{ fit:15, ease:55, quality:15, time:15 } },
-      { id:"quality", label:"결과품질 중심", weights:{ fit:20, ease:10, quality:55, time:15 } },
-      { id:"balanced", label:"균형 평가", weights:{ fit:25, ease:25, quality:25, time:25 } }
+      { label:"과제적합성 중심", weights:{ fit:55, ease:15, quality:15, time:15 } },
+      { label:"쉬운 사용 중심", weights:{ fit:15, ease:55, quality:15, time:15 } },
+      { label:"결과품질 중심", weights:{ fit:20, ease:10, quality:55, time:15 } },
+      { label:"균형 평가", weights:{ fit:25, ease:25, quality:25, time:25 } }
     ],
-    presetHelp:"프리셋은 과제 적합성, 쉬운 사용, 결과품질, 균형 판단을 비교하기 위한 예시입니다."
+    // AI 도구: 도덕성·법윤리 주의 (학문적 정직성, 표절)
+    verify:{
+      checks:[
+        { id:"ethics", title:"도덕성", q:"AI 사용 사실을 과제에 명시할 수 있는가?", expected:"warn" },
+        { id:"bigpicture", title:"큰 그림", q:"본인 학습에도 도움이 되는 사용 방식인가?", expected:"pass" },
+        { id:"safety", title:"안전성", q:"개인정보·민감 데이터를 입력하지 않는가?", expected:"pass" },
+        { id:"environment", title:"환경성", q:"불필요한 반복 호출로 자원을 낭비하지 않는가?", expected:"pass" },
+        { id:"law", title:"법·윤리", q:"학교의 AI 사용 정책·저작권을 지키는가?", expected:"warn" }
+      ],
+      verdict:{
+        allPass:{
+          tone:"pass", icon:"✅", title:"실행 가능",
+          body:"수학적 1위가 모든 검증을 통과했습니다. 학문적 정직성을 유지하면서 활용하세요."
+        },
+        someWarn:{
+          tone:"warn", icon:"⚠️", title:"학문적 정직성 보완 후 실행",
+          body:"1위 도구는 사용에 앞서 AI 사용 명시와 학교 정책 확인이 필요합니다. 표절이 되지 않도록 본인 작업과의 경계를 명확히 하세요."
+        }
+      }
+    }
   }
-];
+};
 
-let currentCaseIndex = 0;
-let rawWeights = {};
-let previousWinner = null;
-let lastChange = null;
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  caseKey: "team",
+  step: 0,              // 0..4 (Step 1..5)
+  weights: {},          // current weights (raw, sum may differ)
+  intuitionPick: null,  // user's gut choice (option id) - set in Step 1
+  verifyResults: {},    // {checkId: 'pass'|'warn'|'fail'}
+  currentWinner: null   // for change detection
+};
 
-function currentCase(){ return cases[currentCaseIndex]; }
-function criteria(){ return currentCase().criteria; }
-function options(){ return currentCase().options; }
+const $ = (id) => document.getElementById(id);
 
-function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+/* ============================================================
+   COMPUTATIONS
+   ============================================================ */
+function normalizedWeights(){
+  const sum = Object.values(state.weights).reduce((a,b) => a+b, 0) || 1;
+  const out = {};
+  for(const [k, v] of Object.entries(state.weights)) out[k] = v / sum;
+  return out;
+}
 
-function selectCase(index){
-  currentCaseIndex = index;
-  rawWeights = clone(currentCase().defaultWeights);
-  previousWinner = null;
-  lastChange = null;
+function calcTotal(option){
+  const nw = normalizedWeights();
+  let total = 0;
+  for(const [cid, w] of Object.entries(nw)){
+    total += (option.scores[cid] || 0) * w;
+  }
+  return total;
+}
+
+function getRanked(){
+  const c = CASES[state.caseKey];
+  return c.options
+    .map(o => ({ ...o, total: calcTotal(o) }))
+    .sort((a, b) => b.total - a.total);
+}
+
+/* ============================================================
+   INTRO RENDER
+   ============================================================ */
+function renderIntro(){
+  const html = Object.entries(CASES).map(([key, c]) => `
+    <button class="case-card" onclick="startCase('${key}')">
+      <span class="cc-num">사례 ${c.num}</span>
+      <div class="cc-icon">${c.icon}</div>
+      <div class="cc-title">${c.label}</div>
+      <div class="cc-sub">${c.title}</div>
+      <div class="cc-tags">
+        ${c.criteria.map(cr => `<span class="cc-tag">${cr.icon} ${cr.name}</span>`).join("")}
+      </div>
+    </button>
+  `).join("");
+  $("caseCards").innerHTML = html;
+}
+
+function startCase(key){
+  state.caseKey = key;
+  initCaseState();
+  showScreen("sim");
   render();
 }
 
-function normalizedWeights(){
-  const total = Object.values(rawWeights).reduce((a,b)=>a+b,0) || 1;
-  const out = {};
-  criteria().forEach(c => out[c.id] = rawWeights[c.id] / total);
-  return out;
+function initCaseState(){
+  const c = CASES[state.caseKey];
+  state.step = 0;
+  state.weights = { ...c.defaultWeights };
+  state.intuitionPick = null;
+  state.verifyResults = {};
+  state.currentWinner = null;
 }
-function percentWeights(){
-  const nw = normalizedWeights();
-  const rounded = {};
-  let sum = 0;
-  criteria().forEach((c, idx) => {
-    if(idx < criteria().length - 1){
-      rounded[c.id] = Math.round(nw[c.id] * 100);
-      sum += rounded[c.id];
-    } else {
-      rounded[c.id] = 100 - sum;
-    }
-  });
-  return rounded;
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  $(id).classList.add("active");
+  window.scrollTo(0, 0);
 }
-function calculate(){
-  const weights = normalizedWeights();
-  return options().map(option => {
-    const total = criteria().reduce((sum, c) => sum + option.scores[c.id] * weights[c.id], 0);
-    return { ...option, total };
-  }).sort((a,b)=>b.total-a.total);
+
+function restart(){
+  initCaseState();
+  showScreen("intro");
 }
-function renderTabs(){
-  document.getElementById("caseTabs").innerHTML = cases.map((c, i) => `
-    <button class="caseTab ${i===currentCaseIndex?'active':''}" onclick="selectCase(${i})">
-      <b>${c.tab}</b>
-      <small>${c.subtitle}</small>
+
+/* ============================================================
+   MAIN RENDER
+   ============================================================ */
+function render(){
+  const c = CASES[state.caseKey];
+
+  // top bar
+  renderStepPipe();
+  renderCaseMenu();
+  $("casePickLabel").textContent = `사례 ${c.num} · ${c.label}`;
+
+  // question banner
+  $("qText").textContent = c.question;
+  $("qConstraint").textContent = "📌 " + c.constraint;
+
+  renderNav();
+  renderScene();
+  renderSide();
+}
+
+function renderStepPipe(){
+  $("stepPipe").innerHTML = STEPS.map((s, i) => {
+    const cls = i < state.step ? "done" : (i === state.step ? "active" : "");
+    return `<button class="sp-node ${cls}" onclick="jumpStep(${i})">
+      <span class="sp-num">${s.num}</span>
+      <span class="sp-name">${s.title}</span>
+    </button>`;
+  }).join("");
+}
+
+function renderCaseMenu(){
+  $("caseMenu").innerHTML = Object.entries(CASES).map(([key, c]) => `
+    <button class="cm-item ${key === state.caseKey ? 'active' : ''}" onclick="switchCase('${key}')">
+      ${c.icon} ${c.label}
+      <small>${c.title}</small>
     </button>
   `).join("");
 }
-function renderContext(){
-  const c = currentCase();
-  document.getElementById("caseTitle").textContent = c.title;
-  document.getElementById("caseIntro").textContent = c.intro;
-  document.getElementById("caseConstraint").textContent = c.constraint;
-  document.getElementById("scoreGuide").textContent = c.scoreGuide;
-  document.getElementById("weightGuide").textContent = c.weightGuide;
-  document.getElementById("presetHelp").textContent = c.presetHelp;
-  document.getElementById("keyMessage").textContent = c.keyMessage;
-  document.getElementById("formulaText").textContent = `최종점수 = ${criteria().map(k => `(${k.name}점수 × 가중치)`).join(" + ")}`;
+
+function toggleCaseMenu(){
+  $("caseMenu").classList.toggle("show");
 }
-function renderIdeas(results){
-  const winner = results[0].id;
-  document.getElementById("ideas").innerHTML = options().map(option => {
-    const result = results.find(r => r.id === option.id);
-    return `
-      <article class="idea ${option.id===winner?'winner':''}" id="idea-${option.id}">
-        <div class="ideaIcon">${option.icon}</div>
-        <div>
-          <h3>${option.name}</h3>
-          <p>${option.short}</p>
-        </div>
-        <div class="scorePill">총점 ${result.total.toFixed(1)}</div>
-      </article>
-    `;
+
+function switchCase(key){
+  if(key === state.caseKey){
+    $("caseMenu").classList.remove("show");
+    return;
+  }
+  state.caseKey = key;
+  initCaseState();
+  $("caseMenu").classList.remove("show");
+  render();
+}
+
+document.addEventListener("click", (e) => {
+  if(!e.target.closest(".case-picker")) $("caseMenu").classList.remove("show");
+});
+
+function jumpStep(i){
+  state.step = i;
+  render();
+}
+
+function renderNav(){
+  $("prevBtn").disabled = state.step === 0;
+  $("nextBtn").textContent = state.step === 4 ? "처음으로 ↺" : "다음 ▶";
+  $("navStatus").textContent = `Step ${state.step + 1} / 5`;
+  const step = STEPS[state.step];
+  $("sceneStepTag").textContent = `STEP ${state.step + 1}/5 · ${step.tag}`;
+  $("sceneLabel").textContent = step.title;
+
+  // 예시 적용 버튼: Step 2(가중치)에서만 의미있음
+  $("presetBtn").style.display = (state.step === 1) ? "" : "none";
+
+  // Step 5 검증: 모든 항목 응답 전엔 nextBtn 활성도 OK (그냥 처음으로로 이동)
+}
+
+function nextStep(){
+  if(state.step < 4){
+    state.step++;
+    if(state.step === 3){ // Reached final ranking - confetti
+      setTimeout(() => burstConfetti(28), 200);
+    }
+    render();
+  } else {
+    restart();
+  }
+}
+function prevStep(){
+  if(state.step > 0){
+    state.step--;
+    render();
+  }
+}
+
+/* ============================================================
+   SCENE RENDERING
+   ============================================================ */
+function renderScene(){
+  const c = CASES[state.caseKey];
+  const stage = $("stage");
+  const caption = $("sceneCaption");
+
+  switch(state.step){
+    case 0: // Options
+      stage.innerHTML = renderOptionsStage(c);
+      caption.innerHTML = `<b>직관적으로 1위라고 생각하는 대안</b>을 골라 두세요 — 나중에 계산 결과와 비교합니다`;
+      break;
+    case 1: // Weights
+      stage.innerHTML = renderWeightStage(c);
+      caption.innerHTML = `가중치를 움직이면 <b>1위 후보가 바뀝니다</b> — 슬라이더로 직접 확인하세요`;
+      break;
+    case 2: // Scores
+      stage.innerHTML = renderScoreStage(c);
+      caption.innerHTML = `<b>기준 점수 × 가중치</b>를 모두 더해 최종 점수가 만들어집니다`;
+      break;
+    case 3: // Ranking
+      stage.innerHTML = renderRankingStage(c);
+      const ranked = getRanked();
+      const intuitionMatch = state.intuitionPick && state.intuitionPick === ranked[0].id;
+      caption.innerHTML = intuitionMatch
+        ? `<b>직관과 계산 결과가 일치</b>합니다 — 단, 가중치를 바꾸면 다를 수 있습니다`
+        : (state.intuitionPick
+          ? `직관(<b>${c.options.find(o=>o.id===state.intuitionPick).name}</b>)과 계산 결과가 <b>다릅니다</b> — 왜일까요?`
+          : `계산상 1위는 <b>${ranked[0].name}</b>입니다 — 가중치를 바꿔 보세요`);
+      break;
+    case 4: // Verify
+      stage.innerHTML = renderVerifyStage(c);
+      caption.innerHTML = `수학적 1등도 <b>도덕성·안전성·환경성</b> 검증을 통과해야 실행할 수 있습니다`;
+      break;
+  }
+}
+
+/* ============================================================
+   SIDE PANEL RENDERING
+   ============================================================ */
+function renderSide(){
+  const c = CASES[state.caseKey];
+  const step = STEPS[state.step];
+  $("panelStepNum").textContent = step.num;
+  $("panelTitle").textContent = step.title;
+  $("panelSub").textContent = step.sub;
+
+  const body = $("panelBody");
+  switch(state.step){
+    case 0:
+      body.innerHTML = renderOptionsPanel(c);
+      break;
+    case 1:
+      body.innerHTML = renderWeightPanel(c);
+      break;
+    case 2:
+      body.innerHTML = renderScorePanel(c);
+      break;
+    case 3:
+      body.innerHTML = renderRankingPanel(c);
+      break;
+    case 4:
+      body.innerHTML = renderVerifyPanel(c);
+      break;
+  }
+}
+
+/* ============================================================
+   STEP 1 - OPTIONS
+   ============================================================ */
+function renderOptionsStage(c){
+  return `
+    <div class="opt-grid">
+      ${c.options.map(o => `
+        <button class="opt-card ${state.intuitionPick === o.id ? 'intuition' : ''}" onclick="pickIntuition('${o.id}')">
+          ${state.intuitionPick === o.id ? '<span class="intuition-badge">내 직관 1위</span>' : ''}
+          <div class="opt-icon">${o.icon}</div>
+          <div class="opt-name">${o.name}</div>
+          <div class="opt-short">${o.short}</div>
+        </button>`).join("")}
+    </div>
+    <div class="criteria-preview" style="margin-top:18px">
+      <p class="cp-title">▸ 이 사례의 평가 기준 ${c.criteria.length}개</p>
+      <div class="criteria-chips">
+        ${c.criteria.map(cr => `<span class="criteria-chip">${cr.icon} ${cr.name}</span>`).join("")}
+      </div>
+    </div>`;
+}
+
+function pickIntuition(id){
+  state.intuitionPick = state.intuitionPick === id ? null : id;
+  renderScene();
+  renderSide();
+}
+
+function renderOptionsPanel(c){
+  return `
+    <p>이번 사례에서 평가할 대안 <b>${c.options.length}개</b>와 평가 기준 <b>${c.criteria.length}개</b>를 확인하세요.</p>
+    <p style="margin-top:10px">왼쪽에서 <b style="color:var(--principle)">직관적으로 1위라고 생각하는 대안</b>을 골라 두면, 나중에 가중치 계산 결과와 비교할 수 있습니다.</p>
+    <div class="hint warn" style="margin-top:14px"><b>다음 단계:</b> 평가 기준에 가중치를 부여해 우선순위를 정합니다.</div>`;
+}
+
+/* ============================================================
+   STEP 2 - WEIGHTS
+   ============================================================ */
+function renderWeightStage(c){
+  return `<div class="ranking-board" id="liveRanking">${renderRankingRows()}</div>`;
+}
+
+function renderRankingRows(){
+  const c = CASES[state.caseKey];
+  const ranked = getRanked();
+  const max = ranked[0].total || 100;
+  return ranked.map((o, i) => {
+    const pct = (o.total / max) * 100;
+    const isIntuition = state.intuitionPick === o.id;
+    return `<div class="rank-row rank-${i+1} ${isIntuition ? 'intuition-mark' : ''}" data-id="${o.id}">
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-icon">${o.icon}</div>
+      <div>
+        <div class="rank-name">${o.name}</div>
+        <div class="rank-bar"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <div class="rank-score">${o.total.toFixed(1)}</div>
+    </div>`;
   }).join("");
 }
-function renderWeights(){
-  const p = percentWeights();
-  document.getElementById("weightList").innerHTML = criteria().map(c => `
-    <div class="weightItem">
-      <div class="weightTop">
-        <div class="weightName"><span class="dot" style="background:${c.color}"></span>${c.icon} ${c.name}</div>
-        <div class="weightPercent">${p[c.id]}%</div>
+
+function renderWeightPanel(c){
+  const sum = Object.values(state.weights).reduce((a,b) => a+b, 0);
+  return `
+    <div class="weight-section">
+      ${c.criteria.map(cr => {
+        const v = state.weights[cr.id] || 0;
+        return `<div class="weight-row">
+          <div class="weight-label"><span class="wl-icon">${cr.icon}</span>${cr.name}</div>
+          <input type="range" min="0" max="100" value="${v}" class="weight-slider"
+            oninput="setWeight('${cr.id}', this.value)" />
+          <div class="weight-value">${v}</div>
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="weight-sum">가중치 합 <b>${sum}</b> · 자동으로 비율로 환산됩니다</div>
+    <div class="preset-section">
+      <p class="preset-title">▸ 빠른 프리셋</p>
+      <div class="preset-grid">
+        ${c.presets.map((p, i) => `
+          <button class="preset-btn ${isActivePreset(c, p) ? 'active' : ''}" onclick="applyPreset(${i})">
+            ${p.label}
+          </button>`).join("")}
       </div>
-      <input type="range" min="1" max="100" value="${rawWeights[c.id]}" oninput="setWeight('${c.id}', this.value)" />
     </div>
-  `).join("");
+    <div class="hint" style="margin-top:14px"><b>핵심:</b> 슬라이더를 움직이면 왼쪽 순위가 즉시 바뀝니다. 1위가 바뀌면 알림이 뜹니다.</div>`;
 }
-function renderPresets(){
-  document.getElementById("presetGrid").innerHTML = currentCase().presets.map(p => `
-    <button class="preset" onclick="applyPreset('${p.id}')">${p.label}</button>
-  `).join("");
-}
-function renderRank(results){
-  document.getElementById("rankList").innerHTML = results.map((r, idx) => `
-    <div class="rankRow ${idx===0?'top':''}">
-      <div class="rankNo">${idx+1}</div>
-      <div class="rankName">${r.icon} ${r.name}</div>
-      <div class="rankScore">${r.total.toFixed(1)}</div>
-    </div>
-  `).join("");
-}
-function renderTable(){
-  const rows = [
-    `<tr><th>대안</th>${criteria().map(c=>`<th>${c.name}</th>`).join("")}</tr>`,
-    ...options().map(option => `
-      <tr>
-        <td>${option.icon} ${option.name}</td>
-        ${criteria().map(c=>`<td>${option.scores[c.id]}</td>`).join("")}
-      </tr>
-    `)
-  ];
-  document.getElementById("scoreTable").innerHTML = rows.join("");
-}
-function explainWinner(results){
-  const top = results[0];
-  const p = percentWeights();
-  const highWeights = criteria()
-    .filter(c => p[c.id] >= 25)
-    .sort((a,b)=>p[b.id]-p[a.id])
-    .map(c => c.name);
 
-  let weightText = highWeights.length
-    ? `현재는 ${highWeights.join("·")} 기준의 영향이 큽니다.`
-    : "현재는 기준이 비교적 균형 있게 반영되어 있습니다.";
-
-  document.getElementById("explainTitle").textContent = `${top.icon} ${top.name}`;
-  document.getElementById("explainText").textContent =
-    `${weightText} ${top.reason}`;
+function isActivePreset(c, preset){
+  return c.criteria.every(cr => state.weights[cr.id] === preset.weights[cr.id]);
 }
-function renderFormulaExample(results){
-  const top = results[0];
-  const p = normalizedWeights();
-  const terms = criteria().map(c => `${top.scores[c.id]}×${p[c.id].toFixed(2)}`);
-  const total = results[0].total.toFixed(1);
-  document.getElementById("formulaExample").textContent =
-    `예시(${top.name}): ${terms.join(" + ")} = ${total}`;
+
+function setWeight(critId, value){
+  const newWinner = getRanked()[0].id;
+  state.weights[critId] = parseInt(value, 10);
+  // detect winner change
+  const nextWinner = getRanked()[0].id;
+  updateLiveRanking(newWinner !== nextWinner ? nextWinner : null);
+
+  // update slider value display next to it
+  const sliders = document.querySelectorAll('.weight-slider');
+  sliders.forEach(s => {
+    if(s.getAttribute('oninput').includes(`'${critId}'`)){
+      s.parentElement.querySelector('.weight-value').textContent = value;
+    }
+  });
+  // update sum
+  const sum = Object.values(state.weights).reduce((a,b) => a+b, 0);
+  document.querySelector('.weight-sum').innerHTML = `가중치 합 <b>${sum}</b> · 자동으로 비율로 환산됩니다`;
+  // update active preset
+  const c = CASES[state.caseKey];
+  document.querySelectorAll('.preset-btn').forEach((btn, idx) => {
+    btn.classList.toggle('active', isActivePreset(c, c.presets[idx]));
+  });
 }
-function renderChangePanel(results){
-  const winner = results[0].id;
-  const winnerOption = results[0];
-  const panel = document.getElementById("changePanel");
-  const text = document.getElementById("changeText");
 
-  if(previousWinner && previousWinner !== winner){
-    const prevName = options().find(i => i.id === previousWinner).name;
-    lastChange = `이전 1위: ${prevName} → 현재 1위: ${winnerOption.name}. 가중치 변경으로 우선순위가 바뀌었습니다.`;
-    panel.classList.remove("changeFlash");
-    void panel.offsetWidth;
-    panel.classList.add("changeFlash");
-    document.getElementById("modeBadge").textContent = "1위 변화!";
-  } else {
-    document.getElementById("modeBadge").textContent = "가중순위 평가";
-  }
-
-  if(lastChange){
-    text.textContent = lastChange;
-  } else {
-    text.textContent = `현재 1위는 ${winnerOption.name}입니다. 아직 1위 변화는 없습니다.`;
+function updateLiveRanking(newWinnerId){
+  const board = $("liveRanking");
+  if(!board) return;
+  board.innerHTML = renderRankingRows();
+  if(newWinnerId){
+    showRankNotice(newWinnerId);
+    burstConfetti(20);
   }
 }
-function render(){
-  const results = calculate();
-  const winner = results[0].id;
-  renderTabs();
-  renderContext();
-  renderIdeas(results);
-  renderWeights();
-  renderPresets();
-  renderRank(results);
-  renderTable();
-  explainWinner(results);
-  renderFormulaExample(results);
-  renderChangePanel(results);
-  previousWinner = winner;
-}
-function setWeight(id, value){
-  rawWeights[id] = Number(value);
-  render();
-}
-function applyPreset(presetId){
-  const preset = currentCase().presets.find(p => p.id === presetId);
-  rawWeights = clone(preset.weights);
-  render();
-}
-function resetWeights(){
-  rawWeights = clone(currentCase().defaultWeights);
-  previousWinner = null;
-  lastChange = null;
-  render();
-}
-function showWhy(){
-  const results = calculate();
-  const top = results[0];
-  const p = percentWeights();
-  const contributions = criteria().map(c => ({
-    name:c.name,
-    value: top.scores[c.id] * (p[c.id]/100),
-    weight:p[c.id],
-    score:top.scores[c.id]
-  })).sort((a,b)=>b.value-a.value);
 
-  const main = contributions[0];
-  document.getElementById("explainTitle").textContent = `왜 ${top.name}인가?`;
-  document.getElementById("explainText").textContent =
-    `현재 1위는 ${top.name}입니다. 가장 크게 영향을 준 기준은 ${main.name}입니다. ` +
-    `${main.name}의 가중치가 ${main.weight}%이고, 해당 대안의 ${main.name} 점수가 ${main.score}점이기 때문입니다. ` +
-    `즉, 순위는 대안의 절대적 우수성만으로 결정되지 않고, 어떤 기준을 얼마나 중요하게 보느냐에 따라 달라집니다.`;
+function showRankNotice(winnerId){
+  const c = CASES[state.caseKey];
+  const winner = c.options.find(o => o.id === winnerId);
+  // Inject notice into stage temporarily
+  const board = $("liveRanking");
+  if(!board) return;
+  const existing = board.querySelector('.rank-notice');
+  if(existing) existing.remove();
+  const notice = document.createElement('div');
+  notice.className = 'rank-notice';
+  notice.innerHTML = `<span class="rn-icon">🎯</span><span><b>1위가 변경되었습니다!</b> 새 1위: ${winner.icon} <b style="color:var(--warn-yellow)">${winner.name}</b></span>`;
+  board.prepend(notice);
+  setTimeout(() => notice.remove(), 3000);
 }
 
-rawWeights = clone(currentCase().defaultWeights);
-render();
+function applyPreset(idx){
+  const c = CASES[state.caseKey];
+  const preset = c.presets[idx];
+  const prevWinner = getRanked()[0].id;
+  state.weights = { ...preset.weights };
+  const newWinner = getRanked()[0].id;
+  renderSide();
+  updateLiveRanking(prevWinner !== newWinner ? newWinner : null);
+}
+
+function applyExamplePresets(){
+  // "예시 적용" - 첫 번째 프리셋 (특성 중심) 적용
+  applyPreset(0);
+}
+
+/* ============================================================
+   STEP 3 - SCORES
+   ============================================================ */
+function renderScoreStage(c){
+  const ranked = getRanked();
+  const winner = ranked[0];
+  const nw = normalizedWeights();
+
+  // Build sample calculation string for winner
+  const calcParts = c.criteria.map(cr => {
+    const score = winner.scores[cr.id];
+    const w = nw[cr.id];
+    return `${score}×${(w*100).toFixed(0)}%`;
+  }).join(" + ");
+  const total = winner.total.toFixed(1);
+
+  return `
+    <table class="score-matrix">
+      <thead>
+        <tr>
+          <th class="opt-th">대안</th>
+          ${c.criteria.map(cr => `<th>${cr.icon}<br>${cr.name}<br><span style="font-size:10px;color:var(--principle)">${(nw[cr.id]*100).toFixed(0)}%</span></th>`).join("")}
+          <th class="total-th">총점</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${ranked.map(o => `
+          <tr class="${o.id === winner.id ? 'is-winner' : ''}">
+            <td class="opt-name"><span class="om-icon">${o.icon}</span>${o.name}</td>
+            ${c.criteria.map(cr => {
+              const s = o.scores[cr.id];
+              return `<td class="score-cell">
+                <span class="sc-bar">
+                  <span class="sc-fill" style="width:${s}%"></span>
+                  <span class="sc-text">${s}</span>
+                </span>
+              </td>`;
+            }).join("")}
+            <td class="total-cell">${o.total.toFixed(1)}</td>
+          </tr>`).join("")}
+      </tbody>
+    </table>
+    <div class="formula-box">
+      <div class="fb-label">▸ 가중 점수 계산 방식</div>
+      <div class="fb-formula">최종점수 = ${c.criteria.map(cr => `(${cr.name}점수 <span class="x">×</span> ${cr.name}가중치)`).join(" + ")}</div>
+      <div class="fb-example">예시 (1위 · ${winner.name}): ${calcParts} = <b style="color:var(--principle)">${total}</b>점</div>
+    </div>`;
+}
+
+function renderScorePanel(c){
+  const ranked = getRanked();
+  const winner = ranked[0];
+  return `
+    <p>각 대안의 기준별 점수 (0~100점)와 정규화된 가중치(%)가 표시됩니다.</p>
+    <p style="margin-top:10px">예를 들어 <b>${winner.name}</b>은 ${c.criteria.map(cr => `${cr.name} ${winner.scores[cr.id]}점`).join(", ")}으로 평가되었습니다.</p>
+    <div class="hint" style="margin-top:14px"><b>핵심:</b> 점수가 같더라도 가중치가 다르면 총점이 달라집니다.</div>`;
+}
+
+/* ============================================================
+   STEP 4 - FINAL RANKING
+   ============================================================ */
+function renderRankingStage(c){
+  return `<div class="ranking-board">${renderRankingRows()}</div>`;
+}
+
+function renderRankingPanel(c){
+  const ranked = getRanked();
+  const winner = ranked[0];
+  const intuition = state.intuitionPick ? c.options.find(o => o.id === state.intuitionPick) : null;
+  const match = intuition && intuition.id === winner.id;
+
+  return `
+    <p><b style="color:var(--principle)">🥇 1위: ${winner.icon} ${winner.name}</b> (${winner.total.toFixed(1)}점)</p>
+    ${intuition ? `
+      <p style="margin-top:10px">내 직관 선택: <b>${intuition.icon} ${intuition.name}</b></p>
+      <div class="hint ${match ? '' : 'warn'}" style="margin-top:8px">
+        ${match
+          ? `<b>일치!</b> 직관이 계산 결과와 같습니다. 단, 가중치를 바꾸면 결과가 달라질 수 있다는 점을 기억하세요.`
+          : `<b>불일치!</b> 직관과 계산 결과가 다릅니다. 가중치 조정이 결과를 바꿨거나, 직관이 특정 기준에 치우쳐 있었을 수 있습니다.`}
+      </div>
+    ` : ''}
+    <div class="hint" style="margin-top:14px"><b>다음 단계:</b> 수학적 1위라도 도덕성·안전성·환경성 검증을 통과해야 실행할 수 있습니다.</div>`;
+}
+
+/* ============================================================
+   STEP 5 - VERIFICATION
+   ============================================================ */
+function renderVerifyStage(c){
+  const ranked = getRanked();
+  const winner = ranked[0];
+  const checks = c.verify.checks;
+
+  const allAnswered = checks.every(ch => state.verifyResults[ch.id]);
+  const verdict = allAnswered ? computeVerdict(c) : null;
+
+  return `
+    <div class="verify-stage">
+      <div class="verify-winner">
+        <div class="vw-icon">${winner.icon}</div>
+        <div>
+          <span class="vw-tag">계산상 1위</span>
+          <div class="vw-name">${winner.name}</div>
+        </div>
+        <div class="vw-score">${winner.total.toFixed(1)}</div>
+      </div>
+      <div class="verify-checks">
+        ${checks.map(ch => {
+          const res = state.verifyResults[ch.id];
+          const cls = res === 'pass' ? 'passed' : (res === 'fail' ? 'failed' : (res === 'warn' ? 'warned' : ''));
+          return `<div class="verify-item ${cls}">
+            <div class="vi-icon">${vIcon(ch.id)}</div>
+            <div>
+              <div class="vi-title">${ch.title}</div>
+              <div class="vi-q">${ch.q}</div>
+            </div>
+            <div class="vi-buttons">
+              <button class="vi-btn pass" onclick="verifyItem('${ch.id}', 'pass')">통과</button>
+              <button class="vi-btn warn" onclick="verifyItem('${ch.id}', 'warn')">주의</button>
+              <button class="vi-btn fail" onclick="verifyItem('${ch.id}', 'fail')">실패</button>
+            </div>
+          </div>`;
+        }).join("")}
+      </div>
+      ${verdict ? renderVerdict(verdict, c, winner) : ''}
+    </div>`;
+}
+
+function vIcon(id){
+  return { ethics:"⚖️", bigpicture:"🌏", safety:"🛡️", environment:"🌱", law:"📜" }[id] || "📋";
+}
+
+function verifyItem(checkId, result){
+  state.verifyResults[checkId] = result;
+  renderScene();
+  renderSide();
+  // 모두 응답하면 검증 결과에 따라 콘페티 또는 알림
+  const c = CASES[state.caseKey];
+  if(c.verify.checks.every(ch => state.verifyResults[ch.id])){
+    const verdict = computeVerdict(c);
+    if(verdict.tone === 'pass') setTimeout(() => burstConfetti(40), 200);
+    // verdict가 보이도록 stage를 부드럽게 아래로 스크롤
+    setTimeout(() => {
+      const stage = $("stage");
+      if(stage){
+        stage.scrollTo({ top: stage.scrollHeight, behavior: 'smooth' });
+      }
+    }, 100);
+  }
+}
+
+function computeVerdict(c){
+  const results = Object.values(state.verifyResults);
+  const hasFail = results.includes('fail');
+  const hasWarn = results.includes('warn');
+
+  if(hasFail){
+    return {
+      tone:"fail", icon:"🚫", title:"1위 기각 · 차순위 검토 필요",
+      body:"검증에서 통과하지 못한 항목이 있습니다. 수학적 1위라도 도덕성·안전성·환경성에 문제가 있다면 실행할 수 없습니다. 차순위 대안을 다시 검토해야 합니다."
+    };
+  }
+  if(hasWarn) return c.verify.verdict.someWarn;
+  return c.verify.verdict.allPass;
+}
+
+function renderVerdict(verdict, c, winner){
+  let next = '';
+  if(verdict.tone === 'fail'){
+    const ranked = getRanked();
+    if(ranked[1]){
+      next = `<div style="margin-top:12px;font-size:13px;color:var(--text);font-weight:800">▸ 차순위 검토 후보: <b style="color:var(--warn-yellow)">${ranked[1].icon} ${ranked[1].name}</b> (${ranked[1].total.toFixed(1)}점)</div>`;
+    }
+  }
+  return `<div class="verdict ${verdict.tone}">
+    <div class="v-icon">${verdict.icon}</div>
+    <div class="v-title">${verdict.title}</div>
+    <div class="v-body">${verdict.body}</div>
+    ${next}
+  </div>`;
+}
+
+function renderVerifyPanel(c){
+  const checks = c.verify.checks;
+  const answered = checks.filter(ch => state.verifyResults[ch.id]).length;
+  const total = checks.length;
+
+  return `
+    <p>1위 후보가 정말 실행할 수 있는 아이디어인지 <b>5개 영역</b>에서 검증합니다.</p>
+    <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">진행: <b style="color:var(--scan-cyan)">${answered}</b> / ${total} 응답</p>
+    ${answered === total ? `
+      <div class="hint" style="margin-top:14px"><b>완료!</b> 모든 항목에 응답했습니다. 왼쪽에서 최종 결과를 확인하세요.</div>
+    ` : `
+      <div class="hint warn" style="margin-top:14px"><b>안내:</b> 각 항목에 <b>통과 / 주의 / 실패</b> 중 하나를 선택하세요. 하나라도 실패면 1위가 기각됩니다.</div>
+    `}
+    <p style="margin-top:14px;font-size:12px;color:var(--text-dim);line-height:1.5">
+      💡 이 시뮬레이터의 검증 결과는 강의 사례 기준이며, 학습자가 자신의 가치 기준으로 직접 답해도 됩니다.
+    </p>`;
+}
+
+/* ============================================================
+   CONFETTI
+   ============================================================ */
+function burstConfetti(count = 32){
+  const c = $("confetti");
+  const colors = ["#4be7ca","#5ec3ff","#ffd166","#ff6b8e","#b794f6","#7ee787"];
+  for(let i = 0; i < count; i++){
+    const s = document.createElement("span");
+    s.style.left = Math.random() * 100 + "%";
+    s.style.background = colors[Math.floor(Math.random() * colors.length)];
+    s.style.animation = `confetti-fall ${1.6 + Math.random()*1.2}s ease-in ${Math.random()*0.3}s forwards`;
+    s.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.appendChild(s);
+    setTimeout(() => s.remove(), 3500);
+  }
+}
+
+const cstyle = document.createElement("style");
+cstyle.textContent = `
+@keyframes confetti-fall {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+  100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+}`;
+document.head.appendChild(cstyle);
+
+/* ============================================================
+   KEYBOARD SHORTCUTS
+   ============================================================ */
+document.addEventListener("keydown", (e) => {
+  if(!$("sim").classList.contains("active")) return;
+  if(e.key === "ArrowRight") nextStep();
+  if(e.key === "ArrowLeft") prevStep();
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+renderIntro();
 </script>
+
 </body>
 </html>
