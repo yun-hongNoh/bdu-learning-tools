@@ -463,6 +463,9 @@ button{font-family:inherit;color:inherit}
   font-weight:900;
   color:var(--text-muted);
   white-space:nowrap;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .q-formula .good{color:var(--good-blue)}
 .q-formula .bad{color:var(--bad-red)}
@@ -1188,7 +1191,7 @@ button{font-family:inherit;color:inherit}
 }
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE (v2: rewritten for proper mobile layout)
    ============================================================ */
 @media (max-width: 1100px){
   .step-pipe{gap:4px}
@@ -1198,32 +1201,138 @@ button{font-family:inherit;color:inherit}
 @media (max-width: 960px){
   body{font-size:14px}
   #sim{padding:12px}
-  .top-bar{grid-template-columns:auto 1fr;padding:12px 14px;gap:10px}
-  .step-pipe{order:3;grid-column:1/-1;overflow-x:auto;justify-content:flex-start;padding-bottom:4px}
+
+  /* Top bar */
+  .top-bar{grid-template-columns:1fr auto;padding:12px 14px;gap:10px}
+  .brand-text{font-size:15px}
+  .step-pipe{order:3;grid-column:1/-1;overflow-x:auto;justify-content:flex-start;padding-bottom:4px;-webkit-overflow-scrolling:touch}
   .step-pipe::-webkit-scrollbar{display:none}
-  .case-picker{order:2;justify-self:end}
+  .case-picker{justify-self:end}
+
+  /* Question banner: allow wrap */
   .q-banner{flex-direction:column;align-items:flex-start;gap:8px;padding:12px 14px}
-  .q-formula{align-self:flex-start}
+  .q-text{font-size:17px}
+  .q-formula{align-self:stretch;white-space:normal;text-align:center;line-height:1.5}
+
+  /* Layout: stack scene above side panel */
   .main-body{grid-template-columns:1fr}
-  .scene{min-height:380px}
-  .stage{inset:54px 20px 64px 20px}
-  .stage > svg{max-height:300px}
-  .scene-label{font-size:10px;left:50px}
-  .scene-step-tag{right:50px;font-size:10px}
-  .nav-bar{grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px}
-  .nav-status{grid-column:1/-1;order:-1}
-  .case-cards{grid-template-columns:1fr 1fr}
-  .pipe-preview{grid-template-columns:repeat(3,1fr);gap:6px}
+
+  /* CRITICAL: scene becomes flow container on mobile (was absolute-position trap) */
+  .scene{
+    min-height:0;
+    padding:18px 16px 70px;
+    display:flex;
+    flex-direction:column;
+  }
+  /* Stage no longer absolute → content can push scene height naturally */
+  .stage{
+    position:relative;
+    inset:auto;
+    width:100%;
+    min-height:300px;
+    padding:34px 0 8px;
+  }
+  .stage > svg{max-height:280px}
+
+  /* Scene corners: hide on mobile (they would overlap with content) */
+  .scene::before,.scene::after,.scene-corner-tr,.scene-corner-bl{display:none}
+
+  /* Scene labels: relocate to be inline with content, not absolutely positioned */
+  .scene-label{
+    position:relative;
+    top:auto;left:auto;
+    display:inline-block;
+    margin-bottom:4px;
+  }
+  .scene-step-tag{
+    position:absolute;
+    top:14px;right:14px;
+    font-size:10px;
+  }
+
+  /* Scene caption: stay at bottom, full width comfortable */
+  .scene-caption{
+    position:relative;
+    left:auto;bottom:auto;
+    transform:none;
+    width:100%;
+    margin-top:14px;
+    font-size:13px;
+    padding:11px 16px;
+  }
+
+  /* Side panel below scene */
+  .side{min-width:0}
+  .panel{padding:16px 16px}
+
+  /* Nav bar: compact 2-row */
+  .nav-bar{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    padding:10px 12px;
+  }
+  .nav-status{grid-column:1/-1;order:-1;font-size:12px}
+  .nav-btn{padding:11px 12px;font-size:13px;min-height:44px}
+
+  /* Case cards in intro: 2-col */
+  .case-cards{grid-template-columns:1fr 1fr;gap:10px}
+  .case-card{padding:18px 14px}
+
+  /* Intro pipe preview */
+  .pipe-preview{grid-template-columns:repeat(3,1fr);gap:6px;max-width:520px}
+  .pipe-node{padding:10px 6px}
   .pipe-node::after{content:""}
-  .general-text{font-size:18px}
+  .pipe-node .pn-num{width:24px;height:24px;font-size:13px}
+  .pipe-node .pn-name{font-size:10px}
+
+  /* General step typography */
+  .general-text{font-size:19px}
+  .general-pill,.solution-banner{font-size:13px;padding:9px 18px}
+
+  /* Step 4 matrix - prevent overflow */
+  .matrix-stage{padding:0}
+  .mx-row{grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+  .mx-row .mx-arrow{transform:rotate(90deg);margin:0 auto}
+
+  /* Step 5 principle cards stay readable */
+  .prn-card{padding:12px}
+  .prn-name{font-size:14px}
 }
 @media (max-width: 500px){
-  .case-cards{grid-template-columns:1fr}
-  .pipe-preview{grid-template-columns:repeat(2,1fr)}
-  .scene-caption{font-size:11px;padding:8px 14px;width:calc(100% - 36px)}
+  #intro{padding:18px 14px}
+  .intro-title{font-size:34px}
+  .intro-sub{font-size:14px;margin-bottom:24px}
+  .case-cards{grid-template-columns:1fr;gap:10px}
+  .pipe-preview{grid-template-columns:repeat(2,1fr);max-width:340px}
+  .case-card{padding:16px 14px}
+  .case-card .cc-title{font-size:16px}
+  .case-card .cc-sub{font-size:11px}
+
+  /* Sim screen tightening */
+  .q-text{font-size:15px}
+  .scene-caption{font-size:12px;padding:10px 14px}
   .morph-row{grid-template-columns:1fr;gap:10px}
-  .morph-arrow{transform:rotate(90deg)}
+  .morph-arrow{transform:rotate(90deg);justify-self:center}
+  .morph-card .mc-text{font-size:16px}
   .mx-row{grid-template-columns:1fr;gap:10px}
+
+  /* Nav bar even tighter */
+  .nav-bar{grid-template-columns:1fr 1fr;padding:8px 10px}
+  .nav-btn{padding:10px 8px;font-size:12px;min-height:42px}
+
+  /* Brand on very small */
+  .brand-text{display:none}
+  .top-bar{padding:10px 12px}
+  .case-pick-btn{font-size:12px;padding:8px 12px}
+
+  /* General text smaller on tiny screens */
+  .general-text{font-size:17px}
+  .general-reason{font-size:13px;padding:12px 14px}
+}
+
+/* iOS safe area support */
+@supports(padding:env(safe-area-inset-bottom)){
+  #sim{padding-bottom:max(18px, env(safe-area-inset-bottom))}
 }
 </style>
 </head>
