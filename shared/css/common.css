@@ -41,6 +41,9 @@ body{font-family:'IBM Plex Sans KR',sans-serif;background:var(--bg);color:var(--
 .tool-card.mindmap{background:linear-gradient(135deg,#FBF8EF 0%,#F3F0FF 100%)}
 .tool-card.mindmap .num,.tool-card.mindmap .go{color:#4f46e5}
 .tool-card.mindmap::after{background:rgba(79,70,229,.10)}
+.tool-card.ninewindows{background:linear-gradient(135deg,#FBF8EF 0%,#EAFAFB 100%)}
+.tool-card.ninewindows .num,.tool-card.ninewindows .go{color:#0E8FA0}
+.tool-card.ninewindows::after{background:rgba(14,143,160,.11)}
 
 @media(max-width:640px){.home{padding:52px 20px}.tool-card{min-height:auto}.hero{padding-bottom:36px}}
 

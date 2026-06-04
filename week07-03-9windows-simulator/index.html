@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 Windows 문제 인식 시뮬레이터</title>
+<style>
+  :root{
+    --bg-0:#070e1c; --bg-1:#0c1730; --bg-2:#12203f;
+    --panel:rgba(18,32,63,.55); --line:rgba(120,170,230,.16); --line-strong:rgba(120,200,255,.45);
+    --text:#e8f1ff; --text-dim:#9fb3d6; --text-faint:#5e739a;
+    --mint:#4fe3c1; --cyan:#46c8ff; --blue:#7aa6ff; --gold:#ffd479; --pink:#ff8fb1;
+    --glow:rgba(79,227,193,.55); --glow-blue:rgba(70,200,255,.5);
+    --radius:16px;
+    --font:"Apple SD Gothic Neo","Pretendard","Noto Sans KR","Malgun Gothic",-apple-system,BlinkMacSystemFont,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:var(--font);color:var(--text);min-height:100vh;line-height:1.5;letter-spacing:-.01em;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1100px 700px at 12% -10%, #15315e 0%, transparent 55%),
+      radial-gradient(900px 600px at 105% 110%, #0e2a4a 0%, transparent 55%),
+      linear-gradient(160deg,var(--bg-1) 0%,var(--bg-0) 100%);
+    background-attachment:fixed;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:linear-gradient(rgba(120,170,230,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(120,170,230,.035) 1px,transparent 1px);
+    background-size:46px 46px;mask-image:radial-gradient(circle at 50% 40%,#000 0%,transparent 80%);
+  }
+  .wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:26px 22px 60px;}
+
+  /* Header */
+  header.top{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:18px;}
+  .brand{flex:1 1 360px;min-width:280px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.18em;color:var(--mint);text-transform:uppercase;margin-bottom:10px;font-weight:600;}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px var(--glow);}
+  h1{font-size:clamp(24px,3.4vw,38px);font-weight:800;line-height:1.12;background:linear-gradient(100deg,#fff 10%,var(--cyan) 60%,var(--mint) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .subtitle{color:var(--text-dim);font-size:14px;margin-top:8px;}
+  .problem-tag{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 18px;backdrop-filter:blur(8px);max-width:380px;}
+  .problem-tag .lab{font-size:11px;letter-spacing:.1em;color:var(--text-faint);text-transform:uppercase;margin-bottom:8px;}
+  .problem-tag .val{font-size:16px;font-weight:700;color:#fff;}
+  .scenario-switch{display:inline-flex;gap:7px;margin-left:6px;}
+  .scenario-switch button{font-family:var(--font);font-size:12px;font-weight:700;padding:6px 11px;border-radius:9px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--text-dim);transition:.2s;}
+  .scenario-switch button.on{background:rgba(79,227,193,.14);border-color:var(--mint);color:var(--mint);}
+
+  /* Stage bar */
+  .stagebar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+  .step{flex:1 1 0;min-width:130px;display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 13px;backdrop-filter:blur(6px);transition:.4s;opacity:.5;}
+  .step.active{opacity:1;border-color:var(--line-strong);box-shadow:0 0 0 1px var(--glow-blue) inset,0 8px 24px rgba(0,0,0,.3);}
+  .step .num{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:13px;font-weight:700;background:rgba(70,200,255,.12);color:var(--cyan);flex:0 0 auto;}
+  .step.active .num{background:linear-gradient(135deg,var(--mint),var(--cyan));color:#05101f;}
+  .step .t{font-size:12.5px;color:var(--text-dim);font-weight:600;}
+  .step.active .t{color:#fff;}
+
+  /* Coach */
+  .coach{display:flex;align-items:center;gap:12px;background:linear-gradient(100deg,rgba(79,227,193,.12),rgba(70,200,255,.07));border:1px solid rgba(79,227,193,.28);border-radius:14px;padding:13px 17px;margin-bottom:18px;}
+  .coach .cic{font-size:22px;flex:0 0 auto;animation:bob 2.4s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-3px) rotate(4deg);}}
+  .coach .cmsg{font-size:13.5px;font-weight:600;color:var(--text);line-height:1.5;transition:opacity .25s;}
+  .coach .cmsg b{color:var(--mint);}
+
+  /* Layout */
+  .grid-layout{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start;}
+
+  /* Matrix card */
+  .matrix-card{background:linear-gradient(160deg,rgba(20,38,72,.7),rgba(10,20,40,.55));border:1px solid var(--line);border-radius:var(--radius);padding:22px 22px 24px;backdrop-filter:blur(10px);box-shadow:0 24px 60px rgba(0,0,0,.4);position:relative;overflow:hidden;}
+  .matrix-card::after{content:"";position:absolute;top:-40%;right:-30%;width:60%;height:80%;background:radial-gradient(circle,var(--glow-blue),transparent 70%);opacity:.18;pointer-events:none;}
+  .matrix-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;}
+  .matrix-head h2{font-size:15px;font-weight:700;color:var(--text);}
+  .hint{font-size:12px;color:var(--mint);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .hint .pulse{width:8px;height:8px;border-radius:50%;background:var(--mint);animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--glow);}50%{box-shadow:0 0 0 7px transparent;}}
+
+  /* progress */
+  .progress{display:none;align-items:center;gap:12px;margin-bottom:14px;}
+  .progress.show{display:flex;}
+  .ptrack{flex:1;height:8px;border-radius:99px;background:rgba(7,14,28,.7);overflow:hidden;border:1px solid var(--line);}
+  .pfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--cyan));transition:width .5s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 12px var(--glow);}
+  .ptxt{font-size:12px;font-weight:700;color:var(--text-dim);white-space:nowrap;}
+  .ptxt b{color:var(--mint);}
+
+  /* matrix shell with axis labels */
+  .matrix-shell{display:grid;grid-template-columns:54px 1fr;grid-template-rows:auto 1fr;gap:8px;}
+  .corner{grid-column:1;grid-row:1;}
+  .x-axis{grid-column:2;grid-row:1;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .y-axis{grid-column:1;grid-row:2;display:grid;grid-template-rows:repeat(3,1fr);gap:10px;}
+  .matrix{grid-column:2;grid-row:2;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:10px;}
+
+  .xlab{text-align:center;opacity:0;transform:translateY(-4px);transition:.5s;padding:4px 0;}
+  .xlab .xt{font-size:13px;font-weight:800;color:var(--blue);}
+  .xlab .xs{font-size:10.5px;color:var(--text-faint);margin-top:1px;}
+  .ylab{display:grid;place-items:center;opacity:0;transform:translateX(-4px);transition:.5s;}
+  .ylab span{writing-mode:vertical-rl;text-orientation:mixed;font-size:12px;font-weight:800;color:var(--blue);letter-spacing:.04em;}
+  .opened .xlab,.opened .ylab{opacity:1;transform:none;}
+
+  /* windows */
+  .win{position:relative;aspect-ratio:1/.82;border-radius:13px;cursor:pointer;border:1px solid var(--line);background:linear-gradient(155deg,rgba(20,36,68,.9),rgba(11,22,44,.85));padding:11px 12px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .45s,box-shadow .35s,border-color .35s,background .35s;}
+  .win::before{content:"";position:absolute;top:0;left:0;right:0;height:42%;background:linear-gradient(180deg,rgba(255,255,255,.07),transparent);pointer-events:none;}
+  .win .wtime{font-size:10px;letter-spacing:.08em;color:var(--text-faint);text-transform:uppercase;}
+  .win .wlevel{font-size:10px;color:var(--text-faint);}
+  .win .wkey{font-size:12.5px;font-weight:600;color:var(--text-dim);line-height:1.35;}
+  .win .corner-mark{position:absolute;bottom:8px;right:9px;width:8px;height:8px;border-radius:50%;background:var(--text-faint);opacity:.5;display:grid;place-items:center;font-size:10px;line-height:1;color:transparent;transition:.3s;}
+
+  /* closed: only center */
+  .matrix.closed .win{opacity:.12;transform:scale(.82);pointer-events:none;filter:blur(1px);}
+  .matrix.closed .win.center{opacity:1;transform:scale(1.04);pointer-events:auto;filter:none;border-color:var(--mint);box-shadow:0 0 0 1px var(--mint),0 0 34px var(--glow),inset 0 0 26px rgba(79,227,193,.12);}
+  .matrix.closed .win.center .wkey{color:#fff;}
+  .matrix.closed .win.center .corner-mark{background:var(--mint);box-shadow:0 0 9px var(--glow);opacity:1;}
+
+  /* opened */
+  .matrix.opened .win{opacity:1;transform:none;pointer-events:auto;filter:none;}
+  .matrix.opened .win:hover{border-color:var(--line-strong);transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.35),0 0 0 1px var(--glow-blue);}
+  .matrix.opened .win:hover .wkey{color:var(--text);}
+
+  /* explored = check */
+  .win.explored .corner-mark{width:17px;height:17px;background:var(--mint);color:#04121f;opacity:1;font-weight:800;box-shadow:0 0 9px var(--glow);}
+
+  /* nudge pulse */
+  .win.nudge{animation:nudge 1.5s ease-in-out infinite;}
+  @keyframes nudge{0%,100%{box-shadow:0 0 0 0 var(--glow-blue);border-color:var(--line);}50%{box-shadow:0 0 0 4px transparent,0 0 22px var(--glow-blue);border-color:var(--line-strong);}}
+
+  /* selected */
+  .win.selected{border-color:var(--mint)!important;background:linear-gradient(155deg,rgba(34,70,80,.92),rgba(15,40,46,.85))!important;box-shadow:0 0 0 1.5px var(--mint),0 0 38px var(--glow),inset 0 0 30px rgba(79,227,193,.14)!important;transform:translateY(-2px)!important;animation:none!important;}
+  .win.selected .wkey{color:#fff;}
+  .win.selected .wtime,.win.selected .wlevel{color:var(--mint);}
+
+  /* recorded badge */
+  .win.recorded::after{content:"기록됨";position:absolute;top:8px;right:8px;font-size:9px;font-weight:700;background:var(--gold);color:#3a2a05;padding:2px 6px;border-radius:6px;letter-spacing:.04em;}
+
+  .matrix.revealing .win:not(.center){animation:openWin .5s backwards cubic-bezier(.2,.85,.25,1);}
+  @keyframes openWin{from{opacity:0;transform:scale(.6) translateY(8px);}to{opacity:1;transform:none;}}
+
+  .legend{margin-top:14px;font-size:11.5px;color:var(--text-faint);line-height:1.7;display:none;}
+  .legend.show{display:block;}
+  .legend b{color:var(--blue);}
+
+  /* controls */
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+  button.btn{font-family:var(--font);font-size:13.5px;font-weight:700;cursor:pointer;border-radius:11px;padding:12px 18px;border:1px solid var(--line);background:rgba(70,200,255,.08);color:var(--text);transition:.25s;letter-spacing:-.01em;}
+  button.btn:hover{border-color:var(--line-strong);background:rgba(70,200,255,.16);transform:translateY(-1px);}
+  button.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+  button.btn.primary{background:linear-gradient(135deg,var(--mint),var(--cyan));color:#04121f;border:none;box-shadow:0 10px 26px rgba(79,227,193,.28);}
+  button.btn.primary:hover{box-shadow:0 14px 34px rgba(79,227,193,.42);}
+  button.btn.ghost{background:transparent;}
+  button.btn.attn{animation:attn 1.4s ease-in-out infinite;}
+  @keyframes attn{0%,100%{box-shadow:0 10px 26px rgba(79,227,193,.28);}50%{box-shadow:0 10px 30px rgba(79,227,193,.55),0 0 0 3px rgba(79,227,193,.18);}}
+
+  /* right column */
+  .side{display:flex;flex-direction:column;gap:18px;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 19px;backdrop-filter:blur(10px);}
+  .card h3{font-size:13px;letter-spacing:.04em;color:var(--cyan);font-weight:700;margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+  .card h3 .bar{width:3px;height:14px;border-radius:2px;background:linear-gradient(var(--mint),var(--cyan));}
+
+  /* narrow-view (stage 1) */
+  .narrow-q{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:9px;}
+  .narrow-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:13px;}
+  .narrow-list li{font-size:13px;color:var(--text-dim);padding:8px 12px;background:rgba(11,22,44,.5);border-radius:9px;border-left:3px solid var(--text-faint);}
+  .narrow-note{font-size:13px;line-height:1.55;color:var(--text-dim);padding:11px 13px;background:rgba(255,212,121,.08);border:1px solid rgba(255,212,121,.25);border-radius:11px;}
+  .narrow-note b{color:var(--gold);}
+
+  /* result */
+  .res-meta{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+  .chip{font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:8px;letter-spacing:.02em;}
+  .chip.lv{background:rgba(122,166,255,.16);color:var(--blue);border:1px solid rgba(122,166,255,.3);}
+  .chip.tm{background:rgba(79,227,193,.14);color:var(--mint);border:1px solid rgba(79,227,193,.3);}
+  .res-context{font-size:12.5px;color:var(--text-faint);margin-bottom:10px;}
+  .res-insight{font-size:15px;line-height:1.55;color:#fff;font-weight:600;padding:13px 15px;border-left:3px solid var(--mint);background:rgba(79,227,193,.07);border-radius:0 10px 10px 0;}
+
+  /* records */
+  #recordList{display:flex;flex-direction:column;gap:9px;}
+  .rec-item{background:rgba(11,22,44,.6);border:1px solid var(--line);border-radius:11px;padding:11px 13px;position:relative;animation:slideIn .35s;}
+  @keyframes slideIn{from{opacity:0;transform:translateX(10px);}to{opacity:1;transform:none;}}
+  .rec-item .rmeta{display:flex;gap:7px;margin-bottom:6px;flex-wrap:wrap;}
+  .rec-item .rmeta span{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:6px;}
+  .rec-item .rmeta .rl{background:rgba(122,166,255,.16);color:var(--blue);}
+  .rec-item .rmeta .rt{background:rgba(79,227,193,.14);color:var(--mint);}
+  .rec-item .rtext{font-size:13px;color:var(--text);line-height:1.45;}
+  .rec-item .rdel{position:absolute;top:9px;right:9px;width:20px;height:20px;border-radius:6px;border:none;cursor:pointer;background:rgba(255,120,120,.15);color:#ff9b9b;font-size:13px;line-height:1;display:grid;place-items:center;}
+  .rec-item .rdel:hover{background:rgba(255,120,120,.3);}
+  .rec-empty{font-size:13px;color:var(--text-faint);line-height:1.6;}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;z-index:50;background:rgba(4,9,20,.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:22px;}
+  .overlay.show{display:flex;animation:fade .3s;}
+  @keyframes fade{from{opacity:0;}to{opacity:1;}}
+  .modal{background:linear-gradient(160deg,var(--bg-2),var(--bg-1));border:1px solid var(--line-strong);border-radius:18px;max-width:680px;width:100%;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line);}
+  .modal-head h3{font-size:16px;font-weight:800;color:#fff;display:flex;align-items:center;gap:9px;}
+  .modal-close{background:none;border:none;color:var(--text-dim);font-size:24px;cursor:pointer;line-height:1;}
+  .modal-close:hover{color:#fff;}
+  .modal-body{padding:18px 22px;overflow-y:auto;}
+  .modal-body .desc{font-size:13px;color:var(--text-dim);margin-bottom:14px;line-height:1.55;}
+  #aiPromptText{width:100%;min-height:260px;resize:vertical;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.65;color:var(--text);background:rgba(7,14,28,.7);border:1px solid var(--line);border-radius:12px;padding:15px;white-space:pre-wrap;}
+  .modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+
+  .toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--mint),var(--cyan));color:#04121f;font-weight:700;font-size:13px;padding:12px 22px;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.4);z-index:80;opacity:0;transition:.35s;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* confetti */
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden;}
+  .conf{position:absolute;width:9px;height:14px;top:-20px;border-radius:2px;animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.2;}}
+
+  .footnote{margin-top:30px;text-align:center;color:var(--text-faint);font-size:12px;line-height:1.7;}
+  .footnote b{color:var(--mint);font-weight:700;}
+
+  @media (max-width:900px){
+    .grid-layout{grid-template-columns:1fr;}
+    .stagebar .step .t{display:none;}
+    .stagebar .step{min-width:0;flex:1;justify-content:center;}
+    .problem-tag{max-width:none;flex:1 1 100%;}
+  }
+  @media (max-width:560px){
+    .wrap{padding:18px 14px 50px;}
+    .matrix-shell{grid-template-columns:34px 1fr;gap:6px;}
+    .x-axis,.matrix{gap:7px;}
+    .xlab .xt{font-size:11.5px;} .xlab .xs{font-size:9px;} .ylab span{font-size:11px;}
+    .win{padding:8px 9px;border-radius:11px;} .win .wkey{font-size:11px;}
+    .controls .btn{flex:1 1 calc(50% - 5px);text-align:center;padding:12px 8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow"><span class="dot"></span>창의적 문제해결 · 7주차 3강 · 시스템 사고</span>
+      <h1>9 Windows 문제 인식 시뮬레이터</h1>
+      <p class="subtitle">하나의 문제를 <b style="color:var(--mint)">9개의 창</b>으로 다시 본다 — 시간 축 × 시스템 수준 축</p>
+    </div>
+    <div class="problem-tag">
+      <div class="lab">분석 대상 ·
+        <span class="scenario-switch">
+          <button id="scBattery" class="on" onclick="setScenario('battery')">🔋 스마트폰 배터리</button>
+          <button id="scTV" onclick="setScenario('tv')">🥽 TV → XR</button>
+        </span>
+      </div>
+      <div class="val" id="problemText">스마트폰 배터리가 너무 빨리 닳는다.</div>
+    </div>
+  </header>
+
+  <div class="stagebar" id="stageBar">
+    <div class="step active" data-s="1"><span class="num">1</span><span class="t">현재 문제만 보기</span></div>
+    <div class="step" data-s="2"><span class="num">2</span><span class="t">9개의 창 열기</span></div>
+    <div class="step" data-s="3"><span class="num">3</span><span class="t">9개 창 탐험하기</span></div>
+    <div class="step" data-s="4"><span class="num">4</span><span class="t">기록 · AI 질문</span></div>
+  </div>
+
+  <div class="coach" id="coach">
+    <span class="cic" id="coachIc">🧭</span>
+    <span class="cmsg" id="coachMsg"></span>
+  </div>
+
+  <div class="grid-layout">
+
+    <!-- LEFT -->
+    <div class="matrix-card">
+      <div class="matrix-head">
+        <h2 id="matrixTitle">우리는 보통 문제를 '지금, 이것' 안에서만 봅니다</h2>
+        <span class="hint" id="matrixHint"><span class="pulse"></span>중앙 칸을 보세요</span>
+      </div>
+
+      <div class="progress" id="progress">
+        <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+        <span class="ptxt" id="ptxt">탐험한 창 <b>0</b> / 9</span>
+      </div>
+
+      <div class="matrix-shell" id="matrixShell">
+        <div class="corner"></div>
+        <div class="x-axis" id="xAxis"></div>
+        <div class="y-axis" id="yAxis"></div>
+        <div class="matrix closed" id="matrix"></div>
+      </div>
+
+      <div class="legend" id="legend">
+        💡 <b>상위 시스템</b> = 주변 환경·인프라 &nbsp;·&nbsp; <b>시스템</b> = 분석 대상 그 자체 &nbsp;·&nbsp; <b>하위 시스템</b> = 구성 부품
+      </div>
+
+      <div class="controls">
+        <button class="btn primary attn" id="btnOpen" onclick="openWindows()">9개의 창 열기 →</button>
+        <button class="btn" id="btnRecord" onclick="recordCurrent()" disabled>＋ 문제 기록하기</button>
+        <button class="btn" id="btnAI" onclick="buildAIPrompt()" disabled>✦ AI 질문 만들기</button>
+        <button class="btn ghost" id="btnReset" onclick="resetAll()">↺ 처음으로</button>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="side">
+      <div class="card">
+        <h3><span class="bar"></span>선택한 창의 문제 인식</h3>
+        <div id="resultPanel"></div>
+      </div>
+
+      <div class="card">
+        <h3><span class="bar"></span>문제 인식 기록 <span id="recCount" style="color:var(--text-faint);font-weight:600;margin-left:auto;font-size:12px"></span></h3>
+        <div id="recordList"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footnote">
+    시스템 사고는 해결책을 바로 찾는 기술이 아니라, <b>문제를 더 잘 보기 위한 기술</b>입니다.<br>
+    좋은 해결책은 좋은 문제 인식에서 시작되며, 좋은 문제 인식은 9개의 창을 모두 열어 볼 때 가능합니다.
+  </p>
+</div>
+
+<!-- AI Modal -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3><span>✦</span>AI 질문 프롬프트</h3>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="desc">기록한 창들을 9화면법 기반 AI 프롬프트로 변환했습니다. 복사하여 생성형 AI에 그대로 입력해 보세요.</p>
+      <textarea id="aiPromptText" readonly></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="closeModal()">닫기</button>
+      <button class="btn primary" onclick="copyPrompt()">프롬프트 복사</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="confetti"></div>
+
+<script>
+/* ============== DATA ============== */
+const SCENARIOS = {
+  battery:{
+    name:"스마트폰 배터리",
+    problem:"스마트폰 배터리가 너무 빨리 닳는다.",
+    role:"모바일 제품 기획자",
+    timeAxis:[{t:"과거",s:"피처폰 시대"},{t:"현재",s:"스마트폰 시대"},{t:"미래",s:"에너지 자유 시대"}],
+    narrow:["배터리 용량을 더 키운다","절전 모드를 더 강화한다","충전 속도를 더 높인다"],
+    windows:{
+      super_past:{level:"상위 시스템",time:"과거",ctx:"문제를 둘러싼 과거의 외부 환경입니다.",key:"통신망 중심, 충전 인프라 부족",insight:"과거에는 충전 인프라가 부족했는데도 왜 배터리 사용 시간이 길게 느껴졌는가?"},
+      super_present:{level:"상위 시스템",time:"현재",ctx:"문제를 둘러싼 현재의 외부 환경입니다.",key:"5G, 앱 생태계, 고속충전 인프라",insight:"앱 생태계·통신망·충전 환경이 배터리 소모에 미치는 영향을 어떻게 줄일 것인가?"},
+      super_future:{level:"상위 시스템",time:"미래",ctx:"미래의 외부 환경과 인프라를 상상합니다.",key:"무선 전력망, 클라우드 연산 분산, 에너지 공유",insight:"도시·건물·차량의 무선 충전 인프라를 활용해 배터리 문제를 어떻게 재정의할 것인가?"},
+      system_past:{level:"시스템",time:"과거",ctx:"분석 대상(스마트폰) 그 자체의 과거 모습입니다.",key:"피처폰, 낮은 전력 사용",insight:"과거 피처폰은 왜 배터리가 오래갔으며, 지금 제품에 되살릴 원리는 무엇인가?"},
+      system_present:{level:"시스템",time:"현재",ctx:"우리가 보통 문제를 바라보는 출발점입니다.",key:"고성능 스마트폰, 대형 화면, 다양한 앱",insight:"스마트폰 자체의 배터리 사용 시간을 어떻게 늘릴 것인가?"},
+      system_future:{level:"시스템",time:"미래",ctx:"분석 대상이 미래에 가질 수 있는 형태입니다.",key:"배터리 걱정 없는 초연결 디바이스",insight:"미래의 스마트폰은 배터리를 많이 담는 기기가 아니라, 에너지 걱정이 없는 기기가 될 수 있는가?"},
+      sub_past:{level:"하위 시스템",time:"과거",ctx:"제품을 구성하던 과거의 부품입니다.",key:"작은 화면, 단순 칩, 저전력 부품",insight:"작은 화면·단순 칩·저전력 부품은 어떤 방식으로 전력 소모를 줄였는가?"},
+      sub_present:{level:"하위 시스템",time:"현재",ctx:"제품을 구성하는 현재의 부품입니다.",key:"고해상도 디스플레이, 고성능 AP, 리튬이온 배터리",insight:"디스플레이·AP·배터리 셀의 전력 소모를 어떻게 줄일 것인가?"},
+      sub_future:{level:"하위 시스템",time:"미래",ctx:"제품을 구성할 미래 부품과 기술입니다.",key:"전고체 배터리, 초저전력 칩, 에너지 하베스팅",insight:"전고체 배터리·초저전력 칩·에너지 하베스팅 부품으로 배터리 문제를 어떻게 혁신할 것인가?"}
+    }
+  },
+  tv:{
+    name:"TV → XR",
+    problem:"TV는 앞으로 어떤 모습으로 진화할까?",
+    role:"디스플레이·XR 제품 기획자",
+    timeAxis:[{t:"과거",s:"아날로그 시대"},{t:"현재",s:"디지털 시대"},{t:"미래",s:"공간 컴퓨팅 시대"}],
+    narrow:["화면을 더 크게 만든다","화질을 더 선명하게 한다","두께를 더 얇게 만든다"],
+    windows:{
+      super_past:{level:"상위 시스템",time:"과거",ctx:"TV를 둘러싼 과거의 방송 환경입니다.",key:"아날로그 방송, 안테나 인프라",insight:"아날로그 방송과 안테나 인프라는 TV의 형태와 화질을 어떻게 제약했는가?"},
+      super_present:{level:"상위 시스템",time:"현재",ctx:"TV를 둘러싼 현재의 인터넷·콘텐츠 환경입니다.",key:"초고속 인터넷, 디지털 방송, OTT",insight:"OTT·인터넷 환경에서 '화면'이라는 물건의 역할을 어떻게 다시 정의할 것인가?"},
+      super_future:{level:"상위 시스템",time:"미래",ctx:"미래의 공간 컴퓨팅·네트워크 환경을 상상합니다.",key:"실시간 공간 인식 AI, 5G/6G 클라우드",insight:"공간 인식 AI와 6G 클라우드 위에서 디스플레이는 어떤 새로운 역할을 가질 수 있는가?"},
+      system_past:{level:"시스템",time:"과거",ctx:"분석 대상(TV) 그 자체의 과거 형태입니다.",key:"브라운관 TV",insight:"브라운관 TV의 부피·무게·발열이라는 한계를 어떻게 줄일 것인가?"},
+      system_present:{level:"시스템",time:"현재",ctx:"우리가 보통 떠올리는 현재의 TV입니다.",key:"벽걸이형 LED TV",insight:"벽에 고정된 평판 TV에서 우리가 정말 개선해야 할 문제는 무엇인가?"},
+      system_future:{level:"시스템",time:"미래",ctx:"분석 대상이 미래에 가질 수 있는 형태입니다.",key:"XR 스마트 글래스 (형태 소멸)",insight:"TV라는 '물건'이 사라지고 안경이 화면이 된다면, 진짜 풀어야 할 문제는 무엇인가?"},
+      sub_past:{level:"하위 시스템",time:"과거",ctx:"TV를 구성하던 과거의 부품입니다.",key:"진공관, 유리판, 아날로그 버튼",insight:"진공관·유리판 구조는 두께와 화질을 어떻게 제약했는가?"},
+      sub_present:{level:"하위 시스템",time:"현재",ctx:"현재 TV를 구성하는 부품입니다.",key:"액정 패널, 백라이트, 내장 반도체",insight:"액정·백라이트 구조의 명암비·두께·전력 한계를 어떻게 넘을 것인가?"},
+      sub_future:{level:"하위 시스템",time:"미래",ctx:"미래의 화면을 구성할 부품과 기술입니다.",key:"마이크로 OLED, 시선 추적 센서, 공간 음향",insight:"마이크로 OLED·시선 추적·공간 음향으로 '눈앞의 화면'을 어떻게 구현할 것인가?"}
+    }
+  }
+};
+
+const ORDER = ["super_past","super_present","super_future","system_past","system_present","system_future","sub_past","sub_present","sub_future"];
+const LEVEL_ROWS = ["상위 시스템","시스템","하위 시스템"];
+
+let current="battery", selectedId="system_present", opened=false;
+let records=[], explored=new Set();
+
+/* ============== RENDER ============== */
+function renderAxes(){
+  const sc=SCENARIOS[current];
+  document.getElementById("xAxis").innerHTML = sc.timeAxis.map(a=>
+    `<div class="xlab"><div class="xt">${a.t}</div><div class="xs">${a.s}</div></div>`).join("");
+  document.getElementById("yAxis").innerHTML = LEVEL_ROWS.map(l=>
+    `<div class="ylab"><span>${l}</span></div>`).join("");
+}
+
+function renderMatrix(){
+  const wins=SCENARIOS[current].windows, mx=document.getElementById("matrix");
+  mx.innerHTML="";
+  ORDER.forEach(id=>{
+    const w=wins[id];
+    const el=document.createElement("div");
+    el.className="win"+(id==="system_present"?" center":"");
+    el.dataset.id=id;
+    el.innerHTML=`<div><div class="wtime">${w.time}</div><div class="wlevel">${w.level}</div></div>
+      <div class="wkey">${w.key}</div><div class="corner-mark">✓</div>`;
+    el.onclick=()=>{ if(opened || id==="system_present") selectWindow(id); };
+    mx.appendChild(el);
+  });
+  refreshClasses();
+}
+
+function refreshClasses(){
+  document.querySelectorAll(".win").forEach(el=>{
+    el.classList.toggle("selected", el.dataset.id===selectedId);
+    el.classList.toggle("recorded", records.includes(el.dataset.id));
+    el.classList.toggle("explored", explored.has(el.dataset.id));
+  });
+}
+
+function selectWindow(id){
+  selectedId=id;
+  if(opened){
+    explored.add(id);
+    document.querySelectorAll(".win").forEach(e=>e.classList.remove("nudge"));
+    updateProgress();
+  }
+  refreshClasses();
+  const w=SCENARIOS[current].windows[id];
+  document.getElementById("resultPanel").innerHTML=`
+    <div class="res-meta"><span class="chip lv">${w.level}</span><span class="chip tm">${w.time}</span></div>
+    <div class="res-context">관점 설명 · ${w.ctx}</div>
+    <div class="res-insight">${w.insight}</div>`;
+  if(opened) document.getElementById("btnRecord").disabled=false;
+  updateCoach();
+}
+
+function updateProgress(){
+  const n=explored.size;
+  document.getElementById("pfill").style.width=(n/9*100)+"%";
+  document.getElementById("ptxt").innerHTML=`탐험한 창 <b>${n}</b> / 9`;
+  if(n===9 && !window._celebrated){ window._celebrated=true; confetti(); toast("🎉 9개의 창을 모두 열었어요!"); }
+}
+
+/* ============== COACH ============== */
+function setCoach(ic,msg){
+  document.getElementById("coachIc").textContent=ic;
+  const m=document.getElementById("coachMsg");
+  m.style.opacity=0;
+  setTimeout(()=>{ m.innerHTML=msg; m.style.opacity=1; },120);
+}
+function updateCoach(){
+  const n=explored.size, r=records.length;
+  if(!opened){ setCoach("🧭","우리는 보통 <b>'지금 이것'</b> 하나만 보고 답을 떠올려요. 먼저 <b>[9개의 창 열기]</b>를 눌러볼까요?"); return; }
+  if(r>=2){ setCoach("🚀","관점이 충분히 모였어요! 이제 <b>[AI 질문 만들기]</b>로 진짜 질문을 만들어 봐요."); return; }
+  if(r===1){ setCoach("📝","첫 기록 완료! 관점을 <b>2개 이상</b> 모으면 AI 질문이 훨씬 풍부해져요."); return; }
+  if(n>=9){ setCoach("🎉","같은 문제가 <b>9가지</b>로 보이죠? 마음에 드는 관점을 <b>[문제 기록하기]</b>로 담아 봐요."); return; }
+  if(n>=5){ setCoach("🔥",`벌써 <b>${n}/9</b> 탐험! 거의 다 왔어요. 남은 창도 열어 봐요.`); return; }
+  if(n>=1){ setCoach("👀",`좋아요, <b>${n}개</b> 탐험! 특히 <b>'미래'</b> 칸들이 흥미로워요. 더 눌러볼까요?`); return; }
+  setCoach("✨","9개의 창이 열렸어요! <b>아무 창이나</b> 눌러 같은 문제가 어떻게 달라지는지 봐요.");
+}
+
+/* ============== FLOW ============== */
+function setStage(n){ document.querySelectorAll("#stageBar .step").forEach(s=>s.classList.toggle("active",+s.dataset.s<=n)); }
+
+function openWindows(){
+  if(opened) return;
+  opened=true;
+  const mx=document.getElementById("matrix");
+  mx.classList.remove("closed"); mx.classList.add("opened","revealing");
+  document.getElementById("matrixShell").classList.add("opened");
+  document.getElementById("legend").classList.add("show");
+  document.getElementById("progress").classList.add("show");
+  const cells=mx.querySelectorAll(".win:not(.center)");
+  cells.forEach((c,i)=>c.style.animationDelay=(i*0.05)+"s");
+  setTimeout(()=>{ mx.classList.remove("revealing");
+    const f=document.querySelector('.win[data-id="sub_future"]'); if(f) f.classList.add("nudge"); },700);
+
+  const b=document.getElementById("btnOpen");
+  b.disabled=true; b.classList.remove("attn"); b.textContent="✓ 9개의 창 열림";
+  document.getElementById("matrixTitle").textContent="이제 같은 문제를 9개의 창으로 펼쳐 봅니다";
+  document.getElementById("matrixHint").innerHTML='<span class="pulse"></span>각 창을 클릭!';
+  setStage(3);
+  selectWindow("system_present");
+}
+
+function recordCurrent(){
+  if(!opened) return;
+  if(records.includes(selectedId)){ toast("이미 기록된 창입니다"); return; }
+  records.push(selectedId);
+  renderRecords(); refreshClasses(); setStage(4);
+  document.getElementById("btnAI").disabled=records.length<1;
+  document.getElementById("btnAI").classList.toggle("attn",records.length>=2);
+  toast("문제 인식이 기록되었습니다");
+  updateCoach();
+}
+
+function renderRecords(){
+  const list=document.getElementById("recordList"), cnt=document.getElementById("recCount");
+  if(records.length===0){
+    list.innerHTML='<div class="rec-empty">의미 있는 창을 선택한 뒤 <b style="color:var(--gold)">[문제 기록하기]</b>로<br>여러 관점을 모아 보세요. (권장: 최소 2개)</div>';
+    cnt.textContent=""; return;
+  }
+  cnt.textContent=records.length+"개";
+  list.innerHTML="";
+  records.forEach(id=>{
+    const w=SCENARIOS[current].windows[id];
+    const it=document.createElement("div");
+    it.className="rec-item";
+    it.innerHTML=`<button class="rdel" onclick="removeRecord('${id}')" title="삭제">×</button>
+      <div class="rmeta"><span class="rl">${w.level}</span><span class="rt">${w.time}</span></div>
+      <div class="rtext">${w.insight}</div>`;
+    list.appendChild(it);
+  });
+}
+function removeRecord(id){
+  records=records.filter(r=>r!==id);
+  renderRecords(); refreshClasses();
+  document.getElementById("btnAI").disabled=records.length<1;
+  document.getElementById("btnAI").classList.toggle("attn",records.length>=2);
+  updateCoach();
+}
+
+/* ============== AI PROMPT ============== */
+function buildAIPrompt(){
+  if(records.length===0){ toast("먼저 창을 기록해 주세요"); return; }
+  const sc=SCENARIOS[current];
+  let p=`나는 ${sc.role}입니다.\n\n"${sc.problem}"라는 문제를 TRIZ의 9화면법(9 Windows)으로 분석해 주세요.\n\n`;
+  p+=`특히 아래에서 선택한 ${records.length}개의 관점에서 각각 새로운 문제 정의를 도출해 주세요.\n\n`;
+  records.forEach((id,i)=>{
+    const w=sc.windows[id];
+    p+=`${i+1}. [${w.level} - ${w.time} 관점]\n   핵심 요소: ${w.key}\n   인식된 문제: ${w.insight}\n\n`;
+  });
+  p+=`각 관점별로 다음을 정리해 주세요.\n- 재정의된 문제 정의\n- 가능한 해결 방향\n- 연결 가능한 신사업 또는 응용 아이디어\n\n`;
+  p+=`마지막으로, 위 관점들을 종합하여 가장 임팩트가 큰 문제 정의 1가지를 제안해 주세요.`;
+  document.getElementById("aiPromptText").value=p;
+  document.getElementById("overlay").classList.add("show");
+  confetti();
+}
+function copyPrompt(){
+  const t=document.getElementById("aiPromptText");
+  navigator.clipboard.writeText(t.value).then(()=>toast("프롬프트가 복사되었습니다"))
+    .catch(()=>{ t.select(); document.execCommand("copy"); toast("프롬프트가 복사되었습니다"); });
+}
+function closeModal(){ document.getElementById("overlay").classList.remove("show"); }
+
+/* ============== SCENARIO / RESET ============== */
+function setScenario(s){
+  if(current===s) return;
+  current=s;
+  document.getElementById("scBattery").classList.toggle("on",s==="battery");
+  document.getElementById("scTV").classList.toggle("on",s==="tv");
+  document.getElementById("problemText").textContent=SCENARIOS[s].problem;
+  resetAll();
+}
+
+function showNarrowView(){
+  const sc=SCENARIOS[current];
+  document.getElementById("resultPanel").innerHTML=`
+    <div class="narrow-q">🤔 보통 우리는 이렇게 답하죠:</div>
+    <ul class="narrow-list">${sc.narrow.map(x=>`<li>${x}</li>`).join("")}</ul>
+    <div class="narrow-note">❗ 이건 <b>틀린 접근이 아니라, 좁은 접근</b>이에요.<br>9개의 창을 열면 전혀 다른 문제가 보입니다.</div>`;
+}
+
+function resetAll(){
+  opened=false; selectedId="system_present"; records=[]; explored=new Set(); window._celebrated=false;
+  const mx=document.getElementById("matrix");
+  mx.classList.remove("opened","revealing"); mx.classList.add("closed");
+  document.getElementById("matrixShell").classList.remove("opened");
+  document.getElementById("legend").classList.remove("show");
+  document.getElementById("progress").classList.remove("show");
+  document.getElementById("pfill").style.width="0%";
+  document.getElementById("ptxt").innerHTML='탐험한 창 <b>0</b> / 9';
+  const b=document.getElementById("btnOpen");
+  b.disabled=false; b.classList.add("attn"); b.textContent="9개의 창 열기 →";
+  document.getElementById("btnRecord").disabled=true;
+  document.getElementById("btnAI").disabled=true;
+  document.getElementById("btnAI").classList.remove("attn");
+  document.getElementById("matrixTitle").textContent="우리는 보통 문제를 '지금, 이것' 안에서만 봅니다";
+  document.getElementById("matrixHint").innerHTML='<span class="pulse"></span>중앙 칸을 보세요';
+  setStage(1);
+  renderAxes(); renderMatrix(); renderRecords(); showNarrowView(); updateCoach();
+}
+
+/* ============== FX ============== */
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1900);
+}
+function confetti(){
+  const c=document.getElementById("confetti");
+  const colors=["#4fe3c1","#46c8ff","#7aa6ff","#ffd479","#ff8fb1"];
+  for(let i=0;i<70;i++){
+    const d=document.createElement("div");
+    d.className="conf";
+    d.style.left=Math.random()*100+"vw";
+    d.style.background=colors[i%colors.length];
+    d.style.animationDuration=(2+Math.random()*1.8)+"s";
+    d.style.animationDelay=(Math.random()*.4)+"s";
+    d.style.opacity=.9;
+    c.appendChild(d);
+    setTimeout(()=>d.remove(),4200);
+  }
+}
+
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+
+/* init */
+resetAll();
+</script>
+</body>
+</html>
